@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Tir.js">
+    <Files>
+      <File FileName="Assets\Scripts\Tir.js" Line="11" Column="33" />
+      <File FileName="Assets\Scripts\ButtonPlay.js" Line="14" Column="1" />
+      <File FileName="Assets\Scripts\ButtonTirarEnrera.js" Line="7" Column="5" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
