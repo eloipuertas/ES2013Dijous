@@ -34,7 +34,7 @@ public class AgentNpc : MonoBehaviour {
 		
 	}
 	void Start () {
-		GameObject pla = GameObject.FindGameObjectWithTag("player");
+		GameObject pla = GameObject.FindGameObjectWithTag("Player");
 		playerposition = pla.transform.localPosition;
 	 	
 	
