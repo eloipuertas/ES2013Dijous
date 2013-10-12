@@ -1,10 +1,13 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Tir.js">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Colisions.js">
     <Files>
-      <File FileName="Assets\Scripts\Tir.js" Line="11" Column="33" />
+      <File FileName="Assets\Scripts\Colisions.js" Line="10" Column="27" />
+      <File FileName="Assets\Scripts\Tir.js" Line="17" Column="2" />
       <File FileName="Assets\Scripts\ButtonPlay.js" Line="14" Column="1" />
       <File FileName="Assets\Scripts\ButtonTirarEnrera.js" Line="7" Column="5" />
+      <File FileName="Assets\Scripts\ControladorPersonatge.js" Line="25" Column="20" />
+      <File FileName="Assets\Scripts\DestruirBala.js" Line="6" Column="38" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
