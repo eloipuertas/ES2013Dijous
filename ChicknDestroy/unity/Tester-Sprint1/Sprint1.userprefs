@@ -1,0 +1,13 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\AgentNpc.cs">
+    <Files>
+      <File FileName="Assets\AgentNpc.cs" Line="14" Column="14" />
+      <File FileName="..\New Unity Project\Assets\Standard Assets\Character Controllers\Sources\Scripts\FireballIA.cs" Line="35" Column="59" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
