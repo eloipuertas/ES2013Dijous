@@ -1,6 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Options.txt">
+    <Files>
+      <File FileName="Assets\Scripts\InitOptions.cs" Line="15" Column="8" />
+      <File FileName="Assets\Scripts\DroidChickenChoose.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\InitChooseTeam.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\MainMenuController.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\StartOrBack.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TeamChoose.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\SaveOrBack.cs" Line="34" Column="49" />
+      <File FileName="Assets\Scripts\Difficulty.cs" Line="40" Column="33" />
+      <File FileName="Assets\Options.txt" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
