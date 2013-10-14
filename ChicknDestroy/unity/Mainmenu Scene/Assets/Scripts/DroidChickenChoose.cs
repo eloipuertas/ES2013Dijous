@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * This script controls the robotChicken choice buttons
+ * */
+
 public class DroidChickenChoose : MonoBehaviour {
 
-	public bool isChicken1 = false, isChicken2 = false, isChicken3 = false, isChicken4 = false, isChicken5 = false;
+	public bool isChicken1 = false, isChicken2 = false, isChicken3 = false, isChicken4 = false, isChicken5 = false;//booleans referenced to robot chicken choice buttons
 	
 	
-
 	
-	public void OnMouseEnter(){
+	public void OnMouseEnter(){//hover state
 		if(isChicken1)
 			renderer.material.color = Color.blue;
 		else if(isChicken2)
@@ -22,9 +25,9 @@ public class DroidChickenChoose : MonoBehaviour {
 		
 	}
 
-	public void OnMouseExit(){
+	public void OnMouseExit(){//when mause stops hovering
 		if(isChicken1){
-			if(!collider.enabled)
+			if(!collider.enabled)//if button has been selected
 				renderer.material.color = Color.cyan;
 			else
 				renderer.material.color = Color.red;
@@ -55,14 +58,14 @@ public class DroidChickenChoose : MonoBehaviour {
 		}
 	}
 	
-	public void OnMouseUpAsButton(){
+	public void OnMouseUpAsButton(){//Selecting a button
 		
-		if(isChicken1){
-			PlayerPrefs.SetInt("Chicken",1);
+		if(isChicken1){//when selected a button we disable the collider of the selected button and set the possible previous selected buttons enabling the colider and making it visible
+			PlayerPrefs.SetInt("Chicken",1);//this will be the global var to know which chicken was selected
 			collider.enabled = false;
 			
 			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("droidbuttons");
-			foreach(GameObject b in droidButtons){
+			foreach(GameObject b in droidButtons){//setting the other button to unselected state
 				if(!b.gameObject.Equals(this.gameObject)){
 					b.renderer.material.color = Color.red;
 					b.collider.enabled = true;

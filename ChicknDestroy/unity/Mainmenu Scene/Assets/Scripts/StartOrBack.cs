@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*
+ * This script Controls the start and back button in TeamCHoose scene
+ * */
+
 public class StartOrBack : MonoBehaviour {
 	
-	public bool isBack = false, isStart = false;
+	public bool isBack = false, isStart = false;//referenced to the buttons
 	
 	
-	public void OnMouseEnter(){
+	public void OnMouseEnter(){//hovering
 		if(isBack)
 			renderer.material.color = Color.blue;
 		else if(isStart)
@@ -14,7 +18,7 @@ public class StartOrBack : MonoBehaviour {
 		
 	}
 
-	public void OnMouseExit(){
+	public void OnMouseExit(){//leaving hover
 		if(isBack){
 				renderer.material.color = Color.red;
 		}
@@ -23,11 +27,11 @@ public class StartOrBack : MonoBehaviour {
 		}
 	}
 	
-	public void OnMouseUpAsButton(){
+	public void OnMouseUpAsButton(){//selecting
 		
 		if(isBack)
 			Application.LoadLevel(0);
-		if(isStart){
+		if(isStart){//if start we set the variables we want to use in the game
 			PlayerPrefs.SetFloat("PosX",0);
 			PlayerPrefs.SetFloat("PosY",0);
 			PlayerPrefs.SetFloat("PosZ",0);

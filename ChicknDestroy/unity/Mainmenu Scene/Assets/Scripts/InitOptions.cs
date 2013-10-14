@@ -4,6 +4,10 @@ using System;
 
 using System.IO;
 
+/*
+ * This script executes with the init of the options scene
+ **/
+
 public class InitOptions : MonoBehaviour {
 	
 	int Difficulty = 0;
@@ -13,10 +17,10 @@ public class InitOptions : MonoBehaviour {
 		
 		string Path = Application.dataPath + "/Options.txt";
 		print(Path);
-		if(File.Exists(Path)){
-			StreamReader sr = new StreamReader(Path);
-			Difficulty = int.Parse(sr.ReadLine());
-			switch(Difficulty){
+		if(File.Exists(Path)){//If options has already a configuration Sets it's configuration
+			StreamReader sr = new StreamReader(Path);//Opening a file to read
+			Difficulty = int.Parse(sr.ReadLine());//reading configuration of the file
+			switch(Difficulty){//setting  the gameObjects properly
 				case 1:
 					GameObject.Find("Easy").collider.enabled = false;
 					GameObject.Find("Easy").renderer.material.color = Color.cyan;

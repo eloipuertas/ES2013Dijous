@@ -2,12 +2,15 @@
 using System.Collections;
 using System.IO;
 
+/* This scrtipt control the save or back buttons in options scene
+ * */
+
 public class SaveOrBack : MonoBehaviour {
 
-	public bool isBack = false, isSave = false;
+	public bool isBack = false, isSave = false;//referenced to the buttons
 	
 	
-	public void OnMouseEnter(){
+	public void OnMouseEnter(){//hovering
 		if(isBack)
 			renderer.material.color = Color.blue;
 		else if(isSave)
@@ -15,7 +18,7 @@ public class SaveOrBack : MonoBehaviour {
 		
 	}
 
-	public void OnMouseExit(){
+	public void OnMouseExit(){//leaving hover
 		if(isBack){
 				renderer.material.color = Color.red;
 		}
@@ -28,9 +31,9 @@ public class SaveOrBack : MonoBehaviour {
 		
 		if(isBack)
 			Application.LoadLevel(0);
-		if(isSave){
+		if(isSave){//if save we save the configuration of the options into a file
 			string Path= Application.dataPath + "/Options.txt";
-			StreamWriter sw = new StreamWriter(Path);
+			StreamWriter sw = new StreamWriter(Path);//opening the file to write
 			sw.WriteLine(PlayerPrefs.GetInt("Difficulty"));
 			sw.Flush();
 			sw.Close();
