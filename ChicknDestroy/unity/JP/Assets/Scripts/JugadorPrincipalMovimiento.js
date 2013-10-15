@@ -1,18 +1,15 @@
 ﻿#pragma strict
 
-var camaraVelocidad = 5;
-var radio = 10;
-var velocidad = 60;
+var radio = 5;
+var velocidad = 1.0;
 var gravedad = 10;
-var saltoFuerza = 10;
+var saltoFuerza = 100;
+
 var saltoTiempo = 0.0;
 var saltoDuracion = 1;
 
 var estaSaltando = false;
 var localScaleY;
-
-private var velocity : Vector3 = Vector3.zero;
-
 
 function Start () {
 	transform.localScale = Vector3.one * radio;
@@ -28,7 +25,7 @@ function Start () {
         gameObject.AddComponent(Rigidbody);
 
 
-    rigidbody.mass = gravedad * radio;
+    rigidbody.mass = 10 * radio;
    
     localScaleY = transform.localScale.y; 
     Time.timeScale =1;
@@ -37,28 +34,35 @@ function Start () {
 function Update () {
 	var hit : RaycastHit;
 	
-    var estaEnTierra = Physics.Raycast(transform.position, -Vector3.up, hit, radio);
+    var estaEnTierra = Physics.Raycast(transform.position, -Vector3.up, hit, 5);
     
     var direction = Vector3(0, Input.GetAxis("Vertical"), Input.GetAxis("Horizontal"));
-    if(direction.magnitude > 1.0) direction.Normalize();
-    
-    if(estaEnTierra && direction.y > 0) {
-    	rigidbody.AddForce(Vector3.up * rigidbody.mass * 100);
+    if(estaEnTierra) {
+    	
+    	if (direction.y > 0) {
+    		rigidbody.AddForce(Vector3.up * rigidbody.mass * saltoFuerza * 60);
+    	}
+    	
     }
     
     if(direction.magnitude > 0){
-   		var modifier = estaEnTierra ? 3.0 : 1.0;
-   		direction = Camera.main.transform.TransformDirection(direction) * camaraVelocidad * 2;
+   		var modifier = estaEnTierra ? 1.0 : 0.2;
    		
-   		if(!estaEnTierra)
+   		direction = direction * velocidad;
+   		
+   		if(!estaEnTierra) {
         	direction.y = rigidbody.velocity.y;
-        
-        //direction = Vector3.one;
-        direction.x = 0;
+        }
         
         rigidbody.velocity = Vector3.Lerp(rigidbody.velocity, direction, modifier * Time.deltaTime);
         
-        if(estaEnTierra)
+        if(estaEnTierra) {
         	rigidbody.velocity.y = 0;
+        	rigidbody.velocity.x = 0;
+        }
+        else {
+        	rigidbody.velocity.y = gravedad;
+        	rigidbody.velocity.x = 0;
+        }
     }
 }
