@@ -16,9 +16,12 @@ function Start () {
 
     if(!rigidbody)
         gameObject.AddComponent(Rigidbody);
-
+	
+	
 
     rigidbody.mass = 1;
+    
+    rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
    
     
     Time.timeScale =1;
