@@ -11,9 +11,9 @@ FBXHeaderExtension:  {
 		Year: 2013
 		Month: 10
 		Day: 16
-		Hour: 10
-		Minute: 35
-		Second: 49
+		Hour: 19
+		Minute: 17
+		Second: 43
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins build 20070228"
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
 		FlagPLE: 0
 	}
 }
-CreationTime: "2013-10-16 10:35:49:000"
+CreationTime: "2013-10-16 19:17:43:000"
 Creator: "Blender version 2.68 (sub 0)"
 
 ; Object definitions
@@ -1287,7 +1287,7 @@ Version5:  {
 		SnapOnFrames: 0
 		ReferenceTimeIndex: -1
 		TimeLineStartTime: -1924423249
-		TimeLineStopTime: 123163088000
+		TimeLineStopTime: 113540971750
 	}
 	RendererSetting:  {
 		DefaultCamera: "Producer Perspective"
