@@ -5,7 +5,7 @@ public var bala:GameObject;
  
 var audioTir: AudioSource;
 var audioRecarga: AudioSource;
-var velocitatBala = 1;
+var velocitatBala = 5;
  
 function Start () {
 	//obtenim tots els audioSources
