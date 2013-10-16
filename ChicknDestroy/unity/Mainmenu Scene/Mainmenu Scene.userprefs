@@ -1,6 +1,6 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Difficulty.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\StartOrBack.cs">
     <Files>
       <File FileName="Assets\Scripts\TeamChoose.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Difficulty.cs" Line="1" Column="1" />
@@ -8,7 +8,7 @@
       <File FileName="Assets\Scripts\DroidChickenChoose.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\InitChooseTeam.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\MainMenuController.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\StartOrBack.cs" Line="36" Column="35" />
+      <File FileName="Assets\Scripts\StartOrBack.cs" Line="38" Column="27" />
       <File FileName="Assets\Scripts\SaveOrBack.cs" Line="1" Column="1" />
       <File FileName="Assets\Options.txt" Line="1" Column="1" />
     </Files>
