@@ -35,7 +35,7 @@ public class StartOrBack : MonoBehaviour {
 			PlayerPrefs.SetFloat("PosX",0);
 			PlayerPrefs.SetFloat("PosY",0);
 			PlayerPrefs.SetFloat("PosZ",0);
-			Application.LoadLevel(5);
+			Application.LoadLevel(4);
 		}
 	}
 	
