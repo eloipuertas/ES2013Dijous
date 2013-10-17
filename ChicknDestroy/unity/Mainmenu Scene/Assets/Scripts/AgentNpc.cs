@@ -5,24 +5,25 @@ public class AgentNpc : MonoBehaviour {
 	
 	private Rigidbody peso= new Rigidbody();
 	//Npc propierties
-	private float velocity = 2f;
-	private bool detect = false;
-	private Vector3 playereulerAngles;
+	private float velocity = 100f;
 	private bool direccio;
-	private float rangeWarp = 100;
+	private float stopRange = 55;
 	//Agent variables
 	
 	void run(){
+		// USING Z AXIS!
 		GameObject pla = GameObject.FindGameObjectWithTag("Player");
 		Vector3 playerposition = pla.transform.localPosition;
 		
-		
-		if (direccio != (playerposition.x > this.transform.localPosition.x)){
+		if (direccio != (playerposition.z > this.transform.localPosition.z)){
 			transform.Rotate (new Vector3(0,180,0));
 			direccio = !direccio;
 		}
-
-		transform.Translate(new Vector3(0,0,velocity) * Time.deltaTime);	
+		
+		float dist = playerposition.z-this.transform.localPosition.z;
+		if (dist < 0) dist = -dist;
+		if (dist > stopRange)
+			transform.Translate(new Vector3(0,0,velocity) * Time.deltaTime);	
 
 	}
 	GameObject warpNpc(Vector3 p,Vector3 s){
@@ -40,7 +41,7 @@ public class AgentNpc : MonoBehaviour {
 	}
 	void Start () {
 
-	 			direccio = false;
+	 			direccio = true;
 	
 	}
 	
