@@ -7,7 +7,7 @@ public class AgentNpc : MonoBehaviour {
 	//Npc propierties
 	private float velocity = 100f;
 	private bool direccio;
-	private float stopRange = 55;
+	private float stopRange = 100f;
 	//Agent variables
 	
 	void run(){
