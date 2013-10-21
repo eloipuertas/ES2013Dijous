@@ -14,8 +14,17 @@ public class AgentNpc : FSM {
 	
 	//Player transform
 	protected Transform playerTransform;
-	protected Rigidbody mas;
 	
+	//Animations 
+	
+	public AnimationClip movRight;
+	public AnimationClip movLeft;
+	public AnimationClip rotRight;
+	public  AnimationClip rotLeft;
+	public AnimationClip jumpRight;
+	public  AnimationClip jumpLeft;
+	public AnimationClip atack;
+
 	//Next target
 	protected Vector3 target;
 	protected Vector3 direction;
@@ -25,7 +34,10 @@ public class AgentNpc : FSM {
 	protected int damage;
 	
 	//Npc propierties
-	private float velocity = 20f;
+	private Collision collision;
+	private Rigidbody mas;
+	
+	public float velocity = 30f;
 	private bool Dead = false;
 	
 	private Vector3 playereulerAngles;
@@ -40,17 +52,13 @@ public class AgentNpc : FSM {
 	protected void UpdateNoneState(){
 	}
 	protected void UpdateRunState(){
-			mas = new Rigidbody();
-	
 			
-			if(target.z > playerTransform.localPosition.z){
+			mas = this.gameObject.rigidbody;
+			transform.LookAt(target);
+		  	transform.Translate(new Vector3(0,0,velocity) * Time.deltaTime);
 			
-		  	transform.Translate(new Vector3(0,0,-velocity) * Time.deltaTime);
 					
-			}else{
-			transform.Translate(new Vector3(0,0,velocity) * Time.deltaTime);	
-				
-			}
+			
 	   
 		//Debug.Log("Target Pos z: " + (Mathf.Abs(target.z)));
 		//Debug.Log("PlayerTransform Pos z:" + (Mathf.Abs(transform.localPosition.z)));
@@ -61,6 +69,7 @@ public class AgentNpc : FSM {
 		updatePlayerPosition();
 	}
 	protected void UpdateAttackState(){
+		Destroy(mas);
 		Debug.Log("KILL THEM");
 		
 	}
@@ -84,22 +93,29 @@ public class AgentNpc : FSM {
 		Debug.Log("Current STATE: "+curState);
 
 	}
-	void OnCollisionEnter(Collision collision){
-		Debug.Log("SHOCK");
-		Destroy(mas);
-		if(collision.gameObject.tag=="Player"){ 
-			Debug.Log("Shock2");
- 		}
-	}
+	//Gestio de collisions
 	
+	void OnCollisionEnter(Collision collision){
+		if(collision.gameObject.collider){
+			Debug.Log("A tocat terra");
+		}
+		if(collision.gameObject.tag=="Player"){ 
+				Debug.Log("A tocat player");
+				curState = FSM.Attack;
+ 		}
+		
+	}
+	//Actualiza la posicio del objectiu
 	void updatePlayerPosition(){
 		GameObject pla = GameObject.FindGameObjectWithTag("Player");
 		playerTransform = pla.transform;
 		target = pla.transform.localPosition;
 		direction = pla.transform.localEulerAngles;
+		
+			
 	}
 	void manDistance(Vector3 p1,Vector3 p2){
-		return sqrt
+		//return Mathf.Sqrt(Mathf.Exp(2.0)*(p1.x -p2.x) +(p1.y - p2.y));
 	}
 	//General Funcionts
 	
@@ -113,8 +129,14 @@ public class AgentNpc : FSM {
 		curState = FSM.Run;
 		health = 100;
 		damage = 2;
+		mas = this.gameObject.rigidbody;
+		Debug.Log(mas.mass);
+		
+		//mas.GetComponent(RigidBody);
+		
 		updatePlayerPosition();
 		Debug.Log(curState);
 	}
 
 }
+
