@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class HUD : MonoBehaviour {
+public class HUDs : MonoBehaviour {
 	private PlayerInterface player;
 	private GameInterface game;
 	
