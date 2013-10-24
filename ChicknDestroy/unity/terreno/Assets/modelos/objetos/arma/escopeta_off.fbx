@@ -11,9 +11,9 @@ FBXHeaderExtension:  {
 		Year: 2013
 		Month: 10
 		Day: 16
-		Hour: 11
-		Minute: 55
-		Second: 29
+		Hour: 08
+		Minute: 23
+		Second: 31
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins build 20070228"
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
 		FlagPLE: 0
 	}
 }
-CreationTime: "2013-10-16 11:55:29:000"
+CreationTime: "2013-10-16 08:23:31:000"
 Creator: "Blender version 2.68 (sub 0)"
 
 ; Object definitions
@@ -3064,7 +3064,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "Sin título-1.png"
-		RelativeFilename: "C:\Users\richard\Desktop\objetos_blender\Sin título-1.png"
+		RelativeFilename: "Sin título-1.png"
 	}
 	Texture: "Texture::cartucho_png", "TextureVideoClip" {
 		Type: "TextureVideoClip"
@@ -3089,7 +3089,7 @@ Objects:  {
 		}
 		Media: "Video::cartucho_png"
 		FileName: "Sin título-1.png"
-		RelativeFilename: "C:\Users\richard\Desktop\objetos_blender\Sin título-1.png"
+		RelativeFilename: "Sin título-1.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"

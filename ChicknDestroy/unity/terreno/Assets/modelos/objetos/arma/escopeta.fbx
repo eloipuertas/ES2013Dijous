@@ -11,9 +11,9 @@ FBXHeaderExtension:  {
 		Year: 2013
 		Month: 10
 		Day: 16
-		Hour: 12
-		Minute: 10
-		Second: 37
+		Hour: 08
+		Minute: 22
+		Second: 56
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins build 20070228"
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
 		FlagPLE: 0
 	}
 }
-CreationTime: "2013-10-16 12:10:37:000"
+CreationTime: "2013-10-16 08:22:56:000"
 Creator: "Blender version 2.68 (sub 0)"
 
 ; Object definitions
@@ -4355,7 +4355,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "color_culata_escopeta.png"
-		RelativeFilename: "C:\Users\richard\Desktop\objetos_blender\color_culata_escopeta.png"
+		RelativeFilename: "color_culata_escopeta.png"
 	}
 	Video: "Video::color_gris_escopeta_png", "Clip" {
 		Type: "Clip"
@@ -4376,7 +4376,7 @@ Objects:  {
 		}
 		UseMipMap: 0
 		Filename: "color_gris_escopeta.png"
-		RelativeFilename: "C:\Users\richard\Desktop\objetos_blender\color_gris_escopeta.png"
+		RelativeFilename: "color_gris_escopeta.png"
 	}
 	Texture: "Texture::color_culata_escopeta_png", "TextureVideoClip" {
 		Type: "TextureVideoClip"
@@ -4401,7 +4401,7 @@ Objects:  {
 		}
 		Media: "Video::color_culata_escopeta_png"
 		FileName: "color_culata_escopeta.png"
-		RelativeFilename: "C:\Users\richard\Desktop\objetos_blender\color_culata_escopeta.png"
+		RelativeFilename: "color_culata_escopeta.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"
@@ -4430,7 +4430,7 @@ Objects:  {
 		}
 		Media: "Video::color_gris_escopeta_png"
 		FileName: "color_gris_escopeta.png"
-		RelativeFilename: "C:\Users\richard\Desktop\objetos_blender\color_gris_escopeta.png"
+		RelativeFilename: "color_gris_escopeta.png"
 		ModelUVTranslation: 0,0
 		ModelUVScaling: 1,1
 		Texture_Alpha_Source: "None"
