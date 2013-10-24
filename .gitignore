@@ -6,7 +6,3 @@
 *.csproj
 *.unityproj
 *.sln
-
-*.mat
-
-*.meta
