@@ -8,23 +8,14 @@ using System.Collections;
 public class StartOrBack : MonoBehaviour {
 	
 	public bool isBack = false, isStart = false;//referenced to the buttons
-	
+	public Material[] Materials;
 	
 	public void OnMouseEnter(){//hovering
-		if(isBack)
-			renderer.material.color = Color.blue;
-		else if(isStart)
-			renderer.material.color = Color.blue;
-		
+		renderer.material = Materials[1];		
 	}
 
 	public void OnMouseExit(){//leaving hover
-		if(isBack){
-				renderer.material.color = Color.red;
-		}
-		else if(isStart){
-				renderer.material.color = Color.red;
-		}
+		renderer.material = Materials[0];		
 	}
 	
 	public void OnMouseUpAsButton(){//selecting

@@ -1,8 +1,10 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AgentNpc.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\TeamChoose.cs">
     <Files>
-      <File FileName="Assets\Scripts\AgentNpc.cs" Line="16" Column="1" />
+      <File FileName="Assets\Scripts\TeamChoose.cs" Line="3" Column="1" />
+      <File FileName="Assets\Scripts\DroidChickenChoose.cs" Line="48" Column="67" />
+      <File FileName="Assets\Scripts\PhiloChickenChoose.cs" Line="23" Column="33" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
