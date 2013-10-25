@@ -26,18 +26,18 @@ public class TeamChoose : MonoBehaviour {
 			GameObject.Find("DroidButton").collider.enabled = true;
 			collider.enabled = false;
 			GameObject [] philoButtons = GameObject.FindGameObjectsWithTag("philobuttons");
-			int i = 3;
+
 			foreach(GameObject b in philoButtons){//enabling Philo chicken buttons
 				b.collider.enabled = true;
-				b.renderer.material = Materials[i];
-				i++;
+				PhiloChickenChoose aux = (PhiloChickenChoose)b.GetComponent("PhiloChickenChoose");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
+				b.renderer.material = aux.Materials[1];
 			}
 			
 			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("droidbuttons");
 			foreach(GameObject b in droidButtons){//Disabling robot chicken buttons
 				b.collider.enabled = false;
-				b.renderer.material = Materials[i];
-				i++;
+				DroidChickenChoose aux = (DroidChickenChoose)b.GetComponent("DroidChickenChoose");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
+				b.renderer.material = aux.Materials[0];
 			}
 			
 		}else if(isDroid){
@@ -45,19 +45,19 @@ public class TeamChoose : MonoBehaviour {
 			GameObject.Find("PhiloButton").renderer.material = Materials[2];
 			GameObject.Find("PhiloButton").collider.enabled = true;
 			collider.enabled = false;
+			
 			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("droidbuttons");
-			int i = 3;
 			foreach(GameObject b in droidButtons){//enabling robot chicken buttons
 				b.collider.enabled = true;
-				b.renderer.material = Materials[i];
-				i++;
+				DroidChickenChoose aux = (DroidChickenChoose)b.GetComponent("DroidChickenChoose");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
+				b.renderer.material = aux.Materials[1];
 			}
 			
 			GameObject [] philoButtons = GameObject.FindGameObjectsWithTag("philobuttons");
 			foreach(GameObject b in philoButtons){//disabling philo chicken buttons
 				b.collider.enabled = false;
-				b.renderer.material = Materials[i];
-				i++;
+				PhiloChickenChoose aux = (PhiloChickenChoose)b.GetComponent("PhiloChickenChoose");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
+				b.renderer.material = aux.Materials[0];
 			}
 		}
 		GameObject.Find("StartButton").collider.enabled = false;//just in case StarButton must be always disabled when we select a team

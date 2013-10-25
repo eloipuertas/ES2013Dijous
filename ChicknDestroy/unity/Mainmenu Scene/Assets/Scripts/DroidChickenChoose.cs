@@ -11,14 +11,14 @@ public class DroidChickenChoose : MonoBehaviour {
 	public Material[] Materials;
 	
 	public void OnMouseEnter(){//hover state		
-		renderer.material = Materials[1];		
+		renderer.material = Materials[2];		
 	}
 
 	public void OnMouseExit(){//when mause stops hovering		
 		if(!collider.enabled)//if button has been selected
-			renderer.material = Materials[2];
+			renderer.material = Materials[3];
 		else
-			renderer.material = Materials[0];
+			renderer.material = Materials[1];
 	}
 	
 	public void OnMouseUpAsButton(){//Selecting a button
@@ -35,16 +35,18 @@ public class DroidChickenChoose : MonoBehaviour {
 		else if(isChicken5)
 			PlayerPrefs.SetInt("Chicken",5);	
 				
-		int i = 3;
+
 		GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("droidbuttons");
 		foreach(GameObject b in droidButtons){//setting the other button to unselected state
 			if(!b.gameObject.Equals(this.gameObject)){
-				b.renderer.material = Materials[i];
+				DroidChickenChoose aux = (DroidChickenChoose)b.GetComponent("DroidChickenChoose");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
+				b.renderer.material = aux.Materials[1];
 				b.collider.enabled = true;
-				i++;
+
 			}
 		}		
+		StartOrBack aux2 = (StartOrBack)GameObject.Find("StartButton").GetComponent("StartOrBack");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
 		GameObject.Find("StartButton").collider.enabled = true;
-		GameObject.Find("StartButton").renderer.material = Materials[7];
+		GameObject.Find("StartButton").renderer.material = aux2.Materials[0];
 	}
 }
