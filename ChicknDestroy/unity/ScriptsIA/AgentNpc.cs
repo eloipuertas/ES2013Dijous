@@ -17,28 +17,39 @@ public class AgentNpc : FSM {
 	
 	//Animations 
 	
-	public AnimationClip movRight;
-	public AnimationClip movLeft;
-	public AnimationClip rotRight;
-	public  AnimationClip rotLeft;
-	public AnimationClip jumpRight;
+	public Animation movRight;
+	public Animation movLeft;
+	public Animation rotRight;
+	public  Animation rotLeft;
+	public Animation jumpRight;
 	public  AnimationClip jumpLeft;
 	public AnimationClip atack;
 
 	//Next target
-	protected Vector3 target;
-	protected Vector3 direction;
+	protected Vector2 target;
+	protected Vector2 direction;
 	
-	//Npc atributes
-	protected int health;
-	protected int damage;
+	
 	
 	//Npc propierties
+	
 	private Collision collision;
+	private Collider col;
 	private Rigidbody mas;
+	private GameObject pla;
+	
+	//Npc atributes
+	
+	public int health = 100;
+	public int damage = 25;
+	public string primaryWeapon;
+	public string secondaryWeapon;
 	
 	public float velocity = 30f;
 	private bool Dead = false;
+	
+	
+	private float dist;
 	
 	private Vector3 playereulerAngles;
 	//private float rangeWarp = 100;
@@ -46,16 +57,20 @@ public class AgentNpc : FSM {
 	
 	
 	
-	// -------Agent arquitecture--------//
+	// ######### Agent arquitecture #########//
 	
-	
+	//--------Agents States------------//
 	protected void UpdateNoneState(){
 	}
 	protected void UpdateRunState(){
 			
+		
+			
 			mas = this.gameObject.rigidbody;
-			transform.LookAt(target);
-		  	transform.Translate(new Vector3(0,0,velocity) * Time.deltaTime);
+			
+			
+			//transform.LookAt
+		  	transform.Translate(new Vector2(-velocity,0) * Time.deltaTime);
 			
 					
 			
@@ -71,11 +86,15 @@ public class AgentNpc : FSM {
 	protected void UpdateAttackState(){
 		Destroy(mas);
 		Debug.Log("KILL THEM");
+//		pla.setHealtPoints((pla.getHealthPoints - damage));
+		if(dist >=0){
+			curState = FSM.Run;
+		}
 		
 	}
 	protected void UpdateDeadState(){
 	}
-	//Agent Perceptions
+	//-----------Agent Perceptions------------
 	protected override void FSMUpdate(){
 		switch (curState){
 			case FSM.None: UpdateNoneState(); break;
@@ -89,51 +108,115 @@ public class AgentNpc : FSM {
  		//elapsedTime += Time.deltaTime;
 
  		//Go to dead state is no health left
-		if (health <= 0) curState = FSM.Dead;
+		Debug.Log(this.getHeatlhPoints());
+		if (this.getHeatlhPoints() <= 0) curState = FSM.Dead;
 		Debug.Log("Current STATE: "+curState);
 
 	}
-	//Gestio de collisions
+	//-----------Gestio de collisions----------
 	
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.collider){
 			Debug.Log("A tocat terra");
 		}
-		if(collision.gameObject.tag=="Player"){ 
+		if(collision.gameObject.tag=="player"){ 
 				Debug.Log("A tocat player");
 				curState = FSM.Attack;
  		}
 		
 	}
+	
+	// -------NPC interface----------
+	
+	protected int getHeatlhPoints(){
+		return health;
+	}
+	protected void setHealthPoints(int n){
+		health = n;
+	}
+	protected string getPrimaryWeapon(){
+		return primaryWeapon;
+	}
+	protected string getSecondaryWeapon(){
+		return secondaryWeapon;
+	}
+	protected Vector2 getCoordinates(){
+		return new Vector2(transform.localPosition.x,transform.localPosition.y);
+	}
+	
+	//Return 
+//	float getcolliderType(){
+//		if(col == null) return 0;
+//		if(col.GetType() == typeof(MeshCollider)){
+//			print("mesh");
+//			MeshCollider f = col.GetComponent<MeshCollider>();
+//			return f;
+//			
+//		}
+//		if(col.GetType() == typeof(CapsuleCollider)){
+//			print("capsule");
+//			CapsuleCollider f = col.GetComponent<CapsuleCollider>();
+//			return f;
+//			
+//		}
+//		if(col.GetType() == typeof(SphereCollider)){
+//			print("sphere");
+//			SphereCollider d = col.GetComponent<SphereCollider>();
+//			return d;
+//		}
+//		if(col.GetType() == typeof(BoxCollider)){
+//			print("box");
+//			BoxCollider f = col.GetComponent<CapsuleCollider>();
+//			return f;
+//		}
+//		if(col.GetType() == typeof(MeshCollider)) print("mesh");
+//	}
+	//void manDistance(Vector3 p1,Vector3 p2){
+		//return Mathf.Sqrt(Mathf.Exp(2.0)*(p1.x -p2.x) +(p1.y - p2.y));
+	//}
+	//-------------Utility Functions---------------
+	
 	//Actualiza la posicio del objectiu
 	void updatePlayerPosition(){
-		GameObject pla = GameObject.FindGameObjectWithTag("Player");
+		pla = GameObject.FindGameObjectWithTag("Player");
 		playerTransform = pla.transform;
 		target = pla.transform.localPosition;
 		direction = pla.transform.localEulerAngles;
+		Vector3 volum = transform.localPosition;
+		Debug.Log(volum);
+		dist = Mathf.Abs(Vector3.Distance(target,volum));
 		
 			
 	}
-	void manDistance(Vector3 p1,Vector3 p2){
-		//return Mathf.Sqrt(Mathf.Exp(2.0)*(p1.x -p2.x) +(p1.y - p2.y));
-	}
-	//General Funcionts
-	
 	GameObject warpNpc(Vector3 p,Vector3 s){
 		GameObject npc = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		npc.transform.localPosition = p;
 		npc.transform.localScale = s;
 		return npc;
 	}
-	protected override void Ini(){
-		curState = FSM.Run;
+	void setInitialsAtributes(){
 		health = 100;
-		damage = 2;
+		damage = 25;
+		primaryWeapon = "katana";
+	}
+	void setInitialState(){
+		curState = FSM.Run;
+	}
+	void setInitialCollider(){
+		col = GetComponent<Collider>();
+		Debug.Log(col);
 		mas = this.gameObject.rigidbody;
 		Debug.Log(mas.mass);
 		
 		//mas.GetComponent(RigidBody);
-		
+	}
+	
+	
+	//Initialization of NPC
+	protected override void Ini(){
+		setInitialsAtributes();
+		setInitialCollider();
+		setInitialState();
 		updatePlayerPosition();
 		Debug.Log(curState);
 	}
