@@ -313,6 +313,7 @@ ModelImporter:
     100614: Plane_001
     100616: Point_014
     100618: Sun
+    100620: Cube_001
     400000: aparet_236
     400002: //RootNode
     400004: Cube_000
@@ -623,6 +624,7 @@ ModelImporter:
     400614: Plane_001
     400616: Point_014
     400618: Sun
+    400620: Cube_001
     2300000: aparet_236
     2300002: Cube_000
     2300004: Cube_005
@@ -930,6 +932,7 @@ ModelImporter:
     2300608: Cylinder_005
     2300610: paret_005
     2300612: Plane_001
+    2300614: Cube_001
     3300000: aparet_236
     3300002: Cube_000
     3300004: Cube_005
@@ -1237,6 +1240,7 @@ ModelImporter:
     3300608: Cylinder_005
     3300610: paret_005
     3300612: Plane_001
+    3300614: Cube_001
     4300000: Cube_305
     4300002: Cube_304
     4300004: Cube_303
@@ -1544,6 +1548,7 @@ ModelImporter:
     4300608: paret_005
     4300610: Plane_001
     4300612: Cube_025
+    4300614: Cube_001
     7400000: Default Take
     9500000: //RootNode
   materials:
