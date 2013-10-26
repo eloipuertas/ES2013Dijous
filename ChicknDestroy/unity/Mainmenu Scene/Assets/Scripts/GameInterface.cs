@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class GameInterfaces : MonoBehaviour{
-	public GameInterfaces (){
+public class GameInterface : MonoBehaviour{
+	public GameInterface (){
 	
 	}
 	

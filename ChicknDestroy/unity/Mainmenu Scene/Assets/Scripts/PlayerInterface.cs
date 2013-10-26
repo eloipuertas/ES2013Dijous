@@ -1,10 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerInterfaces : MonoBehaviour {
+public class PlayerInterface : MonoBehaviour {
 	//private Player player;
 	private int h;
-	public PlayerInterfaces() {
+	public PlayerInterface() {
 		// Debug only
 		this.h = 0;
 	}
