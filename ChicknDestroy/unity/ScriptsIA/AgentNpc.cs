@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+
 public class AgentNpc : FSM {
 	
 	//Agent finite stats
@@ -110,10 +111,8 @@ public class AgentNpc : FSM {
 		pla = GameObject.FindGameObjectWithTag("Player");
 		playerTransform = pla.transform;
 		target = pla.transform.localPosition;
-		direction = pla.transform.localEulerAngles;
-		Vector3 volum = transform.localPosition;
-		//Debug.Log(volum);
-		dist = Mathf.Abs(Vector3.Distance(target,volum));
+		
+	
 		
 			
 	}
@@ -128,6 +127,7 @@ public class AgentNpc : FSM {
 		
 		return distX;
 	}
+	
 	float getDistanceY(Vector3 npcPos,Vector3 playerPos){
 		float distY = 0.0f;
 		if (Mathf.Abs(npcPos.y) > Mathf.Abs(playerPos.y)){
@@ -149,6 +149,10 @@ public class AgentNpc : FSM {
 		health = 100;
 		damage = 25;
 		primaryWeapon = "katana";
+		
+	}
+	void setInitialSpawnPoints(){
+		spawnPoint = transform.position;
 	}
 	void setInitialState(){
 		curState = FSM.Run;
@@ -157,10 +161,17 @@ public class AgentNpc : FSM {
 		col = GetComponent<Collider>();
 		Debug.Log(col);
 		mas = this.gameObject.rigidbody;
-		Debug.Log(mas.mass);
+		Debug.Log(mas);
 		
 		//mas.GetComponent(RigidBody);
 	}
+	IEnumerator WaitAndCallback(float waitTime){
+		Debug.Log("Time "+Time.time);
+		yield return new WaitForSeconds(waitTime);
+		Debug.Log("Time 3 "+Time.time);
+		//gobool = true;
+	}
+
 	
 	// ######### Agent arquitecture #########//
 	
@@ -172,34 +183,41 @@ public class AgentNpc : FSM {
 			
 		
 			
-			//setInitialCollider();
+			setInitialCollider();
 			
-			//Vector3 relPos = target - transform.position;
+			Vector3 relPos = target - transform.position;
 		    //transform.rotation = Quaternion.LookRotation(relPos);
-			//transform.LookAt
+			//transform.LookAt(target);
 //			if(getDistanceY(transform.position,target)>=60){
 //				curState = FSM.Jump;
 //			}
 			this.animation["Mover_Izquierda"].wrapMode = WrapMode.Loop;
 			this.animation.Play("Mover_Izquierda");
 		 	
-			Debug.Log("Distance: "+Vector3.Distance(transform.position,target));
-			Debug.Log("Collider radius: "+GetComponent<CapsuleCollider>().radius);
-			if(Vector3.Distance(transform.position,target)> GetComponent<CapsuleCollider>().radius){
-				transform.Translate(new Vector3(-velocity,0,0) * Time.deltaTime);
-				if(transform.position.x > target.x){
-					
-		  			transform.rotation = Quaternion.Euler(0, 0, 0);
-//					this.animation["Mover_Derecha"].wrapMode = WrapMode.Loop;
-//					this.animation.Play("Mover_Derecha");
-					
-				}
-				if(transform.position.x < target.x){
-					
-		  			transform.rotation = Quaternion.Euler(0, 180, 0);
-					
-				}
-			}
+			//Debug.Log("Distance: "+Vector3.Distance(transform.position,target));
+			//Debug.Log("Collider radius: "+GetComponent<CapsuleCollider>().radius);
+			//if(Vector3.Distance(transform.position,target)> 0){
+				///transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
+							
+				float vx = relPos.x < 0 ? -velocity : velocity; 
+				float vy = relPos.y < 0 ? -velocity : velocity;
+			
+				transform.Translate(new Vector3(vx,0,0) * Time.deltaTime);
+
+//				if(transform.position.x < target.x){
+//					
+//		  			transform.rotation = Quaternion.Euler(0, 0, 0);
+//				    
+////					this.animation["Mover_Derecha"].wrapMode = WrapMode.Loop;
+////					this.animation.Play("Mover_Derecha");
+//					
+//				}
+//				if(transform.position.x > target.x){
+//					
+//		  			transform.rotation = Quaternion.Euler(0, 180, 0);
+//					
+//				}
+			//}
 		
 			
 					
@@ -211,29 +229,43 @@ public class AgentNpc : FSM {
 		//if(Mathf.Abs(target.z) - Mathf.Abs(transform.localPosition.z) >= 1){
 		//	curState = FSM.Attack;
 		//}
+		
 		updatePlayerPosition();
 	}
 	protected void UpdateAttackState(){
-		Destroy(mas);
+		//Destroy(mas);
+		this.animation.Stop ("Mover_Izquierda");
 		Debug.Log("KILL THEM");
 		
 //		pla.setHealtPoints((pla.getHealthPoints - damage));
-		if(
-		WaitForSeconds(0.5f);
+		
+		StartCoroutine(WaitAndCallback(0.5f));
+		Debug.Log("Time 2 "+Time.time);
 		pla.setHeatlhPoints(pla.getHealhpoints()-damage);
 		Debug.Log("Damage: 25");
-		if(Vector3.Distance(transform.position,target)> GetComponent<CapsuleCollider>().radius){
+		if(Vector3.Distance(transform.position,target) >pla.GetComponent<BoxCollider>().size.x * pla.transform.localScale.x+ GetComponent<BoxCollider>().size.x * transform.localScale.x  ){
+			Debug.Log("CHANGE TO RUN");
+			Debug.Log(Vector3.Distance(transform.position,target));
+			Debug.Log(GetComponent<BoxCollider>().size.x * transform.localScale.x);
 			curState = FSM.Run;
 		}
-		
+		//UpdateRunState();
 		updatePlayerPosition();
 		
 	}
+	 
+//	private void KillThatMotherfucker(){
+//		pla.setHeatlhPoints(pla.getHealhpoints()-damage);
+//	}
+		
     protected void UpdateJumpState(){
 		}
 	protected void UpdateDeadState(){
-		//Animacio morir
-		Destroy(this.gameObject);
+		//Animacio morirs
+		setInitialsAtributes();
+		setInitialState();
+		transform.position = spawnPoint;
+		
 	}
 	//-----------Agent Perceptions------------
 	protected override void FSMUpdate(){
@@ -249,10 +281,10 @@ public class AgentNpc : FSM {
  		//elapsedTime += Time.deltaTime;
 
  		//Go to dead state is no health left
-		Debug.Log(this.getHeatlhPoints());
+		//Debug.Log(this.getHeatlhPoints());
 		if (this.getHeatlhPoints() <= 0) curState = FSM.Dead;
-		//if (pla.getHeatlhPoints() <=0) curState = FSM.None;
-		Debug.Log("Current STATE: "+curState);
+		if (pla.getHeatlhPoints() <=0) curState = FSM.None;
+		//Debug.Log("Current STATE: "+curState);
 
 	}
 	//-----------Gestio de collisions----------
@@ -277,7 +309,10 @@ public class AgentNpc : FSM {
 		setInitialsAtributes();
 		setInitialCollider();
 		setInitialState();
+		setInitialSpawnPoints();
+		
 		updatePlayerPosition();
+		
 		Debug.Log(curState);
 	}
 
