@@ -5,7 +5,7 @@ public var bala:GameObject;
  
 var audioTir: AudioSource;
 var audioRecarga: AudioSource;
-var velocitatBala = 5;
+var velocitatBala = 1000;
  
 function Start () {
 	//obtenim tots els audioSources
@@ -23,10 +23,11 @@ function Update () {
 	//Per disparar apretar la tecla T
 	if (Input.GetKeyDown(KeyCode.T)) {
 		var nouTir:GameObject=Instantiate (bala, sortidaBala.transform.position, escopeta.transform.rotation);
+		//nouTir.transform.eulerAngles.z=90;
 		//per fer que la bala desapareixi al cap de X segons
 		nouTir.AddComponent("DestruirBala");
 		//segons l'eix on es col·loca la velocitat de la bala en Vector3, aquesta es desplaça cap a una direccio o una altre
-		nouTir.rigidbody.AddRelativeForce(new Vector3(0, 0, velocitatBala), ForceMode.VelocityChange);
+		nouTir.rigidbody.AddForce(new Vector3(velocitatBala, 0, 0), ForceMode.VelocityChange);
 		audioTir.Play();
 	}
 	

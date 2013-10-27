@@ -1,5 +1,4 @@
-﻿
-var audioPowerUp: AudioSource;
+﻿var audioPowerUp: AudioSource;
 var audioPartidaPerduda: AudioSource;
 var audioPartidaGuanyada: AudioSource;
 

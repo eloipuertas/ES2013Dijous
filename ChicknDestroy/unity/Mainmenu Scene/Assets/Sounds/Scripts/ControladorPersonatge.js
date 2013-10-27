@@ -15,22 +15,24 @@ function Update () {
 	//Barra espaciadora fa saltar el personatge
 	if(Input.GetKeyUp(KeyCode.Space)) {
 		//Força veloctiat constant, moviment sobre eix Y
-		Personatge.rigidbody.AddForce(new Vector3(0,10,0), ForceMode.VelocityChange);
+		Personatge.rigidbody.AddForce(new Vector3(0,30,0), ForceMode.VelocityChange);
 		audioCaminarRobot.Stop();
 		audioSalt.Play();
 	}
 	
 	//Boto esquerra i dret fan moure el personatge
 	if(Input.GetKey("left")){
-		Personatge.transform.position.x -= 0.1;
+		Personatge.transform.position.x -= 1;
 		//per evitar la superposicio del so de caminar i perque no soni mentre s'esta a l'aire i s'apreta moure's a l'esquerra
-		if (!audioCaminarRobot.isPlaying && Personatge.transform.position.y < 2.5)
+		//if (!audioCaminarRobot.isPlaying && Personatge.transform.position.y < 2.5)
+		if (!audioCaminarRobot.isPlaying)
 			audioCaminarRobot.Play();
 	}
 	
 	if(Input.GetKey("right")){
-		Personatge.transform.position.x += 0.1;
-		if (!audioCaminarRobot.isPlaying && Personatge.transform.position.y < 2.5)
+		Personatge.transform.position.x += 1;
+		//if (!audioCaminarRobot.isPlaying && Personatge.transform.position.y < 2.5)
+		if (!audioCaminarRobot.isPlaying)
 			audioCaminarRobot.Play();
 	}
 
