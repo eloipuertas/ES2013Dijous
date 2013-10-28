@@ -4,7 +4,12 @@ using System.Collections;
 [RequireComponent(typeof(PlayerPhysics))]
 public class PlayerController : MonoBehaviour {
 	
-	// Player Handling
+	//Atributos de personaje
+	private int health;
+	private GameObject primaryWeapon;
+	private GameObject secondaryWeapon;
+	
+	//Atributos de control
 	public float gravity = 40;
 	public float speed = 30;
 	public float acceleration = 30;
@@ -23,13 +28,13 @@ public class PlayerController : MonoBehaviour {
 	private int lastDirection;
 	
 	private PlayerPhysics playerPhysics;
-
-	
 	
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animation.Play("paradaDerecha");
 		lastDirection = stopDer;
+		
+		health = 100;
 	}
 	
 	void Update () {
@@ -95,5 +100,31 @@ public class PlayerController : MonoBehaviour {
 			n += a * Time.deltaTime * dir;
 			return (dir == Mathf.Sign(target-n))? n: target; // if n has now passed target then return target, otherwise return n
 		}
+	}
+	
+	public int getHealthPoints() {
+		return health;
+	}
+	
+	public void setHealthPoints(int n) {
+		health = n;
+	}
+	
+	
+	public string getPrimaryWeapon() {
+		return primaryWeapon.ToString();
+	}
+	
+	public string getSecondaryWeapon() {
+		return secondaryWeapon.ToString();
+	}
+	
+	public Vector3 getCoordinates() {
+		return transform.position;
+	}
+	
+	public void setDamage(int damage) {
+		if ((health - damage) > 0) health = health - damage;
+		else health = 0;
 	}
 }
