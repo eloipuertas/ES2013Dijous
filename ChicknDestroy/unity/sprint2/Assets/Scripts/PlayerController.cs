@@ -50,14 +50,17 @@ public class PlayerController : MonoBehaviour {
 		amountToMove.y -= gravity * Time.deltaTime;
 		playerPhysics.Move(amountToMove * Time.deltaTime);
 		
-		Debug.Log(amountToMove.x);
+		
 		if(amountToMove.y > 1) {
+		//Si estamos en el aire de subida
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
 			else animation.Play("saltoVerticalIz");
 		}else if(amountToMove.y < -1){
+		//Si estamos en el aire de bajada
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
 			else animation.Play("caidaIzquierda");
 		}else {
+		//Si estamos en el suelo
 			if (lastDirection == movDer) {
 				if (amountToMove.x > 0) animation.Play("correrDerecha");
 				else if(amountToMove.x < 0) animation.Play("giroDerechaIzq");
