@@ -60,7 +60,8 @@ public class TeamChoose : MonoBehaviour {
 				b.renderer.material = aux.Materials[0];
 			}
 		}
+		StartOrBack aux2 = (StartOrBack)GameObject.Find("StartButton").GetComponent("StartOrBack");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
 		GameObject.Find("StartButton").collider.enabled = false;//just in case StarButton must be always disabled when we select a team
-		GameObject.Find("StartButton").renderer.material = Materials[13];
+		GameObject.Find("StartButton").renderer.material = aux2.Materials[2];
 	}
 }
