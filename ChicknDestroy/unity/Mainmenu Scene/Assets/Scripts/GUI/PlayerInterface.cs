@@ -6,7 +6,7 @@ public class PlayerInterface : MonoBehaviour {
 	private int h;
 	public PlayerInterface() {
 		// Debug only
-		this.h = 0;
+		this.h = 100;
 	}
 	
 	public string getPrimaryWeapon() {

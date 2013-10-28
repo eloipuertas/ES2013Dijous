@@ -18,8 +18,9 @@ public class HUD : MonoBehaviour {
 	Rect rpause;
 	Rect rpoints;
 	
+	// Definitive Objects
+	private Lifebar life;
 
-	private GUIObject o;
 	void initComponents() {
 		this.rhealth = new Rect(10,10,100,10);
 		this.rpweapon = new Rect(rhealth.xMax+10, rhealth.yMin, 100, 10);
@@ -29,7 +30,13 @@ public class HUD : MonoBehaviour {
 		this.rpoints = new Rect(rpause.xMax/2,rhealth.yMin,100,10);
 		
 		
-		//this.s = new Sprite(  ,100,100,"titulo",this.skin);
+		this.life = new Lifebar(new Vector2(10,10),
+			new Vector2(10,10),
+			"life_bar_",
+			new Vector2(10,0),
+			4, // n-segments of LifeBar
+			150, // Max life with the barrier
+			100); // Current life
 	}
 	
 	// Use this for initialization
@@ -43,19 +50,17 @@ public class HUD : MonoBehaviour {
 		this.player = new PlayerInterface();
 		this.game = new GameInterface();
 		
-		this.o = new GUIObject(10,10,200,20,"titulo");
 	}
 	
 	void OnGUI() {
-		this.o.render();
 		GUI.skin = this.skin;
+		
 		// Player Information
-		// GUI.Label(new Rect(0,0,0,0),new Texture2D(50,50).LoadImage());
-		GUI.Label(rhealth,player.getHealthPoints().ToString());
+		//GUI.Label(rhealth,player.getHealthPoints().ToString());
 		GUI.Label(rpweapon,player.getPrimaryWeapon());
 		GUI.Label(rsweapon,player.getSecondaryWeapon());
 		
-		
+		this.life.render();
 		
 		GUI.Label(rpoints,game.getPoints().ToString());
 		if(GUI.Button(rpause, "Pause")) {
@@ -72,5 +77,7 @@ public class HUD : MonoBehaviour {
 		// show pause menu.
 		this.player.setHealthPoints(this.player.getHealthPoints()+10);
 		print ("Pause!!");
+		print("Current Health: "+this.player.getHealthPoints().ToString());
+		this.life.setLife(this.player.getHealthPoints());
 	}
 }
