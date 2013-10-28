@@ -38,7 +38,8 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Update () {
-		targetSpeed = Input.GetAxisRaw("Horizontal") * speed;
+		float raw = Input.GetAxisRaw("Horizontal");
+		targetSpeed = raw * speed;
 		currentSpeed = IncrementTowards(currentSpeed, targetSpeed,acceleration);
 		
 		if (playerPhysics.grounded) {
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour {
 		amountToMove.y -= gravity * Time.deltaTime;
 		playerPhysics.Move(amountToMove * Time.deltaTime);
 		
+		//Debug.Log("x "+raw);
 		
 		if(amountToMove.y > 1) {
 		//Si estamos en el aire de subida
@@ -66,27 +68,62 @@ public class PlayerController : MonoBehaviour {
 			else animation.Play("caidaIzquierda");
 		}else {
 		//Si estamos en el suelo
-			if (lastDirection == movDer) {
-				if (amountToMove.x > 0) animation.Play("correrDerecha");
-				else if(amountToMove.x < 0) animation.Play("giroDerechaIzq");
+			if (lastDirection == movDer ) {
+				if (amountToMove.x > 1) {
+					animation.Play("correrDerecha");
+					lastDirection = movDer;
+				}
+				else if(raw < 0) {
+					animation.Play("giroDerechaIzq", PlayMode.StopAll);
+					lastDirection = movIzq;
+				}
 				else {
 					animation.Play("paradaDerecha");
 					lastDirection = stopDer;
 				}
 			}else if (lastDirection == movIzq) {
-				if (amountToMove.x < 0) animation.Play("correrIzquierda");
-				else if(amountToMove.x > 0) animation.Play("giroIzquierdaDerecha");
+				if (amountToMove.x < -1) {
+					animation.Play("correrIzquierda");
+					lastDirection = movIzq;
+				}
+				else if(raw > 0) {
+					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+					lastDirection = movDer;
+				}
 				else {
 					animation.Play("paradaIzquierda");
 					lastDirection = stopIzq;
 				}
 			}else {
-				if (lastDirection == stopDer) animation.Play("paradaDerecha");
-				else animation.Play("paradaIzquierda");
+				
+				if (lastDirection == stopDer) {
+					if (amountToMove.x > 1) {
+						animation.Play("correrDerecha");
+						lastDirection = movDer;
+					}else if(raw < 0) {
+						animation.Play("giroDerechaIzq", PlayMode.StopAll);
+						lastDirection = movIzq;
+					}
+					else {
+						animation.Play("paradaDerecha");
+						lastDirection = stopDer;
+					}
+				}
+				else {
+					if(amountToMove.x < -1) {
+						animation.Play("correrIzquierda");
+						lastDirection = movIzq;
+					}else if(raw > 0) {
+						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+						lastDirection = movDer;
+					}else {
+						animation.Play("paradaIzquierda");
+						lastDirection = stopIzq;
+					}
+				}
+				
+				
 			}
-		
-			if (amountToMove.x != 0) 
-				lastDirection = (amountToMove.x < 0)?movIzq:movDer;
 		}
 	}
 	
