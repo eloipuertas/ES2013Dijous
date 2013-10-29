@@ -7,6 +7,7 @@ public class WeaponInfo : MonoBehaviour {
 	private bool isPlayer = false;//boolean that determinate if player is colliding or not with the weapon object
 	WWW w;//WWW class search file with a url parameter in it's constructor to get the content, can use //http //https //ftp(this one a little bit limited) and //file protocols, so i've used in this case for get the textures from a path 
 	Texture2D t;
+	bool activeInfo = false;
 	
 	void OnTriggerEnter(Collider whoIs) {//we set at true when player enters in the weapon object box collider
         if(whoIs.CompareTag("Player")){
@@ -21,7 +22,7 @@ public class WeaponInfo : MonoBehaviour {
 	}
 	
 	void OnGUI(){//show on gui
-		if(isPlayer){//if player is over the weapon object
+		if(isPlayer && activeInfo){//if player is over the weapon object
 			if(isEscopeta){//if is escopeta type
 				w = new WWW("file://"+Application.dataPath+"/Texture/hud/escopeta.png");//Loading the escopeta.png file
 				t = w.texture;//getting the texture of the file
