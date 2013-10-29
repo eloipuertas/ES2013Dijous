@@ -27,11 +27,10 @@ public class Lifebar : SpriteGroup{
 	public void setLife(int life) {
 		this.current_life = life;
 		this.irender = calculateIRender();
-		if (this.irender>this.n)this.irender = this.n;
+		if (this.irender>=this.n)this.irender = this.n-1;
 	}
 	public void render() {
-		for (int i = 0; i<this.irender;i++)
-			this.sprites[i].render();
+		this.sprites[(this.n-1)-this.irender].render();
 	}
 }
 

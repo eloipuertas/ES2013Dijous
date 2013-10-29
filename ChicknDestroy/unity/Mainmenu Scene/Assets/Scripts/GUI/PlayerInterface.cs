@@ -4,9 +4,11 @@ using System.Collections;
 public class PlayerInterface : MonoBehaviour {
 	//private Player player;
 	private int h;
+	private int p;
 	public PlayerInterface() {
 		// Debug only
-		this.h = 100;
+		this.h = 0;
+		this.p = 0;
 	}
 	
 	public string getPrimaryWeapon() {
@@ -25,8 +27,12 @@ public class PlayerInterface : MonoBehaviour {
 		return h;
 	}
 	
+	public void setPlayerPoints(int points) {
+		this.p = points;
+	}
+	
 	public int getPlayerPoints() {
-		return 0;
+		return p;
 	}
 	
 	/*public PlayerInterface (Player player) {
