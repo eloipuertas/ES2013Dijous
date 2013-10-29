@@ -37,7 +37,7 @@ public class PlayerPhysics : MonoBehaviour {
 		for (int i = 0; i<3; i ++) {
 			float dir = Mathf.Sign(deltaY);
 			float x = (p.x + c.x - s.x/2) + s.x/2 * i; // Left, centre and then rightmost point of collider
-			float y = p.y + c.y -2.5f + s.y/2 * dir; // Bottom of collider
+			float y = p.y + c.y -15f + s.y/2 * dir; // Bottom of collider
 			
 			ray = new Ray(new Vector2(x,y), new Vector2(0,dir));
 			Debug.DrawRay(ray.origin,ray.direction);
