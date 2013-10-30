@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour {
 	public float acceleration = 30;
 	public float jumpHeight = 60;
 	
+	//sonido
+	public AudioSource sonidoSalto;
+	
 	private float currentSpeed;
 	private float targetSpeed;
 	private Vector2 amountToMove;
@@ -48,6 +51,7 @@ public class PlayerController : MonoBehaviour {
 			
 			// Jump
 			if (Input.GetButtonDown("Jump")) {
+				sonidoSalto.Play();
 				amountToMove.y = jumpHeight;	
 			}
 		}
