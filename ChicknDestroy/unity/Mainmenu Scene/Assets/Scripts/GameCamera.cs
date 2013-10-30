@@ -17,8 +17,8 @@ public class GameCamera : MonoBehaviour {
 		if (target) {
 			//Funciona perfectamente para una distancia Z de la camara al personaje de 500 unidades
 			
-			float x = IncrementTowards(transform.position.x, target.position.x, trackSpeed);
-			float y = IncrementTowards(transform.position.y, (target.position.y + 50), trackSpeed);
+			float x = IncrementTowards(transform.position.x, target.position.x+200, trackSpeed);
+			float y = IncrementTowards(transform.position.y, (target.position.y + 100), trackSpeed);
 			transform.position = new Vector3(x,y, transform.position.z);
 		}
 	}
