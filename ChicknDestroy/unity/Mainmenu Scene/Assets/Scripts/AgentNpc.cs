@@ -37,6 +37,7 @@ public class AgentNpc : FSM {
 	private Collider col;
 	private Rigidbody mas;
 	private GameObject pla;
+	private PlayerController playerScript;
 	
 	//Npc atributes
 	
@@ -45,7 +46,7 @@ public class AgentNpc : FSM {
 	public string primaryWeapon;
 	public string secondaryWeapon;
 	
-	public float velocity = 300f;
+	public float velocity = 80f;
 	private bool Dead = false;
 	
 	
@@ -57,7 +58,8 @@ public class AgentNpc : FSM {
 	
 	private Animator animator;
 	private bool derecha = true;
-	public float stopDistance = 160;
+	public float stopDistance = 60;
+	private bool attacked = false;
 		// -------NPC interface----------
 	
 	protected int getHealthPoints(){
@@ -111,6 +113,7 @@ public class AgentNpc : FSM {
 	//Actualiza la posicio del objectiu
 	void updatePlayerPosition(){
 		pla = GameObject.FindGameObjectWithTag("Player");
+		playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
 		playerTransform = pla.transform;
 		target = pla.transform.localPosition;
 		
@@ -185,8 +188,9 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateRunState(){
 			
+			if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Mover_Derecha"))
+				animator.SetBool("move",false);
 		
-			animator.SetBool("move",false);
 			setInitialCollider();
 			
 			Vector3 relPos = target - transform.position;
@@ -247,32 +251,48 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
-		animator.SetBool("attack",false);
 		
-		Vector3 relPos = target - transform.position;
+		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ataque_Derecha"))
+			animator.SetBool("attack",false);
 
-		if (relPos.x > stopDistance || relPos.x < -stopDistance){
-			animator.SetBool("move",true);
-			curState = FSM.Run;
+		else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Idle")){
+			
+			Vector3 relPos = target - transform.position;
+			
+			if (Mathf.Abs(relPos.x) > stopDistance){
+				animator.SetBool("move",true);
+				curState = FSM.Run;
+				
+			} else if (!attacked){
+				animator.SetBool("attack",true);
+				playerScript.setDamage(damage);
+				print("HIT");
+				attacked = true;
+				
+			} else if(attacked){
+				attacked = false;
+			}
+			
+			
 		}
+
 		
+		//this.animation.Stop ("Mover_Izquierda");
 		
 		/*
-		this.animation.Stop ("Mover_Izquierda");
-		Debug.Log("KILL THEM");
-		
 		StartCoroutine(WaitAndCallback(0.5f));
 		Debug.Log("Time 2 "+Time.time);
-		pla.setHealthPoints(pla.getHealthpoints()-damage);
+		playerScript.setHealthPoints(playerScript.getHealthpoints()-damage);
 		Debug.Log("Damage: 25");
-		if(Vector3.Distance(transform.position,target) >pla.GetComponent<BoxCollider>().size.x * pla.transform.localScale.x+ GetComponent<BoxCollider>().size.x * transform.localScale.x  ){
+		/*if(Vector3.Distance(transform.position,target) >pla.GetComponent<BoxCollider>().size.x * pla.transform.localScale.x+ GetComponent<BoxCollider>().size.x * transform.localScale.x  ){
 			Debug.Log("CHANGE TO RUN");
 			Debug.Log(Vector3.Distance(transform.position,target));
 			Debug.Log(GetComponent<BoxCollider>().size.x * transform.localScale.x);
 			curState = FSM.Run;
-		}
+		}*/
+		
 		//UpdateRunState();
-		*/
+		
 		updatePlayerPosition();
 		
 	}
