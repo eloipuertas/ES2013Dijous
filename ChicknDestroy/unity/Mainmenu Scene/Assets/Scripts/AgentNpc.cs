@@ -43,11 +43,11 @@ public class AgentNpc : FSM {
 	//Npc atributes
 	
 	public int health = 100;
-	public int damage = 25;
+	public int damage = 15;
 	public string primaryWeapon;
 	public string secondaryWeapon;
 	
-	public float velocity = 80f;
+	public float velocity = 175f;
 	private bool Dead = false;
 	
 	
@@ -153,7 +153,7 @@ public class AgentNpc : FSM {
 	}
 	void setInitialsAtributes(){
 		health = 100;
-		damage = 25;
+		//damage = 25;
 		primaryWeapon = "katana";
 		
 		animator = GetComponent<Animator>();
