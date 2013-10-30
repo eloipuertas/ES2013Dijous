@@ -35,6 +35,7 @@ public class PlayerController : MonoBehaviour {
 		lastDirection = stopDer;
 		
 		health = 100;
+		notifyHealth();
 	}
 	
 	void Update () {
@@ -145,6 +146,7 @@ public class PlayerController : MonoBehaviour {
 	
 	public void setHealthPoints(int n) {
 		health = n;
+		notifyHealth();
 	}
 	
 	
@@ -161,7 +163,13 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	public void setDamage(int damage) {
-		if ((health - damage) > 0) health = health - damage;
-		else health = 0;
+		if ((health - damage) > 0) 
+			setHealthPoints(health - damage);
+		else 
+			setHealthPoints(0);
+	}
+	void notifyHealth() {
+		HUD hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		hud.notifyHealth(health);
 	}
 }

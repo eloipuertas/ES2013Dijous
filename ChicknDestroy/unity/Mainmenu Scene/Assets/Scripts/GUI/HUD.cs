@@ -56,6 +56,10 @@ public class HUD : MonoBehaviour{
 			10);
 	}
 	
+	public void notifyHealth(int hp) {
+		this.life.setLife(hp);
+	}
+	
 	// Use this for initialization
 	void Start () {
 		Debug.Log ("Starting HUD debug message");
