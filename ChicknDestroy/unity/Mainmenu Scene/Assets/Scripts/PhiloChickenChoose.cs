@@ -5,9 +5,11 @@ public class PhiloChickenChoose : MonoBehaviour {
 
 	public bool isChicken1 = false, isChicken2 = false, isChicken3 = false, isChicken4 = false, isChicken5 = false;
 	public Material[] Materials;
+	public AudioSource audioOpcions;
 	
 	public void OnMouseEnter(){		
-		renderer.material = Materials[2];	
+		renderer.material = Materials[2];
+		audioOpcions.Play();
 	}
 
 	public void OnMouseExit(){		
