@@ -214,8 +214,8 @@ public class AgentNpc : FSM {
 				}
 		
 				transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
-		
-				if (relPos.x < stopDistance && relPos.x > -stopDistance){
+
+				if (Mathf.Abs(relPos.x) <= stopDistance){
 					animator.SetBool("attack",true);
 					curState = FSM.Attack;
 				}
@@ -259,7 +259,7 @@ public class AgentNpc : FSM {
 			
 			Vector3 relPos = target - transform.position;
 			
-			if (Mathf.Abs(relPos.x) > stopDistance){
+			if (Mathf.Abs(relPos.x) > stopDistance+5){
 				animator.SetBool("move",true);
 				curState = FSM.Run;
 				
