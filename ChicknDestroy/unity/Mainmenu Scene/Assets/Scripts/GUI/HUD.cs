@@ -56,7 +56,7 @@ public class HUD : MonoBehaviour{
 			10);
 	}
 	
-	public void notifyHealth(int hp) {
+	public void notifyHealthChange(int hp) {
 		this.life.setLife(hp);
 	}
 	

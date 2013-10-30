@@ -32,13 +32,18 @@ public class PlayerController : MonoBehaviour {
 	
 	private PlayerPhysics playerPhysics;
 	
+	private HUD hud;
+	private GameManager gameManager;
+	
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animation.Play("paradaDerecha");
 		lastDirection = stopDer;
 		
+		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
-		notifyHealth();
+		fireHealthNotification();
 	}
 	
 	void Update () {
@@ -150,7 +155,10 @@ public class PlayerController : MonoBehaviour {
 	
 	public void setHealthPoints(int n) {
 		health = n;
-		notifyHealth();
+		fireHealthNotification();
+		if (health <= 0) {
+			fireDeathNotification();
+		}
 	}
 	
 	
@@ -172,8 +180,11 @@ public class PlayerController : MonoBehaviour {
 		else 
 			setHealthPoints(0);
 	}
-	void notifyHealth() {
-		HUD hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
-		hud.notifyHealth(health);
+	private void fireHealthNotification() {
+		this.hud.notifyHealthChange(this.health);
+	}
+	private void fireDeathNotification() {
+		this.gameManager.notifyPlayerDeath();
+		
 	}
 }
