@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class FSM : MonoBehaviour {
-	
+	/*
 	//Player transform
 	protected Transform playerTransform;
 	
@@ -12,7 +12,7 @@ public class FSM : MonoBehaviour {
 	//Npc atributes
 	protected int health;
 	protected int damage;
-	
+	*/
 	//Abstract methods
 	
 	protected virtual void Ini(){}

@@ -12,8 +12,6 @@ public class AgentNpc : FSM {
 		Dead,
 	}
 	
-	//Player transform
-	protected Transform playerTransform;
 	
 	//Animations 
 	/*
@@ -24,7 +22,10 @@ public class AgentNpc : FSM {
 	public Animation jumpRight;
 	public  AnimationClip jumpLeft;
 	public AnimationClip atack;*/
-
+	
+	//Player transform
+	protected Transform playerTransform;
+	
 	//Next target
 	protected Vector3 target;
 	protected Vector3 direction;
