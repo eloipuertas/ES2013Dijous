@@ -5,10 +5,13 @@ using System.Collections;
 public class TeamChoose : MonoBehaviour {
 	
 	public bool isPhilo = false, isDroid = false;//booleans referenced to team choice buttons
-	public Material[] Materials;	
+	public Material[] Materials;
+	public AudioSource audioOpcions;
+	public AudioSource audioAcceptar;
 	
 	public void OnMouseEnter(){//hover state		
-		renderer.material = Materials[1];			
+		renderer.material = Materials[1];
+		audioOpcions.Play();
 	}
 
 	public void OnMouseExit(){//when mause stops hovering		
@@ -21,6 +24,7 @@ public class TeamChoose : MonoBehaviour {
 	public void OnMouseUpAsButton(){//Selecting a button
 		
 		if(isPhilo){//when selected a button we disable the collider of the selected button and set the possible previous selected buttons enabling the colider and making it visible
+			audioAcceptar.Play();
 			PlayerPrefs.SetInt("Team",1);//this will be the global var to know which team was selected
 			GameObject.Find("DroidButton").renderer.material = Materials[2];
 			GameObject.Find("DroidButton").collider.enabled = true;
@@ -41,6 +45,7 @@ public class TeamChoose : MonoBehaviour {
 			}
 			
 		}else if(isDroid){
+			audioAcceptar.Play();
 			PlayerPrefs.SetInt("Team",2);
 			GameObject.Find("PhiloButton").renderer.material = Materials[2];
 			GameObject.Find("PhiloButton").collider.enabled = true;
