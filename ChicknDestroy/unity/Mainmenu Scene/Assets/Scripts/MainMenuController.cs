@@ -6,8 +6,8 @@ using System.Collections;
 public class MainMenuController: MonoBehaviour{
 	
 	//Variables
-	public bool isQuit = false, isStart = false, isOptions = false, isLoad = false;			//Is the button the quit button?
-
+	public bool isQuit = false, isStart = false, isOptions = false, isLoad = false;			
+	public Material[] Materials;
 	
 	void Start(){
 		//Should the cursor be visible?
@@ -18,12 +18,12 @@ public class MainMenuController: MonoBehaviour{
 	
 	//This function is called when the mouse entered the GUIElement or Collider
 	public void OnMouseEnter(){
-		renderer.material.color = Color.blue;
+		renderer.material = Materials[1];		
 		
 	}
 	//This function is called when the mouse is not any longer over the GUIElement or Collider
 	public void OnMouseExit(){
-		renderer.material.color = Color.red;
+		renderer.material = Materials[0];
 	}
 	
 	//This function is called when the user has released the mouse button
