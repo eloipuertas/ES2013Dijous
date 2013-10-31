@@ -4,117 +4,47 @@ using System.Collections;
 public class PhiloChickenChoose : MonoBehaviour {
 
 	public bool isChicken1 = false, isChicken2 = false, isChicken3 = false, isChicken4 = false, isChicken5 = false;
+	public Material[] Materials;
+	public AudioSource audioOpcions;
 	
-	
-
-	
-	public void OnMouseEnter(){
-		if(isChicken1)
-			renderer.material.color = Color.blue;
-		else if(isChicken2)
-			renderer.material.color = Color.blue;
-		else if(isChicken3)
-			renderer.material.color = Color.blue;
-		else if(isChicken4)
-			renderer.material.color = Color.blue;
-		else if(isChicken5)
-			renderer.material.color = Color.blue;
-		
+	public void OnMouseEnter(){		
+		renderer.material = Materials[2];
+		audioOpcions.Play();
 	}
 
-	public void OnMouseExit(){
-		if(isChicken1){
-			if(!collider.enabled)
-				renderer.material.color = Color.cyan;
-			else
-				renderer.material.color = Color.red;
-		}
-		else if(isChicken2){
-			if(!collider.enabled)
-				renderer.material.color = Color.cyan;
-			else
-				renderer.material.color = Color.red;
-		}
-		else if(isChicken3){
-			if(!collider.enabled)
-				renderer.material.color = Color.cyan;
-			else
-				renderer.material.color = Color.red;
-		}
-		else if(isChicken4){
-			if(!collider.enabled)
-				renderer.material.color = Color.cyan;
-			else
-				renderer.material.color = Color.red;
-		}
-		else if(isChicken5){
-			if(!collider.enabled)
-				renderer.material.color = Color.cyan;
-			else
-				renderer.material.color = Color.red;
-		}
+	public void OnMouseExit(){		
+		if(!collider.enabled)
+			renderer.material = Materials[3];
+		else
+			renderer.material = Materials[1];
 	}
 	
 	public void OnMouseUpAsButton(){
-		
-		if(isChicken1){
+		collider.enabled = false;
+		if(isChicken1)
 			PlayerPrefs.SetInt("Chicken",1);
-			collider.enabled = false;
-			
-			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("philobuttons");
-			foreach(GameObject b in droidButtons){
-				if(!b.gameObject.Equals(this.gameObject)){
-					b.renderer.material.color = Color.red;
-					b.collider.enabled = true;
-				}
-			}
-			
-		}else if(isChicken2){
+		else if(isChicken2)
 			PlayerPrefs.SetInt("Chicken",2);
-			collider.enabled = false;
-
-			
-			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("philobuttons");
-			foreach(GameObject b in droidButtons){
-				if(!b.gameObject.Equals(this.gameObject)){
-					b.renderer.material.color = Color.red;
-					b.collider.enabled = true;
-				}
-			}
-		}else if(isChicken3){
+		else if(isChicken3)
 			PlayerPrefs.SetInt("Chicken",3);
-			collider.enabled = false;
-			
-			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("philobuttons");
-			foreach(GameObject b in droidButtons){
-				if(!b.gameObject.Equals(this.gameObject)){
-					b.renderer.material.color = Color.red;
-					b.collider.enabled = true;
-				}
-			}
-		}else if(isChicken4){
+		else if(isChicken4)
 			PlayerPrefs.SetInt("Chicken",4);
-			collider.enabled = false;
-			
-			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("philobuttons");
-			foreach(GameObject b in droidButtons){
-				if(!b.gameObject.Equals(this.gameObject)){
-					b.renderer.material.color = Color.red;
-					b.collider.enabled = true;
-				}
-			}
-		}else if(isChicken5){
-			PlayerPrefs.SetInt("Chicken",5);
-			collider.enabled = false;
-			
-			GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("philobuttons");
-			foreach(GameObject b in droidButtons){
-				if(!b.gameObject.Equals(this.gameObject)){
-					b.renderer.material.color = Color.red;
-					b.collider.enabled = true;
-				}
-			}
+		else if(isChicken5)
+			PlayerPrefs.SetInt("Chicken",5);	
+					
+		GameObject [] droidButtons = GameObject.FindGameObjectsWithTag("philobuttons");
+		foreach(GameObject b in droidButtons){
+			if(!b.gameObject.Equals(this.gameObject)){
+				PhiloChickenChoose aux = (PhiloChickenChoose)b.GetComponent("PhiloChickenChoose");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
+				b.renderer.material = aux.Materials[1];
+				b.collider.enabled = true;
+				
+			}			
 		}
+		
+		StartOrBack aux2 = (StartOrBack)GameObject.Find("StartButton").GetComponent("StartOrBack");//GetComponent("componentname") gets the component with its name, at this line we are getting the Script component of the game object so we can cast it to the class inside this script and access at its global variables
 		GameObject.Find("StartButton").collider.enabled = true;
+		GameObject.Find("StartButton").renderer.material = aux2.Materials[0];
 	}
+	
 }
