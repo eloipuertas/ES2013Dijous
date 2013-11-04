@@ -25,7 +25,6 @@ function Update () {
 		//per fer que la bala desapareixi al cap de X segons
 		nouTir.AddComponent("DestruirBala");
 		//segons l'eix on es col·loca la velocitat de la bala en Vector3, aquesta es desplaça cap a una direccio o una altre
-		Debug.Log(escopeta.transform.rotation.y);
 		if (escopeta.transform.rotation.y == 1)
 			nouTir.rigidbody.AddForce(new Vector3(velocitatBala, 0, 0), ForceMode.VelocityChange);
 		else
