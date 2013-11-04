@@ -181,10 +181,10 @@ public class PlayerController : MonoBehaviour {
 			setHealthPoints(0);
 	}
 	private void fireHealthNotification() {
-		this.hud.notifyHealthChange(this.health);
+		//this.hud.notifyHealthChange(this.health);
 	}
 	private void fireDeathNotification() {
-		this.gameManager.notifyPlayerDeath();
+		//this.gameManager.notifyPlayerDeath();
 		
 	}
 }
