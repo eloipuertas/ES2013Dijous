@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class SpriteGroup : MonoBehaviour
+public class SpriteGroup : Sprite
 {
 	protected Sprite[] sprites;
 	protected int n{get; set;}

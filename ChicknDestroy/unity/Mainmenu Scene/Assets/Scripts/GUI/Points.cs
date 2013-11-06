@@ -14,7 +14,7 @@ public class Points : MonoBehaviour
 		this.sprites = new Sprite[POINTS];
 		for (int i = 0;i<POINTS;i++)
 			this.sprites[i] = new Sprite(new Rect(xy.x+(dev.x*i),xy.y+(dev.y*i),size.x,size.y),"");
-		this.bar = new Sprite(new Rect(xy.x-10,xy.y-5,size.x*4+20,size.y+10),"hudPuntos");
+		this.bar = new Sprite(new Rect(xy.x-5,xy.y-5,size.x*4+10,size.y+10),img_pattern+"hudPuntos");
 		this.textures = new Texture2D[max_elements];
 		for (int i = 0; i<max_elements; i++)
 			this.textures[i] = (Texture2D)Resources.Load(img_pattern+i);

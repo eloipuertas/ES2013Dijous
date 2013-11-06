@@ -8,6 +8,7 @@ public class Lifebar : SpriteGroup{
 	public Lifebar (Vector2 xy, Vector2 size, String img_pattern, Vector2 dev, int max_elements,
 		int max_life, int clife)
 	{
+		this.xy_size = new Rect(xy.x,xy.y,size.x,size.y);
 		this.sprites = new Sprite[max_elements];
 		for (int i = 0; i<max_elements; i++)
 			this.sprites[i] = new Sprite(new Rect(xy.x+(dev.x*i),xy.y+(dev.y*i),size.x,size.y),

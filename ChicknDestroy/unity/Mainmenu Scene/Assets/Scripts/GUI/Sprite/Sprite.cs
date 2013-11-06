@@ -16,6 +16,12 @@ public class Sprite : MonoBehaviour{
 		this.xy_size.x = xy.x;
 		this.xy_size.y = xy.y;
 	}
+	public Vector2 getXY() {
+		return new Vector2(xy_size.x,xy_size.y);
+	}
+	public Vector2 getSize() {
+		return new Vector2(xy_size.width,xy_size.height);
+	}
 	
 	public void setImage(String img) {
 		//this.texture.Resize(xy_size.width,xy_size.height);
