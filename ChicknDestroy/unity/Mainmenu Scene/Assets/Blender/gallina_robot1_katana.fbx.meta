@@ -1,7 +1,5 @@
 fileFormatVersion: 2
-guid: af8cfdf38bcb1e1429e3a4ce75972d7e
-labels:
-- Terrain
+guid: c606e9e31731c624cb4082a94ed39f90
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -20,8 +18,10 @@ ModelImporter:
     100024: Bone_011
     100026: Bone_012
     100028: Bone_013
-    100030: Cylinder
-    100032: //RootNode
+    100030: Bone_015
+    100032: Cube
+    100034: Cylinder
+    100036: //RootNode
     400000: Armature
     400002: Bone
     400004: Bone_001
@@ -37,9 +37,12 @@ ModelImporter:
     400024: Bone_011
     400026: Bone_012
     400028: Bone_013
-    400030: Cylinder
-    400032: //RootNode
+    400030: Bone_015
+    400032: Cube
+    400034: Cylinder
+    400036: //RootNode
     4300000: Cylinder
+    4300002: Cube
     7400000: Default Take
     7400002: caidaDerecha
     7400004: caidaIzquierda
@@ -61,7 +64,8 @@ ModelImporter:
     7400036: saltoVerticalIz
     9500000: //RootNode
     11100000: //RootNode
-    13700000: Cylinder
+    13700000: Cube
+    13700002: Cylinder
   materials:
     importMaterials: 1
     materialName: 0

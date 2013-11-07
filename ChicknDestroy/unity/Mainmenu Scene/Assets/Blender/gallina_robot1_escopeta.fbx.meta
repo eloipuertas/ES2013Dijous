@@ -1,7 +1,5 @@
 fileFormatVersion: 2
-guid: af8cfdf38bcb1e1429e3a4ce75972d7e
-labels:
-- Terrain
+guid: 78c3846a586df264bb817f5b5abf5dbe
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -20,8 +18,28 @@ ModelImporter:
     100024: Bone_011
     100026: Bone_012
     100028: Bone_013
-    100030: Cylinder
-    100032: //RootNode
+    100030: Bone_014
+    100032: Bone_016
+    100034: Bone_017
+    100036: Bone_018
+    100038: Bone_019
+    100040: Bone_020
+    100042: Bone_021
+    100044: Bone_022
+    100046: Bone_023
+    100048: Bone_024
+    100050: Bone_025
+    100052: Bone_026
+    100054: Bone_027
+    100056: Bone_028
+    100058: Bone_029
+    100060: Bone_030
+    100062: Bone_031
+    100064: Bone_032
+    100066: Bone_034
+    100068: Cube_002
+    100070: Cylinder
+    100072: //RootNode
     400000: Armature
     400002: Bone
     400004: Bone_001
@@ -37,9 +55,30 @@ ModelImporter:
     400024: Bone_011
     400026: Bone_012
     400028: Bone_013
-    400030: Cylinder
-    400032: //RootNode
+    400030: Bone_014
+    400032: Bone_016
+    400034: Bone_017
+    400036: Bone_018
+    400038: Bone_019
+    400040: Bone_020
+    400042: Bone_021
+    400044: Bone_022
+    400046: Bone_023
+    400048: Bone_024
+    400050: Bone_025
+    400052: Bone_026
+    400054: Bone_027
+    400056: Bone_028
+    400058: Bone_029
+    400060: Bone_030
+    400062: Bone_031
+    400064: Bone_032
+    400066: Bone_034
+    400068: Cube_002
+    400070: Cylinder
+    400072: //RootNode
     4300000: Cylinder
+    4300002: Cube_002
     7400000: Default Take
     7400002: caidaDerecha
     7400004: caidaIzquierda
@@ -61,7 +100,8 @@ ModelImporter:
     7400036: saltoVerticalIz
     9500000: //RootNode
     11100000: //RootNode
-    13700000: Cylinder
+    13700000: Cube_002
+    13700002: Cylinder
   materials:
     importMaterials: 1
     materialName: 0

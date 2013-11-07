@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour {
 	private static int SCORE_TO_WIN = 1000;
 	//public GameObject player;
 	private GameCamera cam;
+	public bool GameSelRobot = true;
 	
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
@@ -14,7 +15,15 @@ public class GameManager : MonoBehaviour {
 		cam = GetComponent<GameCamera>();
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
-		GameObject go = GameObject.FindGameObjectWithTag("Player");
+		
+		GameObject go;
+		
+		if (GameSelRobot)
+			go = GameObject.FindGameObjectWithTag("Player");
+		else 
+			go = GameObject.FindGameObjectWithTag("NPC");
+		
+		
 		cam.SetTarget(go.transform);
 	}
 	// Update is called once per frame

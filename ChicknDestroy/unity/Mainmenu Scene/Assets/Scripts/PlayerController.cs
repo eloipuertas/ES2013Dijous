@@ -12,11 +12,12 @@ public class PlayerController : MonoBehaviour {
 	//Atributos de control
 	private float gravity = 800;
 	private float speed = 250;
-	private float acceleration = 1000;
+	private float acceleration = 2000;
 	private float jumpHeight = 500;
 	
 	//sonido
 	public AudioSource sonidoSalto;
+	public AudioSource sonidoDisparo;
 	
 	private float currentSpeed;
 	private float targetSpeed;
@@ -65,20 +66,24 @@ public class PlayerController : MonoBehaviour {
 				sonidoSalto.Play();
 				amountToMove.y = jumpHeight;	
 			}
+			
+			if (Input.GetButtonDown("Fire1")) {
+				sonidoDisparo.Play();
+			}
 		}
 		
 		
 		amountToMove.x = currentSpeed;
-		amountToMove.y -= gravity * Time.deltaTime;
+		amountToMove.y -= (gravity * Time.deltaTime);
 		playerPhysics.Move(amountToMove * Time.deltaTime);
 		
 		Debug.Log("x: "+amountToMove.x+" y: "+amountToMove.y);
 		
-		if(amountToMove.y > 30) {
+		if(amountToMove.y > 50) {
 		//Si estamos en el aire de subida
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
 			else animation.Play("saltoVerticalIz");
-		}else if(amountToMove.y < -30){
+		}else if(amountToMove.y < -50){
 		//Si estamos en el aire de bajada
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
 			else animation.Play("caidaIzquierda");
