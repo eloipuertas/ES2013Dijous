@@ -12,17 +12,7 @@ public class AgentNpc : FSM {
 		Dead,
 	}
 	
-	
-	//Animations 
-	/*
-	public Animation movRight;
-	public Animation movLeft;
-	public Animation rotRight;
-	public  Animation rotLeft;
-	public Animation jumpRight;
-	public  AnimationClip jumpLeft;
-	public AnimationClip atack;*/
-	
+		
 	//Player transform
 	protected Transform playerTransform;
 	
@@ -57,27 +47,10 @@ public class AgentNpc : FSM {
 	//private float rangeWarp = 100;
 	private FSM curState;
 	
-	private Animator animator;
 	private bool derecha = true;
 	public float stopDistance = 60;
-	private bool attacked = false;
-		// -------NPC interface----------
-	
-	protected int getHealthPoints(){
-		return health;
-	}
-	protected void setHealthPoints(int n){
-		health = n;
-	}
-	protected string getPrimaryWeapon(){
-		return primaryWeapon;
-	}
-	protected string getSecondaryWeapon(){
-		return secondaryWeapon;
-	}
-	protected Vector3 getCoordinates(){
-		return transform.position;
-	}
+
+
 	
 	//Return 
 //	float getcolliderType(){
@@ -117,34 +90,17 @@ public class AgentNpc : FSM {
 		playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
 		playerTransform = pla.transform;
 		target = pla.transform.localPosition;
-		
-		
-		
+
 			
 	}
 	float getDistanceX(Vector3 npcPos,Vector3 playerPos){
-		float distX = 0.0f;
-		if (Mathf.Abs(npcPos.x) > Mathf.Abs(playerPos.x)){
-		 distX = Mathf.Abs(npcPos.x - playerPos.x);
-		}
-		if (Mathf.Abs(npcPos.x) < Mathf.Abs(playerPos.x)){
-			distX = Mathf.Abs(playerPos.x - npcPos.x);
-		}	
-		
-		return distX;
+		return Mathf.Abs(playerPos.x - npcPos.x);
 	}
 	
-	float getDistanceY(Vector3 npcPos,Vector3 playerPos){
-		float distY = 0.0f;
-		if (Mathf.Abs(npcPos.y) > Mathf.Abs(playerPos.y)){
-		 distY = Mathf.Abs(npcPos.y - playerPos.y);
-		}
-		if (Mathf.Abs(npcPos.y) < Mathf.Abs(playerPos.y)){
-			distY = Mathf.Abs(playerPos.y - npcPos.y);
-		}	
-		
-		return distY;
+	float getDistanceY(Vector3 npcPos,Vector3 playerPos){		
+		return Mathf.Abs(playerPos.y - npcPos.y);
 	}
+	
 	GameObject warpNpc(Vector3 p,Vector3 s){
 		GameObject npc = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		npc.transform.localPosition = p;
@@ -156,7 +112,9 @@ public class AgentNpc : FSM {
 		//damage = 25;
 		primaryWeapon = "katana";
 		
-		animator = GetComponent<Animator>();
+		animation["Mover_Derecha"].speed = 3;
+		animation["Ataque_Derecha"].speed = 2;
+		Physics.gravity = new Vector3(0, -800, 0);
 		
 	}
 	void setInitialSpawnPoints(){
@@ -188,10 +146,9 @@ public class AgentNpc : FSM {
 		//Animation idle
 	}
 	protected void UpdateRunState(){
-			
-			if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Mover_Derecha"))
-				animator.SetBool("move",false);
-		
+					
+			animation.Play("Mover_Derecha");
+
 			setInitialCollider();
 			
 			Vector3 relPos = target - transform.position;
@@ -215,12 +172,12 @@ public class AgentNpc : FSM {
 				}
 		
 				transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
-
+		
 				if (Mathf.Abs(relPos.x) <= stopDistance){
-					animator.SetBool("attack",true);
+					animation.Play ("Ataque_Derecha");
 					curState = FSM.Attack;
 				}
-
+		 
 
 //				if(transform.position.x < target.x){
 //					
@@ -253,30 +210,23 @@ public class AgentNpc : FSM {
 	protected void UpdateAttackState(){
 		//Destroy(mas);
 		
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ataque_Derecha"))
-			animator.SetBool("attack",false);
-
-		else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Idle")){
+		if (!animation.IsPlaying("Ataque_Derecha")){
 			
 			Vector3 relPos = target - transform.position;
 			
 			if (Mathf.Abs(relPos.x) > stopDistance+5){
-				animator.SetBool("move",true);
 				curState = FSM.Run;
 				
-			} else if (!attacked){
-				animator.SetBool("attack",true);
+			} else {
+				animation.Play ("Ataque_Derecha");
 				playerScript.setDamage(damage);
 				print("HIT");
-				attacked = true;
 				
-			} else if(attacked){
-				attacked = false;
 			}
 			
 			
 		}
-
+		 
 		
 		//this.animation.Stop ("Mover_Izquierda");
 		
@@ -359,6 +309,26 @@ public class AgentNpc : FSM {
 		
 		Debug.Log(curState);
 	}
-
+	
+	
+	
+		// -------NPC interface----------
+	
+	protected int getHealthPoints(){
+		return health;
+	}
+	protected void setHealthPoints(int n){
+		health = n;
+	}
+	protected string getPrimaryWeapon(){
+		return primaryWeapon;
+	}
+	protected string getSecondaryWeapon(){
+		return secondaryWeapon;
+	}
+	protected Vector3 getCoordinates(){
+		return transform.position;
+	}
+	
 }
 

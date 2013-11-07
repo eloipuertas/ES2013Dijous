@@ -91,6 +91,7 @@ ModelImporter:
     7400006: Mover_Derecha
     7400008: Salto_Derecha
     9500000: //RootNode
+    11100000: //RootNode
     13700000: Cuerpo
   materials:
     importMaterials: 1
@@ -172,7 +173,7 @@ ModelImporter:
       takeName: Mover_Derecha
       firstFrame: -1
       lastFrame: 49
-      wrapMode: 0
+      wrapMode: 2
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
@@ -247,5 +248,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   additionalBone: 1
-  animationType: 2
+  animationType: 1
   userData: 
