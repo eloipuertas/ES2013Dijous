@@ -10,10 +10,10 @@ public class PlayerController : MonoBehaviour {
 	private GameObject secondaryWeapon;
 	
 	//Atributos de control
-	public float gravity = 40;
-	public float speed = 30;
-	public float acceleration = 30;
-	public float jumpHeight = 60;
+	private float gravity = 800;
+	private float speed = 250;
+	private float acceleration = 1000;
+	private float jumpHeight = 500;
 	
 	//sonido
 	public AudioSource sonidoSalto;
@@ -39,6 +39,12 @@ public class PlayerController : MonoBehaviour {
 		playerPhysics = GetComponent<PlayerPhysics>();
 		animation.Play("paradaDerecha");
 		lastDirection = stopDer;
+		
+		
+		gravity = 800;
+		speed = 250;
+		acceleration = 1000;
+		jumpHeight = 500;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
@@ -66,13 +72,13 @@ public class PlayerController : MonoBehaviour {
 		amountToMove.y -= gravity * Time.deltaTime;
 		playerPhysics.Move(amountToMove * Time.deltaTime);
 		
-		//Debug.Log("x "+raw);
+		Debug.Log("x: "+amountToMove.x+" y: "+amountToMove.y);
 		
-		if(amountToMove.y > 1) {
+		if(amountToMove.y > 30) {
 		//Si estamos en el aire de subida
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
 			else animation.Play("saltoVerticalIz");
-		}else if(amountToMove.y < -1){
+		}else if(amountToMove.y < -30){
 		//Si estamos en el aire de bajada
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
 			else animation.Play("caidaIzquierda");
