@@ -6,14 +6,14 @@ private var treshold = 0.5;
 private var lastTime = 0;
 private var lT = 0;
 private var entrar = 0;
-private var tempsEntrat = 60;
+private var tempsEntrat = 120;
 private var colorActual : Color;
 private var tempsLlampAleatori;
 
 
 function Start() {
 	colorActual = light.color;
-	tempsLlampAleatori = Random.Range(30,60);
+	tempsLlampAleatori = Random.Range(30,120);
 }
 
 function Update () {
@@ -33,7 +33,7 @@ function Update () {
 	}
 	
 	if ((Time.time - tempsEntrat > 2.8) && entrar == 1){
-		tempsLlampAleatori = Random.Range(30,60);
+		tempsLlampAleatori = Random.Range(30,120);
 		Debug.Log(tempsLlampAleatori);
 		lT = Time.time;
 		light.color = colorActual;

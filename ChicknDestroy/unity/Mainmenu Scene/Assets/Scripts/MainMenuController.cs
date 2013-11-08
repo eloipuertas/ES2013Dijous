@@ -8,6 +8,8 @@ public class MainMenuController: MonoBehaviour{
 	//Variables
 	public bool isQuit = false, isStart = false, isOptions = false, isLoad = false;			
 	public Material[] Materials;
+	public AudioSource audioOpcions;
+	public AudioSource audioAcceptar;
 	
 	void Start(){
 		//Should the cursor be visible?
@@ -18,6 +20,7 @@ public class MainMenuController: MonoBehaviour{
 	
 	//This function is called when the mouse entered the GUIElement or Collider
 	public void OnMouseEnter(){
+		audioOpcions.Play();
 		renderer.material = Materials[1];		
 		
 	}
@@ -28,7 +31,7 @@ public class MainMenuController: MonoBehaviour{
 	
 	//This function is called when the user has released the mouse button
 	public void OnMouseUpAsButton(){
-
+		audioAcceptar.Play();
 		if(isQuit)
 			Application.Quit();//referenced to Quit Game button, quits program
 		else if(isStart)
