@@ -28,17 +28,19 @@ public class HUD : MonoBehaviour{
 		this.weapons = new SpriteWeaponControl(new Rect(10,10,100,40));
 		
 		this.life = new Lifebar(new Vector2((Screen.width/2)-100,20),
-			new Vector2(150,20),
+			new Vector2(200,60),
 			"LifeBar/life_bar_",
 			new Vector2(0,0),
 			21, // n-segments of LifeBar
 			150, // Max life with the barrier
 			0); // Current life
-		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-5,
+		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-13,
 			this.life.getSize().x+20,this.life.getSize().y+10),"LifeBar/hudVida");
 		
-		this.pause_menu = new PauseMenu(new Vector2(100,40), // Origin
+		this.pause_menu = new PauseMenu(this,
+			new Vector2(100,40), // Origin
 			new Vector2(500,500), // end
+			new Vector2(0,20),	// Deviation
 			"PauseMenu", // Menu layout
 			"titulo", // Menu Title
 			"button_"); // Button pattern.
@@ -52,7 +54,8 @@ public class HUD : MonoBehaviour{
 		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
 			"pausa/pause",
 			"pausa/pause1",
-			new ChangeLevelAction());
+			new ChangeLevelAction(),
+			KeyCode.P);
 	}
 	
 	
@@ -80,6 +83,8 @@ public class HUD : MonoBehaviour{
 		this.game_points.render(this.player.getPlayerPoints());
 		
 		this.pause_button.render();
+		
+		if(isPaused())this.pause_menu.render();
 	}
 	
 	// Update is called once per frame
@@ -98,6 +103,10 @@ public class HUD : MonoBehaviour{
 	
 	public bool isPaused() {
 		return this.pause_button.isToggled();
+	}
+	
+	public void resume() {
+		this.pause_button.setToggled(false);
 	}
 	
 	// Notify section.
