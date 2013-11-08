@@ -1,9 +1,9 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
 [RequireComponent(typeof(PlayerPhysics))]
-public class PlayerController : MonoBehaviour {
-	
+public class PlayerControllerKatana : MonoBehaviour {
+
 	//Atributos de personaje
 	private int health;
 	private GameObject primaryWeapon;
@@ -36,7 +36,6 @@ public class PlayerController : MonoBehaviour {
 	
 	private HUD hud;
 	private GameManager gameManager;
-	private float animTime;
 	
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
@@ -94,26 +93,18 @@ public class PlayerController : MonoBehaviour {
 			else animation.Play("caidaIzquierda");
 		}else {
 		//Si estamos en el suelo
-			//float currentTime = Time.time - animTime.time;
-			Debug.Log((Time.time - animTime.time));
-			float currentTime = 0.5f;
-			
 			if (disparo == true && lastDirection == movDer){
-				//Debug.Log (Time.time);
-				if(currentTime > 0.2) {
-					animation.Play("disparaEscopetaDer",PlayMode.StopAll);
-					animTime = Time;
-				}
-				disparo = false;
-				
+						
+						
+						animation.Play("golpearkatanaDer");
+						
+						disparo = false;
+						
 				
 			}
 			else if (disparo == true && lastDirection == movIzq){
 						
-						if(currentTime > 0.2){
-							animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
-							animTime = Time;
-						}
+						animation.Play("golpearkatanaIzq");
 								
 						disparo = false;
 						
@@ -121,50 +112,32 @@ public class PlayerController : MonoBehaviour {
 			}
 			if (lastDirection == movDer ) {
 				if (amountToMove.x > 1) {
-					if(currentTime > 0.2){
-						animation.Play("correrDerecha");
-						animTime = Time;
-					}
+					animation.Play("correrDerecha");
 					lastDirection = movDer;
 					
 				}
 				else if(raw < 0) {
-					if(currentTime > 0.2){
-						animation.Play("giroDerechaIzq", PlayMode.StopAll);
-						animTime = Time;
-					}
-
+					animation.Play("giroDerechaIzq", PlayMode.StopAll);
 					lastDirection = movIzq;
 				}
 				
 				else {
-					if(currentTime > 0.2){
-						animation.Play("paradaDerecha");
-						animTime = Time;
-					}
+					animation.Play("paradaDerecha");
 					lastDirection = stopDer;
 				}
 				
 			}else if (lastDirection == movIzq) {
 				if (amountToMove.x < -1) {
-					if(currentTime > 0.2){
-						animation.Play("correrIzquierda");
-						animTime = Time;
-					}
+					animation.Play("correrIzquierda");
 					lastDirection = movIzq;
 				}
 				else if(raw > 0) {
-					if(currentTime > 0.2){
-						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
-						animTime = Time;
-					}
+					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
 					lastDirection = movDer;
 				}
 				else {
-					if(currentTime > 0.2){
-						animation.Play("paradaIzquierda");
-						animTime = Time;
-					}
+					
+					animation.Play("paradaIzquierda");
 					lastDirection = stopIzq;
 				}
 			}else {
@@ -172,26 +145,16 @@ public class PlayerController : MonoBehaviour {
 				if (lastDirection == stopDer) {
 					
 					if(disparo == true){
-						if(currentTime > 0.2){
-							animation["disparaEscopetaDer"].speed = (float) 2;
-					 		animation.Play("disparaEscopetaDer");
-							animTime = Time;
-						}
+						animation["golpearkatanaDer"].speed = (float) 2;
+					 	animation.Play("golpearkatanaDer");
 						disparo = false;
 					}
 					else if (amountToMove.x > 1) {
-						if(currentTime > 0.2){
-							animation.Play("correrDerecha");
-							animTime = Time;
-						}
+						animation.Play("correrDerecha");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
-						if(currentTime > 0.2){
-							animation.Play("giroDerechaIzq", PlayMode.StopAll);
-							animTime = Time;
-						
-						}
+						animation.Play("giroDerechaIzq", PlayMode.StopAll);
 						lastDirection = movIzq;
 					}
 					else {
@@ -204,24 +167,16 @@ public class PlayerController : MonoBehaviour {
 				}
 				else {
 					if(disparo == true){
-						if(currentTime > 0.2){
-							animation["disparaEscopetaIzq"].speed = (float) 2;
-					 		animation.Play("disparaEscopetaIzq");
-							animTime = Time;
-						}
+						Debug.Log("ENTRO AQUIIIII");
+						animation["golpearkatanaIzq"].speed = (float) 2;
+					 	animation.Play("golpearkatanaIzq");
 						disparo = false;
 					}
 					else if(amountToMove.x < -1) {
-						if(currentTime > 0.2){
-							animation.Play("correrIzquierda");
-							animTime = Time;
-						}
+						animation.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
-						if(currentTime > 0.2){
-							animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
-							animTime = Time;
-						}
+						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
 						lastDirection = movDer;
 					}else {
 							
@@ -282,14 +237,14 @@ public class PlayerController : MonoBehaviour {
 			setHealthPoints(0);
 	}
 	private void fireHealthNotification() {
-		//this.hud.notifyHealthChange(this.health);
+		this.hud.notifyHealthChange(this.health);
 	}
 	private void fireDeathNotification() {
 		this.gameManager.notifyPlayerDeath();
 		
 	}
-	/*
 	private IEnumerator wait(){
 		yield return new WaitForSeconds(-10);
-	}*/
+	}
 }
+
