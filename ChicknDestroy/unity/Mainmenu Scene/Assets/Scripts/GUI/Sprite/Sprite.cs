@@ -4,9 +4,11 @@ using System;
 public class Sprite : MonoBehaviour{
 	protected Texture2D texture;
 	protected Rect xy_size;
+	protected bool visible;
 	
 	public Sprite() {}
 	public Sprite (Rect xy_size, String image){
+		this.setVisible(true);
 		this.texture = new Texture2D((int)xy_size.width,(int)xy_size.height);
 		this.xy_size = xy_size;
 		this.texture = (Texture2D)Resources.Load(image);
@@ -32,8 +34,16 @@ public class Sprite : MonoBehaviour{
 		this.texture = texture;
 	}
 	
+	public Boolean isVisible() {
+		return this.visible;
+	}
+	
+	public void setVisible(Boolean visible) {
+		this.visible = visible;
+	}
+	
 	public void render() {
-		GUI.Label(this.xy_size,this.texture);
+		if(this.isVisible())GUI.Label(this.xy_size,this.texture);
 	}
 	
 }
