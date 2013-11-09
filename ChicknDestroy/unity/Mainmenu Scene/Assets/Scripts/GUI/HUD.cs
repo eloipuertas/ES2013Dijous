@@ -37,13 +37,13 @@ public class HUD : MonoBehaviour{
 		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-13,
 			this.life.getSize().x+20,this.life.getSize().y+10),"LifeBar/hudVida");
 		
-		this.pause_menu = new PauseMenu(this,
+		this.pause_menu = new PauseMenu(//this,
 			new Vector2(100,40), // Origin
 			new Vector2(500,500), // end
-			new Vector2(0,20),	// Deviation
+			//new Vector2(0,20),	// Deviation
 			"PauseMenu", // Menu layout
 			"titulo", // Menu Title
-			"button_"); // Button pattern.
+			"button"); // Button pattern.
 		
 		this.game_points = new Points(new Vector2(this.life.getXY().x+this.life.getSize().x+isegment,20),
 			new Vector2(20,20),
