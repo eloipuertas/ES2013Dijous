@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(PlayerPhysics))]
 public class PlayerControllerKatana : MonoBehaviour {
 
 	//Atributos de personaje
@@ -32,13 +31,13 @@ public class PlayerControllerKatana : MonoBehaviour {
 
 	private int lastDirection;
 	
-	private PlayerPhysics playerPhysics;
+	//private PlayerPhysics playerPhysics;
 	
 	private HUD hud;
 	private GameManager gameManager;
 	
 	void Start () {
-		playerPhysics = GetComponent<PlayerPhysics>();
+		//playerPhysics = GetComponent<PlayerPhysics>();
 		animation.Play("paradaDerecha");
 		lastDirection = stopDer;
 		
@@ -59,7 +58,7 @@ public class PlayerControllerKatana : MonoBehaviour {
 		float raw = Input.GetAxisRaw("Horizontal");
 		targetSpeed = raw * speed;
 		currentSpeed = IncrementTowards(currentSpeed, targetSpeed,acceleration);
-		
+		/*
 		if (playerPhysics.grounded) {
 			amountToMove.y = 0;
 			
@@ -75,11 +74,11 @@ public class PlayerControllerKatana : MonoBehaviour {
 				sonidoDisparo.Play();
 			}
 		}
-		
+		*/
 		
 		amountToMove.x = currentSpeed;
 		amountToMove.y -= (gravity * Time.deltaTime);
-		playerPhysics.Move(amountToMove * Time.deltaTime);
+		//playerPhysics.Move(amountToMove * Time.deltaTime);
 		
 		//Debug.Log("x: "+amountToMove.x+" y: "+amountToMove.y);
 		

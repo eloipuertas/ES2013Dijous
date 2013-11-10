@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(PlayerPhysics))]
+//[RequireComponent(typeof(PlayerPhysics))]
 public class PlayerController : MonoBehaviour {
 	
 	//Atributos de personaje
@@ -11,17 +11,20 @@ public class PlayerController : MonoBehaviour {
 	
 	//Atributos de control
 	private float gravity = 800;
-	private float speed = 250;
-	private float acceleration = 2000;
+	private float speed = 300;
 	private float jumpHeight = 500;
+	private float acceleration = 50;
 	
 	//sonido
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
 	
+	
+	private float animTime;
+	private float animDuration = 0.4f;
+	
 	private float currentSpeed;
 	private float targetSpeed;
-	private Vector2 amountToMove;
 	
 	
 	private int movDer = 1;
@@ -31,205 +34,159 @@ public class PlayerController : MonoBehaviour {
 	private bool disparo= false;
 
 	private int lastDirection;
-	
-	private PlayerPhysics playerPhysics;
+	private float heightHero;
 	
 	private HUD hud;
 	private GameManager gameManager;
-	private float animTime;
+	private Rigidbody rigid;
+	
+	
 	
 	void Start () {
-		playerPhysics = GetComponent<PlayerPhysics>();
+		
+		rigid =	GetComponent<Rigidbody>();
+		
 		animation.Play("paradaDerecha");
 		lastDirection = stopDer;
 		
-		
-		gravity = 800;
-		speed = 250;
-		acceleration = 1000;
-		jumpHeight = 500;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
 		fireHealthNotification();
+		
+		disparo = true;
+		
+		heightHero = rigid.collider.bounds.extents.y;
+	}
+	
+	private bool isGround() {
+		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.1f);
+	}
+	
+	void OnCollisionStay(Collision collision) {
+		//TRATAMIENTO DE COLISIONES CON OBJETOS
 	}
 	
 	void Update () {
 		
 		float raw = Input.GetAxisRaw("Horizontal");
-		targetSpeed = raw * speed;
-		currentSpeed = IncrementTowards(currentSpeed, targetSpeed,acceleration);
 		
-		if (playerPhysics.grounded) {
-			amountToMove.y = 0;
-			
-			// Jump
+		
+		if (isGround()) {
 			if (Input.GetButtonDown("Jump")) {
 				sonidoSalto.Play();
-				amountToMove.y = jumpHeight;	
+				rigid.velocity += Vector3.up * jumpHeight;
 			}
 			
-			if (Input.GetButtonDown("Fire1")) {
+			if (!disparo && Input.GetButtonDown("Fire1")) {
 				
-				disparo = true;
 				sonidoDisparo.Play();
+				disparo = true;
+				
 			}
 		}
 		
+		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
+		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
 		
-		amountToMove.x = currentSpeed;
-		amountToMove.y -= (gravity * Time.deltaTime);
-		playerPhysics.Move(amountToMove * Time.deltaTime);
+		//Debug.Log(rigid.velocity.x + " "+ rigid.velocity.y);
 		
-		//Debug.Log("x: "+amountToMove.x+" y: "+amountToMove.y);
-		
-		if(amountToMove.y > 50) {
+		if(rigid.velocity.y > 10) {
 		//Si estamos en el aire de subida
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
 			else animation.Play("saltoVerticalIz");
-		}else if(amountToMove.y < -50){
+		}else if(rigid.velocity.y < -65){
 		//Si estamos en el aire de bajada
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
 			else animation.Play("caidaIzquierda");
 		}else {
-		//Si estamos en el suelo
-			//float currentTime = Time.time - animTime.time;
-//			Debug.Log((Time.time - animTime.time));
-			float currentTime = 0.5f;
+
+			float currentTime = Time.time - animTime;
 			
-			if (lastDirection == movDer && disparo == true  ){
-				
-				//if(currentTime > 0.2) {
-					animation.Play("disparaEscopetaDer",PlayMode.StopAll);
-				//animTime = Time;
-				//}
-				lastDirection = movDer;
-				disparo = false;
-				
-				
-			}
-			else if (disparo == true && lastDirection == movIzq){
-						
-						//if(currentTime > 0.2){
-							animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
-						//	animTime = Time;
-						//}
-								
-						disparo = false;
-						
-				
-			}
-			if (lastDirection == movDer && disparo != true) {
-				if (amountToMove.x > 1) {
-					//if(currentTime > 0.2){
-						animation.Play("correrDerecha");
-					//	animTime = Time;
-					//}
+			if (lastDirection == movDer) {
+				if (rigid.velocity.x > 0) {
+					if(currentTime > animDuration){
+						if(disparo) {
+							animation.Play("disparaEscopetaDer",PlayMode.StopAll);
+							disparo = false;
+						}
+						else animation.Play("correrDerecha");
+						animTime = Time.time;
+					}
 					lastDirection = movDer;
 					
 				}
 				else if(raw < 0) {
-					//if(currentTime > 0.2){
-						animation.Play("giroDerechaIzq", PlayMode.StopAll);
-					//	animTime = Time;
-					//}
-
+					animation.Play("giroDerechaIzq", PlayMode.StopAll);
+					animTime = Time.time;
 					lastDirection = movIzq;
 				}
-				
 				else {
-					//if(currentTime > 0.2){
-						animation.Play("paradaDerecha");
-					//	animTime = Time;
-					//}
 					lastDirection = stopDer;
 				}
 				
 			}else if (lastDirection == movIzq) {
-				if (amountToMove.x < -1) {
-					//if(currentTime > 0.2){
-						animation.Play("correrIzquierda");
-					//	animTime = Time;
-					//}
+				if (rigid.velocity.x < 0) {
+					if(currentTime > animDuration){
+						if(disparo) {
+							animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
+							disparo = false;
+						}
+						else animation.Play("correrIzquierda");
+						animTime = Time.time;
+					}
 					lastDirection = movIzq;
 				}
 				else if(raw > 0) {
-					//if(currentTime > 0.2){
-						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
-					//	animTime = Time;
-					//}
+					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+					animTime = Time.time;
 					lastDirection = movDer;
 				}
 				else {
-					//if(currentTime > 0.2){
-						animation.Play("paradaIzquierda");
-					//	animTime = Time;
-					//}
 					lastDirection = stopIzq;
 				}
 			}else {
-				
 				if (lastDirection == stopDer) {
-					
-					if(disparo == true){
-					//	if(currentTime > 0.2){
-							animation["disparaEscopetaDer"].speed = (float) 2;
-					 		animation.Play("disparaEscopetaDer");
-					//		animTime = Time;
-					//	}
+					if (disparo && currentTime > animDuration) {
+						animation.Play("disparaEscopetaDer",PlayMode.StopAll);
 						disparo = false;
+						animTime = Time.time;
 					}
-					else if (amountToMove.x > 1) {
-					//	if(currentTime > 0.2){
-							animation.Play("correrDerecha");
-					//		animTime = Time;
-					//	}
+					else if (rigid.velocity.x > 0) {
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
-					//	if(currentTime > 0.2){
-							animation.Play("giroDerechaIzq", PlayMode.StopAll);
-					//		animTime = Time;
-						
-					//	}
+						animation.Play("giroDerechaIzq", PlayMode.StopAll);
+						animTime = Time.time;
 						lastDirection = movIzq;
 					}
 					else {
-						    
-							//animation.Play("paradaDerecha");
-							//lastDirection = stopDer;
-								
-						
+						if(currentTime > animDuration){
+							animation.Play("paradaDerecha");
+							animTime = Time.time;
+						}
+						lastDirection = stopDer;
 					}
 				}
 				else {
-					if(disparo == true){
-					//	if(currentTime > 0.2){
-							animation["disparaEscopetaIzq"].speed = (float) 2;
-					 		animation.Play("disparaEscopetaIzq");
-					//		animTime = Time;
-					//	}
+					if(currentTime > animDuration && disparo) {
+						animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
 						disparo = false;
+						animTime = Time.time;
 					}
-					else if(amountToMove.x < -1) {
-					//	if(currentTime > 0.2){
-							animation.Play("correrIzquierda");
-					//		animTime = Time;
-					//	}
+					else if(rigid.velocity.x < 0) {
 						lastDirection = movIzq;
 					}else if(raw > 0) {
-					//	if(currentTime > 0.2){
-							animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
-					//		animTime = Time;
-					//	}
+						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+						animTime = Time.time;
 						lastDirection = movDer;
 					}else {
-							
-							//animation.Play("paradaIzquierda");
-							
-							
-						  //lastDirection = stopIzq;
+						if (currentTime > animDuration) {	
+							animation.Play("paradaIzquierda");
+							animTime = Time.time;
+						}
+						lastDirection = stopIzq;
 					}
 				}
 				
