@@ -37,7 +37,11 @@ public class PlayerController : MonoBehaviour {
 	
 	void Start () {
 		playerPhysics = GetComponent<PlayerPhysics>();
-		animation.Play("paradaDerecha");
+		try{
+			animation.Play("paradaDerecha");
+		}catch{
+			//print ("Exeption Parada Derecha: Null pointer animation");
+		}
 		lastDirection = stopDer;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
@@ -70,64 +74,138 @@ public class PlayerController : MonoBehaviour {
 		
 		if(amountToMove.y > 1) {
 		//Si estamos en el aire de subida
-			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
-			else animation.Play("saltoVerticalIz");
+			if(lastDirection == movDer || lastDirection == stopDer){
+				try{
+					animation.Play("saltoVerticalDer");
+				}catch{
+					//print ("Exeption Salto vertical Izq: Null Pointer animation");
+				}
+			}
+			else {
+				try{
+					animation.Play("saltoVerticalIz");
+				}catch{
+					//print ("Exeption Salto vertical Izq: Null Pointer animation");
+				}
+			}
 		}else if(amountToMove.y < -1){
 		//Si estamos en el aire de bajada
-			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
-			else animation.Play("caidaIzquierda");
+			if(lastDirection == movDer || lastDirection == stopDer){
+				try{
+						animation.Play("caidaDerecha");
+				}catch{
+						//print ("Exeption caidaDerecha Izq: Null Pointer animation");
+				}
+			}
+			else{
+				try{
+						animation.Play("caidaIzquierda");
+				}catch{
+						//print ("Exeption caidaIzquierda Izq: Null Pointer animation");
+				}
+			}
 		}else {
 		//Si estamos en el suelo
 			if (lastDirection == movDer ) {
 				if (amountToMove.x > 1) {
-					animation.Play("correrDerecha");
+					try{
+						animation.Play("correrDerecha");
+					}catch{
+						//print ("Exeption correrDerecha Izq: Null Pointer animation");
+					}
 					lastDirection = movDer;
 				}
 				else if(raw < 0) {
-					animation.Play("giroDerechaIzq", PlayMode.StopAll);
+					try{
+						animation.Play("giroDerechaIzq", PlayMode.StopAll);
+					}catch{
+						//print ("Exeption giroDerechaIzq Izq: Null Pointer animation");
+					}
 					lastDirection = movIzq;
 				}
 				else {
-					animation.Play("paradaDerecha");
+					try{
+						animation.Play("paradaDerecha");
+					}catch{
+						//print ("Exeption paradaDerecha Izq: Null Pointer animation");
+					}
 					lastDirection = stopDer;
 				}
 			}else if (lastDirection == movIzq) {
 				if (amountToMove.x < -1) {
-					animation.Play("correrIzquierda");
+					try{
+						animation.Play("correrIzquierda");
+					}catch{
+						//print ("Exeption correrIzquierda Izq: Null Pointer animation");
+					}
+					
 					lastDirection = movIzq;
 				}
 				else if(raw > 0) {
-					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+					try{
+						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+					}catch{
+						//print ("Exeption giroIzquierdaDerecha Izq: Null Pointer animation");
+					}
 					lastDirection = movDer;
 				}
 				else {
-					animation.Play("paradaIzquierda");
+					try{
+						animation.Play("paradaIzquierda");
+					}catch{
+						//print ("Exeption giroIzquierdaDerecha Izq: Null Pointer animation");
+					}
 					lastDirection = stopIzq;
 				}
 			}else {
 				
 				if (lastDirection == stopDer) {
 					if (amountToMove.x > 1) {
-						animation.Play("correrDerecha");
+						try{
+							animation.Play("correrDerecha");
+						}catch{
+							//print ("Exeption correrDerecha Izq: Null Pointer animation");
+						}
 						lastDirection = movDer;
 					}else if(raw < 0) {
-						animation.Play("giroDerechaIzq", PlayMode.StopAll);
+						try{
+							animation.Play("giroDerechaIzq", PlayMode.StopAll);
+						}catch{
+							//print ("Exeption giroDerechaIzq Izq: Null Pointer animation");
+						}
 						lastDirection = movIzq;
 					}
 					else {
-						animation.Play("paradaDerecha");
+						try{
+							animation.Play("paradaDerecha");
+						}catch{
+							//print ("Exeption paradaDerecha Izq: Null Pointer animation");
+						}
+
 						lastDirection = stopDer;
 					}
 				}
 				else {
 					if(amountToMove.x < -1) {
-						animation.Play("correrIzquierda");
+						try{
+							animation.Play("correrIzquierda");
+						}catch{
+							//print ("Exeption correrIzquierda Izq: Null Pointer animation");
+						}	
 						lastDirection = movIzq;
 					}else if(raw > 0) {
-						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+						try{
+							animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+						}catch{
+							//print ("Exeption giroIzquierdaDerecha Izq: Null Pointer animation");
+						}						
 						lastDirection = movDer;
 					}else {
-						animation.Play("paradaIzquierda");
+						try{
+							animation.Play("paradaIzquierda");
+						}catch{
+							//print ("Exeption paradaIzquierda Izq: Null Pointer animation");
+						}
 						lastDirection = stopIzq;
 					}
 				}

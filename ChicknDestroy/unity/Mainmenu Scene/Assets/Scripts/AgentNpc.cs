@@ -56,7 +56,6 @@ public class AgentNpc : FSM {
 	private Vector3 playereulerAngles;
 	//private float rangeWarp = 100;
 	private FSM curState;
-	
 	private Animator animator;
 	private bool derecha = true;
 	public float stopDistance = 60;
@@ -155,8 +154,12 @@ public class AgentNpc : FSM {
 		health = 100;
 		//damage = 25;
 		primaryWeapon = "katana";
+		try{
+			animator = GetComponent<Animator>();
+		}catch{
+			//print("Exception GetComponent animator");
+		}
 		
-		animator = GetComponent<Animator>();
 		
 	}
 	void setInitialSpawnPoints(){
@@ -189,8 +192,13 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateRunState(){
 			
-			if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Mover_Derecha"))
+			try{
+				if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Mover_Derecha"))
 				animator.SetBool("move",false);
+			}catch{
+				//print("Exception Base Layer.Mover_Derecha UpdateRunState animator");
+			}
+			
 		
 			setInitialCollider();
 			
@@ -217,7 +225,11 @@ public class AgentNpc : FSM {
 				transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
 
 				if (Mathf.Abs(relPos.x) <= stopDistance){
-					animator.SetBool("attack",true);
+					try{
+						animator.SetBool("attack",true);
+					}catch{
+						//print("Exception GetCurrentAnimatorStateInfo animator");
+					}
 					curState = FSM.Attack;
 				}
 
@@ -252,11 +264,10 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
-		
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ataque_Derecha"))
+		try{
+			if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ataque_Derecha"))
 			animator.SetBool("attack",false);
-
-		else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Idle")){
+			else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Idle")){
 			
 			Vector3 relPos = target - transform.position;
 			
@@ -273,9 +284,27 @@ public class AgentNpc : FSM {
 			} else if(attacked){
 				attacked = false;
 			}
-			
-			
+				
 		}
+		}catch{
+			Vector3 relPos = target - transform.position;
+			
+			if (Mathf.Abs(relPos.x) > stopDistance+5){
+				curState = FSM.Run;
+				
+			} else if (!attacked){
+				playerScript.setDamage(damage);
+				print("HIT");
+				attacked = true;
+				
+			} else if(attacked){
+				attacked = false;
+			}
+			//print("Exception Base Layer.Ataque_Derecha UpdateAttackState animator");
+		}
+		
+
+		
 
 		
 		//this.animation.Stop ("Mover_Izquierda");
