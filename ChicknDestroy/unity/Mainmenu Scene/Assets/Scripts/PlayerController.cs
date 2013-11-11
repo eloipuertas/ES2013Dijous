@@ -119,6 +119,7 @@ public class PlayerController : MonoBehaviour {
 					
 				}
 				else if(raw < 0) {
+					animation["giroDerechaIzq"].speed = 3;
 					animation.Play("giroDerechaIzq", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movIzq;
@@ -141,6 +142,7 @@ public class PlayerController : MonoBehaviour {
 					lastDirection = movIzq;
 				}
 				else if(raw > 0) {
+					animation["giroIzquierdaDerecha"].speed = 3;
 					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movDer;
@@ -161,6 +163,7 @@ public class PlayerController : MonoBehaviour {
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
+						animation["giroDerechaIzq"].speed = 3;
 						animation.Play("giroDerechaIzq", PlayMode.StopAll);
 						animTime = Time.time;
 						lastDirection = movIzq;
@@ -184,6 +187,7 @@ public class PlayerController : MonoBehaviour {
 						animation.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
+						animation["giroIzquierdaDerecha"].speed = 3;
 						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
 						animTime = Time.time;
 						lastDirection = movDer;
