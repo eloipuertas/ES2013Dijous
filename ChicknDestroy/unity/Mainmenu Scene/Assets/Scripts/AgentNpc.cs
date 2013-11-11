@@ -22,8 +22,8 @@ public class AgentNpc : FSM {
 	protected Vector3 actualTarget;
 	
 	protected Vector3 direction;
-	protected Vector3 relPos;
-	public string direrutas = "C:/Users/ARocafort/Desktop/codibo/ES2013Dijous-devel-A/ChicknDestroy/unity/Mainmenu Scene/Assets/Scripts/RutasNpc";
+	protected Vector3 relPos;	
+	public string direrutas = "/Scripts/RutasNpc";
 	//Lectors de rutes
 	private List <List<Vector3>> rutas = new List<List<Vector3>>();
 	private List <Vector3> rutaActual  = new List<Vector3>();
@@ -44,7 +44,7 @@ public class AgentNpc : FSM {
 	public string primaryWeapon;
 	public string secondaryWeapon;
 	
-	public float velocity = 1f;
+	public float velocity = 175f;
 	private bool Dead = false;
 	
 	
@@ -118,7 +118,10 @@ public class AgentNpc : FSM {
 		//damage = 25;
 		primaryWeapon = "katana";
 		
+		Physics.gravity = new Vector3(0, -800, 0);
 		
+		animation["correrDerecha"].wrapMode = WrapMode.Loop;
+		animation["correrIzquierda"].wrapMode = WrapMode.Loop;
 		
 		
 		
@@ -152,7 +155,7 @@ public class AgentNpc : FSM {
 		List<Vector3> positions = new List<Vector3>();
 		int fileindex = 0;
 		int posindex = 0;
-		
+		direrutas = Application.dataPath + direrutas;
 		foreach (string file in Directory.GetFiles(direrutas, "*.txt")){
 			Debug.Log("NOVA RUTA-->ID::"+fileindex);
 			string content = File.ReadAllText(file);
@@ -213,25 +216,22 @@ public class AgentNpc : FSM {
 	//#########################################
 	protected void UpdateNoneState(){
 		//Animation idle
+		string anim = (derecha)? "paradaDerecha":"paradaIzquierda";
+		if(animation[anim]!=null)
+			animation.Play(anim);
 	}
 	protected void UpdateRunState(){
 			setInitialCollider();
-			if(animation["Mover_Derecha"]!=null){
-						//animation["Mover_Derecha"].wrapMode = WrapMode.Loop;
-						animation["Mover_Derecha"].speed = 3.0f;
-						animation.Play("Mover_Derecha");
-						
-			}
 
-		
-			
-
-			if (derecha != (relPos.x > 0)){
-				transform.Rotate (0,180,0);
+			if (derecha != (relPos.x > 0))
 				derecha = !derecha;			
-			}
 			
-			transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
+			string anim = (derecha)? "correrDerecha":"correrIzquierda";
+			if(animation[anim]!=null)
+				animation.Play(anim);
+
+
+			transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
 	
 		    //Si el objectiu canvia de lloc
 			
@@ -268,16 +268,14 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
-		if(animation["Ataque_Derecha"]!=null){
-			animation.Play("Ataque_Derecha");
-			while(animation.IsPlaying("Ataque_Derecha"));
-				curState = FSM.Run;
-			
-			
-			
-			
-			
+		
+		string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
+		if(!animation.IsPlaying(anim) && animation[anim]!=null){
+			animation.Play(anim);
+			//while(animation.IsPlaying(anim));
+				//curState = FSM.Run;
 		}
+		
 		
 		//Debug.Log("Relpos:"+Mathf.Abs(relPos.x));
 		
