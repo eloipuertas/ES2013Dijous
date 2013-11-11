@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour {
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
-		fireHealthNotification();
+		//fireHealthNotification();
 		
 		disparo = true;
 		
@@ -238,7 +238,7 @@ public class PlayerController : MonoBehaviour {
 			setHealthPoints(0);
 	}
 	private void fireHealthNotification() {
-		//this.hud.notifyHealthChange(this.health);
+		this.hud.notifyHealthChange(this.health);
 	}
 	private void fireDeathNotification() {
 		this.gameManager.notifyPlayerDeath();
