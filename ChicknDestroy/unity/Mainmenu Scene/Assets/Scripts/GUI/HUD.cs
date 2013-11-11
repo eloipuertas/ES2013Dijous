@@ -44,12 +44,6 @@ public class HUD : MonoBehaviour{
 			"PauseMenu", // Menu layout
 			"titulo", // Menu Title
 			"button_"); // Button pattern.*/
-		this.pause_menu = new PauseMenu(
-			new Vector2(100,40), // Origin
-			new Vector2(500,500), // end	// Deviation
-			"PauseMenu", // Menu layout
-			"titulo", // Menu Title
-			"button_");
 		
 		this.game_points = new Points(new Vector2(this.life.getXY().x+this.life.getSize().x+isegment,20),
 			new Vector2(20,20),
@@ -90,7 +84,7 @@ public class HUD : MonoBehaviour{
 		
 		this.pause_button.render();
 		
-		if(isPaused())this.pause_menu.render();
+		//if(isPaused())this.pause_menu.render();
 	}
 	
 	// Update is called once per frame
