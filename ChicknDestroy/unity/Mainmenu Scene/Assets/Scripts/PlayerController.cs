@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 	
 	
 	private float animTime;
-	private float animDuration = 0.4f;
+	private float animDuration = 0.3f;
 	
 	private float currentSpeed;
 	private float targetSpeed;
@@ -108,6 +108,7 @@ public class PlayerController : MonoBehaviour {
 				if (rigid.velocity.x > 0) {
 					if(currentTime > animDuration){
 						if(disparo) {
+							animation["disparaEscopetaDerCorriendo"].speed = 3;
 							animation.Play("disparaEscopetaDerCorriendo",PlayMode.StopAll);
 							disparo = false;
 						}
@@ -130,6 +131,7 @@ public class PlayerController : MonoBehaviour {
 				if (rigid.velocity.x < 0) {
 					if(currentTime > animDuration){
 						if(disparo) {
+							animation["disparaEscopetaIzqCorriendo"].speed = 3;
 							animation.Play("disparaEscopetaIzqCorriendo",PlayMode.StopAll);
 							disparo = false;
 						}
@@ -149,11 +151,13 @@ public class PlayerController : MonoBehaviour {
 			}else {
 				if (lastDirection == stopDer) {
 					if (disparo && currentTime > animDuration) {
+						animation["disparaEscopetaDer"].speed = 3;
 						animation.Play("disparaEscopetaDer",PlayMode.StopAll);
 						disparo = false;
 						animTime = Time.time;
 					}
 					else if (rigid.velocity.x > 0) {
+						animation.Play("correrDerecha");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
@@ -171,11 +175,13 @@ public class PlayerController : MonoBehaviour {
 				}
 				else {
 					if(currentTime > animDuration && disparo) {
+						animation["disparaEscopetaIzq"].speed = 3;
 						animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
 						disparo = false;
 						animTime = Time.time;
 					}
 					else if(rigid.velocity.x < 0) {
+						animation.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
 						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
