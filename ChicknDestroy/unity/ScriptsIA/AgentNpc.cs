@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+
 
 public class AgentNpc : FSM {
 	
@@ -11,18 +14,6 @@ public class AgentNpc : FSM {
 		Attack,
 		Dead,
 	}
-	
-	
-	//Animations 
-	/*
-	public Animation movRight;
-	public Animation movLeft;
-	public Animation rotRight;
-	public  Animation rotLeft;
-	public Animation jumpRight;
-	public  AnimationClip jumpLeft;
-	public AnimationClip atack;*/
-	
 	//Player transform
 	protected Transform playerTransform;
 	
@@ -32,8 +23,12 @@ public class AgentNpc : FSM {
 	
 	protected Vector3 direction;
 	protected Vector3 relPos;
-	
-	
+	public string direrutas = "C:/Users/ARocafort/Desktop/codibo/ES2013Dijous-devel-A/ChicknDestroy/unity/Mainmenu Scene/Assets/Scripts/RutasNpc";
+	//Lectors de rutes
+	private List <List<Vector3>> rutas = new List<List<Vector3>>();
+	private List <Vector3> rutaActual  = new List<Vector3>();
+	private int keyPosActual =0; 
+	private int idruta = 0;
 	//Npc propierties
 	private Vector3 spawnPoint;
 	private Collider col;
@@ -49,7 +44,7 @@ public class AgentNpc : FSM {
 	public string primaryWeapon;
 	public string secondaryWeapon;
 	
-	public float velocity = 175f;
+	public float velocity = 1f;
 	private bool Dead = false;
 	
 	
@@ -89,41 +84,29 @@ public class AgentNpc : FSM {
 	//-------------Utility Functions---------------
 	
 	//Actualiza la posicio del objectiu
-	void updatePlayerPosition(){
-		pla = GameObject.FindGameObjectWithTag("Player");
-		playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
-		actualTarget = nextTarget;
-		
-		nextTarget = pla.transform.localPosition;
-		relPos = nextTarget - transform.position;
-		
-		
-		
-			
-	}
-	float getDistanceX(Vector3 npcPos,Vector3 playerPos){
-		float distX = 0.0f;
-		if (Mathf.Abs(npcPos.x) > Mathf.Abs(playerPos.x)){
-		 distX = Mathf.Abs(npcPos.x - playerPos.x);
+	void printRuta(){
+		foreach(Vector3 pos in rutaActual){
+			Debug.Log(pos);
 		}
-		if (Mathf.Abs(npcPos.x) < Mathf.Abs(playerPos.x)){
-			distX = Mathf.Abs(playerPos.x - npcPos.x);
-		}	
+	}
+	void updateNextTarget(){
+//		//pla = GameObject.FindGameObjectWithTag("Player");
+//		//playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
 		
-		return distX;
+		nextTarget = rutas[idruta][keyPosActual];
+		Debug.Log("####NPC GO TO -------> "+nextTarget);
+		relPos = nextTarget - transform.position;
+		if(Mathf.Abs(relPos.x) <= 15) {
+			keyPosActual+=1;
+			Debug.Log("###NEXT KEY###");
+		}
+//		
+//		actualTarget = nextTarget;
+//		if(keyPosActual == rutas[0].Count) curState = FSM.None;
+		
+//		relPos = nextTarget - transform.position;		
 	}
 	
-	float getDistanceY(Vector3 npcPos,Vector3 playerPos){
-		float distY = 0.0f;
-		if (Mathf.Abs(npcPos.y) > Mathf.Abs(playerPos.y)){
-		 distY = Mathf.Abs(npcPos.y - playerPos.y);
-		}
-		if (Mathf.Abs(npcPos.y) < Mathf.Abs(playerPos.y)){
-			distY = Mathf.Abs(playerPos.y - npcPos.y);
-		}	
-		
-		return distY;
-	}
 	GameObject warpNpc(Vector3 p,Vector3 s){
 		GameObject npc = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		npc.transform.localPosition = p;
@@ -134,7 +117,8 @@ public class AgentNpc : FSM {
 		health = 100;
 		//damage = 25;
 		primaryWeapon = "katana";
-		StartCoroutine("canviaSentit");
+		
+		
 		
 		
 		
@@ -143,8 +127,62 @@ public class AgentNpc : FSM {
 		spawnPoint = transform.position;
 	}
 	void setInitialState(){
+		nextTarget = rutaActual[keyPosActual];
+		Debug.Log("###INITIAL TARGET"+rutaActual[keyPosActual]);
 		curState = FSM.Run;
 	}
+	
+	void selectRoute(){
+		int op = Random.Range(0,rutas.Count);
+		Debug.Log("### NPC HA SELECIONAT RUTA "+op);
+		Debug.Log(rutas.Count);
+		Debug.Log(rutas[0]);
+		int i = 0;
+		foreach(Vector3 p in rutas[0]){
+			Debug.Log(p);
+			rutaActual.Insert(i,p);
+			i+=1;
+		}
+//		
+//		
+//		//rutaActual = (Vector3[])rutas[op];
+//		//Debug.Log("###POSICIONS DE LA RUTA####"+rutaActual);
+	}
+	void loadRoutes(){
+		List<Vector3> positions = new List<Vector3>();
+		int fileindex = 0;
+		int posindex = 0;
+		
+		foreach (string file in Directory.GetFiles(direrutas, "*.txt")){
+			Debug.Log("NOVA RUTA-->ID::"+fileindex);
+			string content = File.ReadAllText(file);
+			string []lines = content.Split('|');
+			foreach(string s in lines){
+				string []pos = s.Split(',');
+				//Debug.Log(pos.Length);
+				float x = float.Parse(pos[0]);
+				float y = float.Parse(pos[1]);
+				float z = float.Parse(pos[2]);
+				positions.Insert(posindex,(Vector3)new Vector3(x,y,z));
+				Debug.Log("ADD NEW POS"+positions[posindex]);
+				posindex +=1;
+				Debug.Log("NOVA POSICIO -->"+x+" "+y+" "+z);
+			}
+			rutas.Insert(fileindex,positions);
+			
+			content ="";
+			posindex = 0;
+			
+			fileindex +=1;
+		}
+		foreach(List<Vector3> ruta in rutas){
+			foreach(Vector3 pos in ruta){
+				Debug.Log("posi,"+pos);
+			}
+		}
+		
+	}
+	
 	void setWeapon(string tag){
 		GameObject arma  ;
 	}
@@ -157,19 +195,8 @@ public class AgentNpc : FSM {
 		//mas.GetComponent(RigidBody);
 	}
 
-	 IEnumerator canviaSentit() {
-		if(canvia){
-			Debug.Log("##CANVIA sentit##");
-        	animation.Play("Giro_Derecha");
-        	yield return new WaitForSeconds(animation.clip.length);
-		} else yield return null;
-    }
-	IEnumerator WaitAndCallback(float waitTime){
-		Debug.Log("Time "+Time.time);
-		yield return new WaitForSeconds(waitTime);
-		Debug.Log("Time 3 "+Time.time);
-		//gobool = true;
-	}
+	
+	
 
 	
 	// ######### Agent arquitecture #########//
@@ -179,28 +206,7 @@ public class AgentNpc : FSM {
 	//#########################################
 	//##NOMES CALCULS AMB RIGIDBODY & COLLIDERS
 	//#########################################
-	protected void UpdateFixedNoneState(){
-		//Animation idle
-	}
-	protected void UpdateFixedRunState(){
-		//Animation idle
-	}
-	protected void UpdateFixedJumpState(){
-		//Animation idle
-		Debug.Log("rigidbody velocity:"+mas.velocity);
-		if (Physics.Raycast(transform.position, -Vector3.up, 10) && mas.velocity.y < 500/2){
-			//animation.Play("Salto_Derecha", PlayMode.StopAll);
-			Debug.Log("Entra salta");
-			mas.velocity += Vector3.up *500;	
-			
-		}
-	}
-	protected void UpdateFixedAttackState(){
-		//Animation idle
-	}
-	protected void UpdateFixedDeadState(){
-		//Animation idle
-	}
+	
 	
 	//#########################################
 	//###NOMES TRANSFORMACIONS DE POSICIONS####
@@ -209,81 +215,64 @@ public class AgentNpc : FSM {
 		//Animation idle
 	}
 	protected void UpdateRunState(){
-			
-//			if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Mover_Derecha"))
-//				animator.SetBool("move",false);
-			//animation.Play("Correr_Derecha");
-		
 			setInitialCollider();
-			Vector3 relPos = actualTarget - transform.position;
-		    //transform.rotation = Quaternion.LookRotation(relPos);
-			//transform.LookAt(target);
-//			if(getDistanceY(transform.position,target)>=60){
-//				curState = FSM.Jump;
-//			}
-
-			//Debug.Log("Distance: "+Vector3.Distance(transform.position,target));
-			//Debug.Log("Collider radius: "+GetComponent<CapsuleCollider>().radius);
-			//if(Vector3.Distance(transform.position,target)> 0){
-				///transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
-//			if (derecha != (relPos.x > 0)){
-//				transform.Rotate (0,180,0);
-//				derecha = !derecha;			
-//			}
 			if(animation["Mover_Derecha"]!=null){
 						//animation["Mover_Derecha"].wrapMode = WrapMode.Loop;
+						animation["Mover_Derecha"].speed = 3.0f;
 						animation.Play("Mover_Derecha");
 						
 			}
-			transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
-			
-//			if (Mathf.Abs(relPos.x) <= stopDistance){
-//				animator.SetBool("attack",true);
-//				curState = FSM.Attack;
-//			}
-	
 
-			if(actualTarget != nextTarget){
-				if(transform.position.x < nextTarget.x){  
-					if(derecha){	
-						canvia = true;
-						derecha = false;
-					}
-		  			transform.rotation = Quaternion.Euler(0, 0, 0);					
-				}
-				if(transform.position.x > nextTarget.x){  
-					if(!derecha){	
-						canvia = true;
-						derecha = true;
-					}
-		  			transform.rotation = Quaternion.Euler(0, 180, 0);					
-				}
-				if(transform.position.y > nextTarget.y){
-					Invoke("UpdateJumpState",2);
-				}
-				
-				canvia = false;
 		
-		}
+			
+
+			if (derecha != (relPos.x > 0)){
+				transform.Rotate (0,180,0);
+				derecha = !derecha;			
+			}
+			
+			transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
+	
+		    //Si el objectiu canvia de lloc
+			
+//				if((transform.position.x - nextTarget.x)<stopDistance){  
+//					if(derecha){	
+//						animation.Play("Giro_Derecha");
+//						while(animation.IsPlaying("Giro_Derecha"));
+//						derecha = false;
+//					}
+//		  			transform.rotation = Quaternion.Euler(0, 0, 0);					
+//				}
+//				if((transform.position.x - nextTarget.x)>stopDistance){  
+//					if(!derecha){	
+//						animation.Play("Giro_Derecha");
+//						while(animation.IsPlaying("Giro_Derecha"));
+//						derecha = true;
+//					}
+//		  			transform.rotation = Quaternion.Euler(0, 180, 0);					
+				
+			
+//				if(transform.position.y > nextTarget.y){
+//					Invoke("UpdateJumpState",2);
+//				}
+				
+		
+			
+
 					
 			
 	   
-		//Debug.Log("Target Pos z: " + (Mathf.Abs(target.z)));
-		//Debug.Log("PlayerTransform Pos z:" + (Mathf.Abs(transform.localPosition.z)));
-		//Debug.Log("Distance: " + (Mathf.Abs(target.z) - Mathf.Abs(transform.localPosition.z)));
-		//if(Mathf.Abs(target.z) - Mathf.Abs(transform.localPosition.z) >= 1){
-		//	curState = FSM.Attack;
-		//}
 		
-		updatePlayerPosition();
+		
+		updateNextTarget();
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
 		if(animation["Ataque_Derecha"]!=null){
 			animation.Play("Ataque_Derecha");
-			if(Mathf.Abs(relPos.x) <=stopDistance){
+			while(animation.IsPlaying("Ataque_Derecha"));
 				curState = FSM.Run;
-			}
+			
 			
 			
 			
@@ -310,7 +299,7 @@ public class AgentNpc : FSM {
 		
 		//UpdateRunState();
 		
-		updatePlayerPosition();
+		//updatePlayerPosition();
 		
 	}
 	
@@ -319,7 +308,6 @@ public class AgentNpc : FSM {
 //		if(animation["Salto_Derecha"]!=null){
 //				animation.Play("Salto_Derecha", PlayMode.StopAll);
 //		}
-		
 		
 		
 	}
@@ -350,25 +338,7 @@ public class AgentNpc : FSM {
 		Debug.Log("Current STATE: "+curState);
 
 	}
-	protected override void FSMFixedUpdate(){
-		switch (curState){
-			case FSM.None: UpdateFixedNoneState(); break;
-			case FSM.Jump: UpdateFixedJumpState(); break;
-			case FSM.Run: UpdateFixedRunState(); break;
-			case FSM.Attack: UpdateFixedAttackState(); break;
-			case FSM.Dead: UpdateFixedDeadState(); break;
-
- 		}
-
- 		//elapsedTime += Time.deltaTime;
-
- 		//Go to dead state is no health left
-		//Debug.Log(this.getHealthPoints());
-		if (this.getHealthPoints() <= 0) curState = FSM.Dead;
-		//if (pla.getHealthPoints() <=0) curState = FSM.None;
-		Debug.Log("Current STATE: "+curState);
-
-	}
+	
 	//-----------Gestio de collisions----------
 	
 	void OnCollisionEnter(Collision collision){
@@ -386,16 +356,25 @@ public class AgentNpc : FSM {
 		
 		
 	}
+//	void OnCollisionExit(Collision collision){
+//		
+//	}
+//	void OnCollisionStay(Collision collision){
+//		
+//	}
 	
 	//Initialization of NPC
 	protected override void Ini(){
+		
+		loadRoutes();
+		selectRoute();
+		
 		setInitialsAtributes();
 		setInitialCollider();
 		setInitialState();
-		
 		setInitialSpawnPoints();
 
-		updatePlayerPosition();
+		updateNextTarget();
 		
 		Debug.Log(curState);
 	}
