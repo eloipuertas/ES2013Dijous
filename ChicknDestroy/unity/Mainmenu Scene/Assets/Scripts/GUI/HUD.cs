@@ -58,7 +58,7 @@ public class HUD : MonoBehaviour{
 		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
 			"pausa/pause",
 			"pausa/pause1",
-			new ResumeAction(),
+			new ChangeLevelAction(),
 			KeyCode.P);
 		
 		this.mes = new MessagePool(10);
