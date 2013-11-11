@@ -41,6 +41,8 @@ public class AgentNpc : FSM {
 	public int health = 100;
 	public int damage = 15;
 	public int puntuacio = 0;
+	public int jumpForce = 20;
+	public int gravity = -800;
 	public string primaryWeapon;
 	public string secondaryWeapon;
 	
@@ -230,31 +232,46 @@ public class AgentNpc : FSM {
 				transform.Rotate (0,180,0);
 				derecha = !derecha;			
 			}
+//			if(transform.position.z > 1 ){ 
+//				transform.Translate(new Vector3(0,0,-1));
+//			}else if(transform.position.z < -1 ){
+//				transform.Translate(new Vector3(0,0,1));
+//			}else{
+//					transform.Translate(new Vector3(0,0,0));
+//				}
 			
 			transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
-	
-		    //Si el objectiu canvia de lloc
-			
-//				if((transform.position.x - nextTarget.x)<stopDistance){  
-//					if(derecha){	
-//						animation.Play("Giro_Derecha");
-//						while(animation.IsPlaying("Giro_Derecha"));
-//						derecha = false;
-//					}
-//		  			transform.rotation = Quaternion.Euler(0, 0, 0);					
-//				}
-//				if((transform.position.x - nextTarget.x)>stopDistance){  
-//					if(!derecha){	
-//						animation.Play("Giro_Derecha");
-//						while(animation.IsPlaying("Giro_Derecha"));
-//						derecha = true;
-//					}
-//		  			transform.rotation = Quaternion.Euler(0, 180, 0);					
+			if(GameObject.FindGameObjectWithTag("obs")!=null){
+				GameObject obs = GameObject.FindGameObjectWithTag("obs");
+				Vector3 margin = new Vector3(1.0f,1.0f,1.0f);
+				Debug.Log("Obstacle detectat");
+				//Debug.Log(Mathf.Abs(transform.position.x -obs.transform.position.x));
+				//Debug.Log((obs.transform.localScale.x +10));
+			     Vector3 fwd = transform.TransformDirection(Vector3.right);
+				RaycastHit hit;
+				if (Physics.Raycast(transform.position, fwd, out hit,6)){
+				 	if(hit.transform.gameObject.tag =="obs"){
+            			print("There is something in front of the object!");
+						Invoke("UpdateJumpState",0.4f);
+					}
+					if(hit.transform.gameObject.tag =="Player"){
+					print("Player in front me!");
+					 	Invoke("UpdateAttackState",0.5f);
+					}
+					if(hit.transform.gameObject.tag =="NPC"){
+						GameObject npc = GameObject.FindGameObjectWithTag("NPC");
+						Physics.IgnoreCollision(npc.collider,col);
+					}
+        
+  				  }
+				
 				
 			
-//				if(transform.position.y > nextTarget.y){
-//					Invoke("UpdateJumpState",2);
-//				}
+				
+			}else{
+			 	Debug.Log("OBS NO TROBAT");
+			}
+
 				
 		
 			
@@ -268,15 +285,12 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
+		
+     
 		if(animation["Ataque_Derecha"]!=null){
 			animation.Play("Ataque_Derecha");
-			while(animation.IsPlaying("Ataque_Derecha"));
-				curState = FSM.Run;
 			
-			
-			
-			
-			
+		
 		}
 		
 		//Debug.Log("Relpos:"+Mathf.Abs(relPos.x));
@@ -305,6 +319,12 @@ public class AgentNpc : FSM {
 	
     protected void UpdateJumpState(){
 		Debug.Log("Salte");
+		Physics.gravity = new Vector3(0, gravity, 0);
+		if (Physics.Raycast(transform.position, -Vector3.up, 10) && rigidbody.velocity.y < jumpForce/2){
+			rigidbody.velocity = rigidbody.velocity + Vector3.up *jumpForce;	
+			
+		}
+		
 //		if(animation["Salto_Derecha"]!=null){
 //				animation.Play("Salto_Derecha", PlayMode.StopAll);
 //		}
@@ -346,13 +366,13 @@ public class AgentNpc : FSM {
 			Debug.Log("A tocat alguna cosa");
 			
 		}
-		if(collision.gameObject.tag == "Player"){ 
-				Debug.Log("A tocat player");
-				curState = FSM.Attack;
- 		}
-		if(collision.gameObject.tag =="katana"){
-			setHealthPoints(getHealthPoints()-25);
-		}
+//		if(collision.gameObject.tag == "Player"){ 
+//				Debug.Log("A tocat player");
+//				curState = FSM.Attack;
+// 		}
+//		if(collision.gameObject.tag =="katana"){
+//			setHealthPoints(getHealthPoints()-25);
+//		}
 		
 		
 	}
