@@ -253,22 +253,7 @@ public class AgentNpc : FSM {
 			
 			transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
 		
-<<<<<<< HEAD
-//		
-//				if (derecha != (relPos.x > 0)){
-//					transform.Rotate (0,180,0);
-//					derecha = !derecha;			
-//				}
-				
-				//CONTROLABLE
-				//transform.Translate(new Vector3(Input.GetAxisRaw("Horizontal")*velocity,0,0) * Time.deltaTime);
-				transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
-		
-				if (Mathf.Abs(relPos.x) <= stopDistance){
-					animator.SetBool("attack",true);
-					curState = FSM.Attack;
-=======
-		
+	
 		
 			RaycastHit hit;
 			if(Physics.Raycast(transform.position+Vector3.up*30, (derecha)?Vector3.right:Vector3.left, out hit,stopDistance)){	
@@ -295,7 +280,6 @@ public class AgentNpc : FSM {
 						//print("There is something in front of the object!");
 						//Invoke("UpdateJumpState",0.4f);
 						break;
->>>>>>> devel-B
 				}
 
 			}
@@ -437,13 +421,7 @@ public class AgentNpc : FSM {
  		}
 		if(collision.gameObject.tag =="katana"){
 			setHealthPoints(getHealthPoints()-25);
-<<<<<<< HEAD
-		}	
-=======
-		}
 		*/
-		
->>>>>>> devel-B
 	}
 //	void OnCollisionExit(Collision collision){}
 //	void OnCollisionStay(Collision collision){}
