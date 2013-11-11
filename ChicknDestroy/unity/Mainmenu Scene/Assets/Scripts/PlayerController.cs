@@ -87,10 +87,10 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 		
+		//Actualiza la posicion del personaje
 		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
 		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
-		
-		//Debug.Log(rigid.velocity.x + " "+ rigid.velocity.y);
+	
 		
 		if(rigid.velocity.y > 10) {
 		//Si estamos en el aire de subida
@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour {
 				if (rigid.velocity.x > 0) {
 					if(currentTime > animDuration){
 						if(disparo) {
-							animation.Play("disparaEscopetaDer",PlayMode.StopAll);
+							animation.Play("disparaEscopetaDerCorriendo",PlayMode.StopAll);
 							disparo = false;
 						}
 						else animation.Play("correrDerecha");
@@ -130,7 +130,7 @@ public class PlayerController : MonoBehaviour {
 				if (rigid.velocity.x < 0) {
 					if(currentTime > animDuration){
 						if(disparo) {
-							animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
+							animation.Play("disparaEscopetaIzqCorriendo",PlayMode.StopAll);
 							disparo = false;
 						}
 						else animation.Play("correrIzquierda");
@@ -196,18 +196,6 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 	
-	// Increase n towards target by speed
-	private float IncrementTowards(float n, float target, float a) {
-		if (n == target) {
-			return n;	
-		}
-		else {
-			float dir = Mathf.Sign(target - n); // must n be increased or decreased to get closer to target
-			n += a * Time.deltaTime * dir;
-			return (dir == Mathf.Sign(target-n))? n: target; // if n has now passed target then return target, otherwise return n
-		}
-	}
-	
 	public int getHealthPoints() {
 		return health;
 	}
@@ -246,8 +234,4 @@ public class PlayerController : MonoBehaviour {
 		this.gameManager.notifyPlayerDeath();
 		
 	}
-	/*
-	private IEnumerator wait(){
-		yield return new WaitForSeconds(10);
-	}*/
 }

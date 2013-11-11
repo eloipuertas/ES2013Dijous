@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 78c3846a586df264bb817f5b5abf5dbe
+guid: 6dc641137645ea44a8bacfc0b4f02318
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -85,19 +85,21 @@ ModelImporter:
     7400006: correrDerecha
     7400008: correrIzquierda
     7400010: disparaEscopetaDer
-    7400012: disparaEscopetaIzq
-    7400014: giroDerechaIzq
-    7400016: giroIzquierdaDerecha
-    7400018: golpearkatanaDer
-    7400020: golpearkatanaIzq
-    7400022: paradaDerecha
-    7400024: paradaIzquierda
-    7400026: RecogerItemDer
-    7400028: recogerItemIzq
-    7400030: saltarDerecha
-    7400032: saltarIzquierda
-    7400034: saltoVerticalDer
-    7400036: saltoVerticalIz
+    7400012: disparaEscopetaDerCorriendo
+    7400014: disparaEscopetaIzq
+    7400016: disparaEscopetaIzqCorriendo
+    7400018: giroDerechaIzq
+    7400020: giroIzquierdaDerecha
+    7400022: golpearkatanaDer
+    7400024: golpearkatanaIzq
+    7400026: paradaDerecha
+    7400028: paradaIzquierda
+    7400030: RecogerItemDer
+    7400032: recogerItemIzq
+    7400034: saltarDerecha
+    7400036: saltarIzquierda
+    7400038: saltoVerticalDer
+    7400040: saltoVerticalIz
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube_002
