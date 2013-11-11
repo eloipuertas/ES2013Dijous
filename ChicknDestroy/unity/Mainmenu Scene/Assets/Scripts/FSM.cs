@@ -3,15 +3,9 @@ using System.Collections;
 
 public class FSM : MonoBehaviour {
 	
-	//Player transform
-	protected Transform playerTransform;
-	
 	//Next target
 	protected Vector3 target;
 	
-	//Npc atributes
-	protected int health;
-	protected int damage;
 	
 	//Abstract methods
 	
