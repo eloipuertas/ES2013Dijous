@@ -21,7 +21,7 @@ public class EndGameConditions : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown(KeyCode.Escape)){//when player press escape we signal to stop showing the banner and set the game timeScale at 1F
+		if(Input.anyKeyDown){//when player press escape we signal to stop showing the banner and set the game timeScale at 1F
 			start = true;
 			Time.timeScale = 1F;
 		}
@@ -30,7 +30,7 @@ public class EndGameConditions : MonoBehaviour {
 	void OnGUI(){
 		if(!start){//we show the banner til the player press escape
 			GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load (Banner) as  Texture);
-			GUI.Label(new Rect(Screen.width/2.7F,Screen.height-40,500,500),"Press 'ESC' to Start",style);
+			GUI.Label(new Rect(Screen.width/2.7F,Screen.height-40,500,500),"Press a key to Start",style);
 		}
 	}
 	
