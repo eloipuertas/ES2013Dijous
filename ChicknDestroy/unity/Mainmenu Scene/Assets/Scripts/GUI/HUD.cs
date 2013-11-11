@@ -12,6 +12,8 @@ public class HUD : MonoBehaviour{
 	private Vector2 pause;
 	
 	// Definitive Objects
+	private static double millis = 2000;
+	
 	private Lifebar life;
 	private Sprite bg_life;
 	
@@ -21,6 +23,8 @@ public class HUD : MonoBehaviour{
 	private SpriteWeaponControl weapons;
 	
 	private SpriteButton pause_button;
+	
+	private MessagePool mes;
 
 	void initComponents() {
 		int isegment = Screen.width/10;
@@ -54,8 +58,10 @@ public class HUD : MonoBehaviour{
 		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
 			"pausa/pause",
 			"pausa/pause1",
-			new ChangeLevelAction(),
+			new ResumeAction(),
 			KeyCode.P);
+		
+		this.mes = new MessagePool(10);
 	}
 	
 	
@@ -84,7 +90,9 @@ public class HUD : MonoBehaviour{
 		
 		this.pause_button.render();
 		
-		//if(isPaused())this.pause_menu.render();
+		this.mes.render();
+		
+		if(isPaused())this.pause_menu.render();
 	}
 	
 	// Update is called once per frame
@@ -120,5 +128,8 @@ public class HUD : MonoBehaviour{
 	
 	public void notifySecondaryWeapon(string weapon) {
 		this.weapons.notifySecondaryWeapon(weapon);
+	}
+	public void notifyMessage(Vector2 position, string message) {
+		this.mes.start(position,message,millis);
 	}
 }
