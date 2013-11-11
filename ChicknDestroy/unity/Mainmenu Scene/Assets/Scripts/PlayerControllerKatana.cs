@@ -10,17 +10,20 @@ public class PlayerControllerKatana : MonoBehaviour {
 	
 	//Atributos de control
 	private float gravity = 800;
-	private float speed = 250;
-	private float acceleration = 2000;
+	private float speed = 300;
 	private float jumpHeight = 500;
+	private float acceleration = 50;
 	
 	//sonido
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
 	
+	
+	private float animTime;
+	private float animDuration = 0.3f;
+	
 	private float currentSpeed;
 	private float targetSpeed;
-	private Vector2 amountToMove;
 	
 	
 	private int movDer = 1;
@@ -30,159 +33,169 @@ public class PlayerControllerKatana : MonoBehaviour {
 	private bool disparo= false;
 
 	private int lastDirection;
-	
-	//private PlayerPhysics playerPhysics;
+	private float heightHero;
 	
 	private HUD hud;
 	private GameManager gameManager;
+	private Rigidbody rigid;
+	
+	
 	
 	void Start () {
-		//playerPhysics = GetComponent<PlayerPhysics>();
+		
+		rigid =	GetComponent<Rigidbody>();
+		
 		animation.Play("paradaDerecha");
 		lastDirection = stopDer;
 		
-		
-		gravity = 800;
-		speed = 250;
-		acceleration = 1000;
-		jumpHeight = 500;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
 		fireHealthNotification();
+		
+		disparo = true;
+		
+		heightHero = rigid.collider.bounds.extents.y;
+	}
+	
+	private bool isGround() {
+		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.1f);
+	}
+	
+	void OnCollisionStay(Collision collision) {
+		//TRATAMIENTO DE COLISIONES CON OBJETOS
 	}
 	
 	void Update () {
 		
 		float raw = Input.GetAxisRaw("Horizontal");
-		targetSpeed = raw * speed;
-		currentSpeed = IncrementTowards(currentSpeed, targetSpeed,acceleration);
-		/*
-		if (playerPhysics.grounded) {
-			amountToMove.y = 0;
-			
-			// Jump
+		
+		
+		if (isGround()) {
 			if (Input.GetButtonDown("Jump")) {
 				sonidoSalto.Play();
-				amountToMove.y = jumpHeight;	
+				rigid.velocity += Vector3.up * jumpHeight;
 			}
 			
-			if (Input.GetButtonDown("Fire1")) {
+			if (!disparo && Input.GetButtonDown("Fire1")) {
 				
-				disparo = true;
 				sonidoDisparo.Play();
+				disparo = true;
+				
 			}
 		}
-		*/
 		
-		amountToMove.x = currentSpeed;
-		amountToMove.y -= (gravity * Time.deltaTime);
-		//playerPhysics.Move(amountToMove * Time.deltaTime);
+		//Actualiza la posicion del personaje
+		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
+		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
+	
 		
-		//Debug.Log("x: "+amountToMove.x+" y: "+amountToMove.y);
-		
-		if(amountToMove.y > 50) {
+		if(rigid.velocity.y > 10) {
 		//Si estamos en el aire de subida
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
 			else animation.Play("saltoVerticalIz");
-		}else if(amountToMove.y < -50){
+		}else if(rigid.velocity.y < -65){
 		//Si estamos en el aire de bajada
 			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
 			else animation.Play("caidaIzquierda");
 		}else {
-		//Si estamos en el suelo
-			if (disparo == true && lastDirection == movDer){
-						
-						
-						animation.Play("golpearkatanaDer");
-						
-						disparo = false;
-						
-				
-			}
-			else if (disparo == true && lastDirection == movIzq){
-						
-						animation.Play("golpearkatanaIzq");
-								
-						disparo = false;
-						
-				
-			}
-			if (lastDirection == movDer ) {
-				if (amountToMove.x > 1) {
-					animation.Play("correrDerecha");
+
+			float currentTime = Time.time - animTime;
+			
+			if (lastDirection == movDer) {
+				if (rigid.velocity.x > 0) {
+					if(currentTime > animDuration){
+						if(disparo) {
+							animation["golpearkatanaDerCorriendo"].speed = 3;
+							animation.Play("golpearkatanaDerCorriendo",PlayMode.StopAll);
+							disparo = false;
+						}
+						else animation.Play("correrDerecha");
+						animTime = Time.time;
+					}
 					lastDirection = movDer;
 					
 				}
 				else if(raw < 0) {
+					animation["giroDerechaIzq"].speed = 2;
 					animation.Play("giroDerechaIzq", PlayMode.StopAll);
+					animTime = Time.time;
 					lastDirection = movIzq;
 				}
-				
 				else {
-					animation.Play("paradaDerecha");
 					lastDirection = stopDer;
 				}
 				
 			}else if (lastDirection == movIzq) {
-				if (amountToMove.x < -1) {
-					animation.Play("correrIzquierda");
+				if (rigid.velocity.x < 0) {
+					if(currentTime > animDuration){
+						if(disparo) {
+							animation["golpearkatanaIzqCorriendo"].speed = 3;
+							animation.Play("golpearkatanaIzqCorriendo",PlayMode.StopAll);
+							disparo = false;
+						}
+						else animation.Play("correrIzquierda");
+						animTime = Time.time;
+					}
 					lastDirection = movIzq;
 				}
 				else if(raw > 0) {
+					animation["giroIzquierdaDerecha"].speed = 2;
 					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+					animTime = Time.time;
 					lastDirection = movDer;
 				}
 				else {
-					
-					animation.Play("paradaIzquierda");
 					lastDirection = stopIzq;
 				}
 			}else {
-				
 				if (lastDirection == stopDer) {
-					
-					if(disparo == true){
-						animation["golpearkatanaDer"].speed = (float) 2;
-					 	animation.Play("golpearkatanaDer");
+					if (disparo && currentTime > animDuration) {
+						animation["golpearkatanaDer"].speed = 3;
+						animation.Play("golpearkatanaDer",PlayMode.StopAll);
 						disparo = false;
+						animTime = Time.time;
 					}
-					else if (amountToMove.x > 1) {
+					else if (rigid.velocity.x > 0) {
 						animation.Play("correrDerecha");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
+						animation["giroDerechaIzq"].speed = 2;
 						animation.Play("giroDerechaIzq", PlayMode.StopAll);
+						animTime = Time.time;
 						lastDirection = movIzq;
 					}
 					else {
-						    
-							//animation.Play("paradaDerecha");
-							//lastDirection = stopDer;
-								
-						
+						if(currentTime > animDuration){
+							animation.Play("paradaDerecha");
+							animTime = Time.time;
+						}
+						lastDirection = stopDer;
 					}
 				}
 				else {
-					if(disparo == true){
-						Debug.Log("ENTRO AQUIIIII");
-						animation["golpearkatanaIzq"].speed = (float) 2;
-					 	animation.Play("golpearkatanaIzq");
+					if(currentTime > animDuration && disparo) {
+						animation["golpearkatanaIzq"].speed = 3;
+						animation.Play("golpearkatanaIzq",PlayMode.StopAll);
 						disparo = false;
+						animTime = Time.time;
 					}
-					else if(amountToMove.x < -1) {
+					else if(rigid.velocity.x < 0) {
 						animation.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
+						animation["giroIzquierdaDerecha"].speed = 2;
 						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+						animTime = Time.time;
 						lastDirection = movDer;
 					}else {
-							
-							//animation.Play("paradaIzquierda");
-							
-							
-						  //lastDirection = stopIzq;
+						if (currentTime > animDuration) {	
+							animation.Play("paradaIzquierda");
+							animTime = Time.time;
+						}
+						lastDirection = stopIzq;
 					}
 				}
 				
@@ -190,18 +203,6 @@ public class PlayerControllerKatana : MonoBehaviour {
 			}
 		}
 		
-	}
-	
-	// Increase n towards target by speed
-	private float IncrementTowards(float n, float target, float a) {
-		if (n == target) {
-			return n;	
-		}
-		else {
-			float dir = Mathf.Sign(target - n); // must n be increased or decreased to get closer to target
-			n += a * Time.deltaTime * dir;
-			return (dir == Mathf.Sign(target-n))? n: target; // if n has now passed target then return target, otherwise return n
-		}
 	}
 	
 	public int getHealthPoints() {
@@ -236,14 +237,10 @@ public class PlayerControllerKatana : MonoBehaviour {
 			setHealthPoints(0);
 	}
 	private void fireHealthNotification() {
-		this.hud.notifyHealthChange(this.health);
+		//this.hud.notifyHealthChange(this.health);
 	}
 	private void fireDeathNotification() {
 		this.gameManager.notifyPlayerDeath();
 		
 	}
-	private IEnumerator wait(){
-		yield return new WaitForSeconds(-10);
-	}
 }
-

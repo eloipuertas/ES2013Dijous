@@ -53,15 +53,17 @@ ModelImporter:
     7400014: giroDerechaIzq
     7400016: giroIzquierdaDerecha
     7400018: golpearkatanaDer
-    7400020: golpearkatanaIzq
-    7400022: paradaDerecha
-    7400024: paradaIzquierda
-    7400026: RecogerItemDer
-    7400028: recogerItemIzq
-    7400030: saltarDerecha
-    7400032: saltarIzquierda
-    7400034: saltoVerticalDer
-    7400036: saltoVerticalIz
+    7400020: golpearkatanaDerCorriendo
+    7400022: golpearkatanaIzq
+    7400024: golpearkatanaIzqCorriendo
+    7400026: paradaDerecha
+    7400028: paradaIzquierda
+    7400030: RecogerItemDer
+    7400032: recogerItemIzq
+    7400034: saltarDerecha
+    7400036: saltarIzquierda
+    7400038: saltoVerticalDer
+    7400040: saltoVerticalIz
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube
