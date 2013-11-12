@@ -12,7 +12,9 @@ public class PauseMenu : MonoBehaviour
 	private Vector2 origin;
 	private Vector2 end;
 	private bool visible;
-	public PauseMenu (Vector2 origin, Vector2 end,String menu, String title, String b_pattern) {
+	private HUD hud;
+	public PauseMenu (HUD hud, Vector2 origin, Vector2 end,String menu, String title, String b_pattern) {
+		this.hud = hud;
 		this.origin = origin;
 		this.end = end;
 		this.visible = false;

@@ -56,7 +56,6 @@ public class AgentNpc : FSM {
 	private Vector3 playereulerAngles;
 	//private float rangeWarp = 100;
 	private FSM curState;
-	
 	private Animator animator;
 	private bool derecha = true;
 	private bool canvia = false;
@@ -128,6 +127,11 @@ public class AgentNpc : FSM {
 		health = 100;
 		//damage = 25;
 		primaryWeapon = "katana";
+		try{
+			animator = GetComponent<Animator>();
+		}catch{
+			//print("Exception GetComponent animator");
+		}
 		
 		pla = GameObject.FindGameObjectWithTag("Player");
 		playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
@@ -137,7 +141,6 @@ public class AgentNpc : FSM {
 		animation["correrIzquierda"].wrapMode = WrapMode.Loop;
 		animation["golpearKatanaDer"].speed = 0.7f;
 		animation["golpearKatanaIzq"].speed = 0.7f;
-		
 		
 	}
 	void setInitialSpawnPoints(){
@@ -276,7 +279,6 @@ public class AgentNpc : FSM {
 						break;
 					default:
 						curState = FSM.Jump;
-
 						//print("There is something in front of the object!");
 						//Invoke("UpdateJumpState",0.4f);
 						break;
@@ -288,7 +290,6 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
-		
 		string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
 		
 		if(!animation.IsPlaying(anim) && animation[anim]!=null){

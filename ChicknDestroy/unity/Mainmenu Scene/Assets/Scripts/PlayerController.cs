@@ -43,7 +43,6 @@ public class PlayerController : MonoBehaviour {
 	
 	
 	void Start () {
-		
 		rigid =	GetComponent<Rigidbody>();
 		
 		animation.Play("paradaDerecha");
@@ -104,10 +103,21 @@ public class PlayerController : MonoBehaviour {
 			else animation.Play("saltoVerticalIz");
 		}else if(rigid.velocity.y < -65){
 		//Si estamos en el aire de bajada
-			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("caidaDerecha");
-			else animation.Play("caidaIzquierda");
+			if(lastDirection == movDer || lastDirection == stopDer){
+				try{
+						animation.Play("caidaDerecha");
+				}catch{
+						//print ("Exeption caidaDerecha Izq: Null Pointer animation");
+				}
+			}
+			else{
+				try{
+						animation.Play("caidaIzquierda");
+				}catch{
+						//print ("Exeption caidaIzquierda Izq: Null Pointer animation");
+				}
+			}
 		}else {
-
 			float currentTime = Time.time - animTime;
 			
 			if (lastDirection == movDer) {
