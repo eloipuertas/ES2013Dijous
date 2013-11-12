@@ -58,10 +58,16 @@ public class PlayerController : MonoBehaviour {
 		disparo = true;
 		
 		heightHero = rigid.collider.bounds.extents.y;
+		
+		//heightHero = 50f;
+	
 	}
 	
 	private bool isGround() {
-		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.1f);
+		
+		bool b = Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.1f);
+		//Debug.Log(heightHero + " " + b);
+		return b;
 	}
 	
 	void OnCollisionStay(Collision collision) {
