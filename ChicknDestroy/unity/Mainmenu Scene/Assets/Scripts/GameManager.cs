@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	private void endGame() {
-		if(loseOrWinTime <= 0F)//when 5 seconds of the timer elapsed return to main menu
+		if(loseOrWinTime <= 0F || Input.anyKeyDown)//when 5 seconds of the timer elapsed return to main menu
 			Application.LoadLevel(0);
 	}
 }
