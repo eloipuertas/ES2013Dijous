@@ -53,7 +53,8 @@ public class PlayerController : MonoBehaviour {
 		gre = GameObject.Find("gre");
 		grk = GameObject.Find("grk");
 		myAnim = grk.animation;
-		//gre.renderer.enabled = false;
+		
+		gre.renderer.enabled = false;
 		//player = gre;
 		
 		
