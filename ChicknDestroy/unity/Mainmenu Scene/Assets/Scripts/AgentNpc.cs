@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+
 
 public class AgentNpc : FSM {
 	
@@ -11,39 +14,36 @@ public class AgentNpc : FSM {
 		Attack,
 		Dead,
 	}
-	
-	
-	//Animations 
-	/*
-	public Animation movRight;
-	public Animation movLeft;
-	public Animation rotRight;
-	public  Animation rotLeft;
-	public Animation jumpRight;
-	public  AnimationClip jumpLeft;
-	public AnimationClip atack;*/
-	
 	//Player transform
 	protected Transform playerTransform;
-	
-	//Next target
-	protected Vector3 target;
-	protected Vector3 direction;
-	
-	
-	
-	//Npc propierties
-	private Vector3 spawnPoint;
-	private Collision collision;
-	private Collider col;
-	private Rigidbody mas;
 	private GameObject pla;
 	private PlayerController playerScript;
+	
+	//Next target 
+	protected Vector3 nextTarget;
+	protected Vector3 actualTarget;
+	
+	protected Vector3 direction;
+	protected Vector3 relPos;
+	public string direrutas = "ruta1.txt";
+	//Lectors de rutes
+	private List <List<Vector3>> rutas = new List<List<Vector3>>();
+	private List <Vector3> rutaActual  = new List<Vector3>();
+	private int keyPosActual =0; 
+	private int idruta = 0;
+	//Npc propierties
+	private Vector3 spawnPoint;
+	private Collider col;
+	private Rigidbody mas;
 	
 	//Npc atributes
 	
 	public int health = 100;
 	public int damage = 15;
+	public int puntuacio = 200;
+	public int jumpForce = 500;
+	public int gravity = -800;
+	public int radioVision = 275;
 	public string primaryWeapon;
 	public string secondaryWeapon;
 	
@@ -56,12 +56,13 @@ public class AgentNpc : FSM {
 	private Vector3 playereulerAngles;
 	//private float rangeWarp = 100;
 	private FSM curState;
-	
 	private Animator animator;
 	private bool derecha = true;
-	public float stopDistance = 60;
+	private bool canvia = false;
+	public float stopDistance = 50;
 	private bool attacked = false;
-		// -------NPC interface----------
+	
+	// -------NPC interface----------
 	
 	protected int getHealthPoints(){
 		return health;
@@ -78,73 +79,44 @@ public class AgentNpc : FSM {
 	protected Vector3 getCoordinates(){
 		return transform.position;
 	}
-	
-	//Return 
-//	float getcolliderType(){
-//		if(col == null) return 0;
-//		if(col.GetType() == typeof(MeshCollider)){
-//			print("mesh");
-//			MeshCollider f = col.GetComponent<MeshCollider>();
-//			return f;
-//			
-//		}
-//		if(col.GetType() == typeof(CapsuleCollider)){
-//			print("capsule");
-//			CapsuleCollider f = col.GetComponent<CapsuleCollider>();
-//			return f;
-//			
-//		}
-//		if(col.GetType() == typeof(SphereCollider)){
-//			print("sphere");
-//			SphereCollider d = col.GetComponent<SphereCollider>();
-//			return d;
-//		}
-//		if(col.GetType() == typeof(BoxCollider)){
-//			print("box");
-//			BoxCollider f = col.GetComponent<CapsuleCollider>();
-//			return f;
-//		}
-//		if(col.GetType() == typeof(MeshCollider)) print("mesh");
-//	}
-	//void manDistance(Vector3 p1,Vector3 p2){
-		//return Mathf.Sqrt(Mathf.Exp(2.0)*(p1.x -p2.x) +(p1.y - p2.y));
-	//}
+	protected int getPuntuacio(){
+		return puntuacio;
+	}
+
 	//-------------Utility Functions---------------
 	
 	//Actualiza la posicio del objectiu
-	void updatePlayerPosition(){
+	void printRuta(){
+		foreach(Vector3 pos in rutaActual){
+			Debug.Log(pos);
+		}
+	}
+	void updateNextTarget(){
 		pla = GameObject.FindGameObjectWithTag("Player");
 		playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
 		playerTransform = pla.transform;
-		target = pla.transform.localPosition;
-		
-		
-		
-			
-	}
-	float getDistanceX(Vector3 npcPos,Vector3 playerPos){
-		float distX = 0.0f;
-		if (Mathf.Abs(npcPos.x) > Mathf.Abs(playerPos.x)){
-		 distX = Mathf.Abs(npcPos.x - playerPos.x);
+		relPos = playerTransform.localPosition - transform.position;
+		if(Mathf.Abs(relPos.x) <= radioVision) {
+			return;
 		}
-		if (Mathf.Abs(npcPos.x) < Mathf.Abs(playerPos.x)){
-			distX = Mathf.Abs(playerPos.x - npcPos.x);
-		}	
 		
-		return distX;
+		
+		nextTarget = rutas[idruta][keyPosActual];
+		Debug.Log("####NPC GO TO -------> "+nextTarget);
+		relPos = nextTarget - transform.position;
+		if(Mathf.Abs(relPos.x) <= 15) {
+			keyPosActual+=1;
+			if (keyPosActual == rutas[idruta].Count)
+				keyPosActual = 0;
+			Debug.Log("###NEXT KEY###");
+		}
+//		
+//		actualTarget = nextTarget;
+//		if(keyPosActual == rutas[0].Count) curState = FSM.None;
+		
+//		relPos = nextTarget - transform.position;		
 	}
 	
-	float getDistanceY(Vector3 npcPos,Vector3 playerPos){
-		float distY = 0.0f;
-		if (Mathf.Abs(npcPos.y) > Mathf.Abs(playerPos.y)){
-		 distY = Mathf.Abs(npcPos.y - playerPos.y);
-		}
-		if (Mathf.Abs(npcPos.y) < Mathf.Abs(playerPos.y)){
-			distY = Mathf.Abs(playerPos.y - npcPos.y);
-		}	
-		
-		return distY;
-	}
 	GameObject warpNpc(Vector3 p,Vector3 s){
 		GameObject npc = GameObject.CreatePrimitive(PrimitiveType.Cube);
 		npc.transform.localPosition = p;
@@ -155,127 +127,196 @@ public class AgentNpc : FSM {
 		health = 100;
 		//damage = 25;
 		primaryWeapon = "katana";
+		try{
+			animator = GetComponent<Animator>();
+		}catch{
+			//print("Exception GetComponent animator");
+		}
 		
-		animator = GetComponent<Animator>();
+		pla = GameObject.FindGameObjectWithTag("Player");
+		playerScript = (PlayerController) pla.GetComponent(typeof(PlayerController));
+		
+		Physics.gravity = new Vector3(0, gravity, 0);
+		animation["correrDerecha"].wrapMode = WrapMode.Loop;
+		animation["correrIzquierda"].wrapMode = WrapMode.Loop;
+		animation["golpearKatanaDer"].speed = 0.7f;
+		animation["golpearKatanaIzq"].speed = 0.7f;
 		
 	}
 	void setInitialSpawnPoints(){
 		spawnPoint = transform.position;
 	}
 	void setInitialState(){
+		nextTarget = rutaActual[keyPosActual];
+		Debug.Log("###INITIAL TARGET"+rutaActual[keyPosActual]);
 		curState = FSM.Run;
+	}
+	
+	void selectRoute(){
+		int op = Random.Range(0,rutas.Count);
+		Debug.Log("### NPC HA SELECIONAT RUTA "+op);
+		Debug.Log(rutas.Count);
+		Debug.Log(rutas[0]);
+		int i = 0;
+		foreach(Vector3 p in rutas[0]){
+			Debug.Log(p);
+			rutaActual.Insert(i,p);
+			i+=1;
+		}
+//		
+//		
+//		//rutaActual = (Vector3[])rutas[op];
+//		//Debug.Log("###POSICIONS DE LA RUTA####"+rutaActual);
+	}
+	void loadRoutes(){
+		List<Vector3> positions = new List<Vector3>();
+		int fileindex = 0;
+		int posindex = 0;
+		
+		
+		
+		direrutas = Application.dataPath + "/Scripts/RutasNpc/" + direrutas;
+
+		Debug.Log("NOVA RUTA-->ID::"+fileindex);
+		string content = File.ReadAllText(direrutas);
+		string []lines = content.Split('|');
+		foreach(string s in lines){
+			string []pos = s.Split(',');
+			//Debug.Log(pos.Length);
+			float x = float.Parse(pos[0]);
+			float y = float.Parse(pos[1]);
+			float z = float.Parse(pos[2]);
+			positions.Insert(posindex,(Vector3)new Vector3(x,y,z));
+			Debug.Log("ADD NEW POS"+positions[posindex]);
+			posindex +=1;
+			Debug.Log("NOVA POSICIO -->"+x+" "+y+" "+z);
+		}
+		rutas.Insert(fileindex,positions);
+		
+		content ="";
+		posindex = 0;
+		
+		fileindex +=1;
+
+		foreach(List<Vector3> ruta in rutas){
+			foreach(Vector3 pos in ruta){
+				Debug.Log("posi,"+pos);
+			}
+		}
+		
+	}
+	
+	void setWeapon(string tag){
+		GameObject arma  ;
 	}
 	void setInitialCollider(){
 		col = GetComponent<Collider>();
 		Debug.Log(col);
-		mas = this.gameObject.rigidbody;
+		mas = gameObject.rigidbody;
 		Debug.Log(mas);
 		
 		//mas.GetComponent(RigidBody);
 	}
-	IEnumerator WaitAndCallback(float waitTime){
-		Debug.Log("Time "+Time.time);
-		yield return new WaitForSeconds(waitTime);
-		Debug.Log("Time 3 "+Time.time);
-		//gobool = true;
-	}
+
+	
+	
 
 	
 	// ######### Agent arquitecture #########//
 	
 	//--------Agents States------------//
+	
+	//#########################################
+	//##NOMES CALCULS AMB RIGIDBODY & COLLIDERS
+	//#########################################
+	
+	
+	//#########################################
+	//###NOMES TRANSFORMACIONS DE POSICIONS####
+	//#########################################
 	protected void UpdateNoneState(){
 		//Animation idle
 	}
 	protected void UpdateRunState(){
-			
-			if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Mover_Derecha"))
-				animator.SetBool("move",false);
-		
 			setInitialCollider();
-			
-			Vector3 relPos = target - transform.position;
-		    //transform.rotation = Quaternion.LookRotation(relPos);
-			//transform.LookAt(target);
-//			if(getDistanceY(transform.position,target)>=60){
-//				curState = FSM.Jump;
-//			}
-
-			
-		 	
-			//Debug.Log("Distance: "+Vector3.Distance(transform.position,target));
-			//Debug.Log("Collider radius: "+GetComponent<CapsuleCollider>().radius);
-			//if(Vector3.Distance(transform.position,target)> 0){
-				///transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
 		
+			if (derecha != (relPos.x > 0))
+				derecha = !derecha;			
+			
+			string anim = (derecha)? "correrDerecha":"correrIzquierda";
 		
-				if (derecha != (relPos.x > 0)){
-					transform.Rotate (0,180,0);
-					derecha = !derecha;			
+			// Si esta tocando suelo:
+			if(Physics.Raycast(transform.position, -Vector3.up, 10) && rigidbody.velocity.y < jumpForce/2 && animation[anim]!=null)
+				animation.Play(anim);
+		
+			// Si esta caiendo:
+			else if (rigidbody.velocity.y < -10)
+					animation.Play((derecha)? "caidaDerecha":"caidaIzquierda");
+			// else -> estoy haciendo la animacion de salto
+			
+			transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
+		
+	
+		
+			RaycastHit hit;
+			if(Physics.Raycast(transform.position+Vector3.up*30, (derecha)?Vector3.right:Vector3.left, out hit,stopDistance)){	
+			
+				switch(hit.transform.gameObject.tag){
+					case "Player":
+						curState = FSM.Attack;
+				
+						string anima = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
+						if(animation[anima]!=null)
+							animation.Play(anima);
+						
+						//print("Player in front me!");
+					 	//Invoke("UpdateAttackState",0.5f);
+						break;
+					case "NPC":
+						curState = FSM.Jump;
+						//GameObject npc = GameObject.FindGameObjectWithTag("NPC");
+						//Physics.IgnoreCollision(npc.collider,col);
+						break;
+					default:
+						curState = FSM.Jump;
+						//print("There is something in front of the object!");
+						//Invoke("UpdateJumpState",0.4f);
+						break;
 				}
-		
-				transform.Translate(new Vector3(velocity,0,0) * Time.deltaTime);
 
-				if (Mathf.Abs(relPos.x) <= stopDistance){
-					animator.SetBool("attack",true);
-					curState = FSM.Attack;
-				}
+			}
 
-
-//				if(transform.position.x < target.x){
-//					
-//		  			transform.rotation = Quaternion.Euler(0, 0, 0);
-//				    
-////					this.animation["Mover_Derecha"].wrapMode = WrapMode.Loop;
-////					this.animation.Play("Mover_Derecha");
-//					
-//				}
-//				if(transform.position.x > target.x){
-//					
-//		  			transform.rotation = Quaternion.Euler(0, 180, 0);
-//					
-//				}
-			//}
-		
-			
-					
-			
-	   
-		//Debug.Log("Target Pos z: " + (Mathf.Abs(target.z)));
-		//Debug.Log("PlayerTransform Pos z:" + (Mathf.Abs(transform.localPosition.z)));
-		//Debug.Log("Distance: " + (Mathf.Abs(target.z) - Mathf.Abs(transform.localPosition.z)));
-		//if(Mathf.Abs(target.z) - Mathf.Abs(transform.localPosition.z) >= 1){
-		//	curState = FSM.Attack;
-		//}
-		
-		updatePlayerPosition();
+		updateNextTarget();
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
+		string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
 		
-		if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Ataque_Derecha"))
-			animator.SetBool("attack",false);
-
-		else if (animator.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Idle")){
+		if(!animation.IsPlaying(anim) && animation[anim]!=null){
 			
-			Vector3 relPos = target - transform.position;
-			
-			if (Mathf.Abs(relPos.x) > stopDistance+5){
-				animator.SetBool("move",true);
+			RaycastHit hit;
+			if(Physics.Raycast(transform.position+Vector3.up * 30, (derecha)?Vector3.right:Vector3.left, out hit,stopDistance+5)){
+				if (hit.transform.gameObject.tag == "Player"){
+						
+						animation.Play(anim);
+						playerScript.setDamage(damage);
+					
+						print("HIT");
+				} else {
+						curState = FSM.Run;
+				}
+				
+			} else {
 				curState = FSM.Run;
-				
-			} else if (!attacked){
-				animator.SetBool("attack",true);
-				playerScript.setDamage(damage);
-				print("HIT");
-				attacked = true;
-				
-			} else if(attacked){
-				attacked = false;
 			}
-			
-			
 		}
+		
+		
+	
+		
+		
+		//Debug.Log("Relpos:"+Mathf.Abs(relPos.x));
+		
 
 		
 		//this.animation.Stop ("Mover_Izquierda");
@@ -294,21 +335,56 @@ public class AgentNpc : FSM {
 		
 		//UpdateRunState();
 		
-		updatePlayerPosition();
 		
 	}
-	 
-//	private void KillThatMotherfucker(){
-//		pla.setHeatlhPoints(pla.getHealhpoints()-damage);
-//	}
-		
+	
     protected void UpdateJumpState(){
-		}
+		Debug.Log("Salte");
+
+		
+			RaycastHit hit;
+			if(Physics.Raycast(transform.position+Vector3.up * 30, (derecha)?Vector3.right:Vector3.left, out hit,stopDistance)){
+			
+				switch(hit.transform.gameObject.tag){
+					case "Player":
+						curState = FSM.Attack;
+						string anima = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
+						if(animation[anima]!=null)
+							animation.Play(anima);
+				
+						//print("Player in front me!");
+					 	//Invoke("UpdateAttackState",0.5f);
+						break;
+					case "NPC":
+						jump ();
+						//GameObject npc = GameObject.FindGameObjectWithTag("NPC");
+						//Physics.IgnoreCollision(npc.collider,col);
+						break;
+					default:
+						jump ();
+						//print("There is something in front of the object!");
+						//Invoke("UpdateJumpState",0.4f);
+						break;
+				}
+
+			} else
+				curState = FSM.Run;
+		
+//		if(animation["Salto_Derecha"]!=null){
+//				animation.Play("Salto_Derecha", PlayMode.StopAll);
+//		}
+		
+	}
 	protected void UpdateDeadState(){
 		//Animacio morirs
+		Destroy(gameObject);
+		// Dar puntos a player
+		
+		/*
 		setInitialsAtributes();
 		setInitialState();
 		transform.position = spawnPoint;
+		*/
 		
 	}
 	//-----------Agent Perceptions------------
@@ -321,43 +397,65 @@ public class AgentNpc : FSM {
 			case FSM.Dead: UpdateDeadState(); break;
 
  		}
-
+		
  		//elapsedTime += Time.deltaTime;
 
  		//Go to dead state is no health left
 		//Debug.Log(this.getHealthPoints());
 		if (this.getHealthPoints() <= 0) curState = FSM.Dead;
 		//if (pla.getHealthPoints() <=0) curState = FSM.None;
-		//Debug.Log("Current STATE: "+curState);
+		Debug.Log("Current STATE: "+curState);
 
 	}
+	
 	//-----------Gestio de collisions----------
 	
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.collider){
-			Debug.Log("A tocat terra");
+			Debug.Log("A tocat alguna cosa");
+			
 		}
-		if(collision.gameObject.tag=="Player"){ 
+		/*
+		if(collision.gameObject.tag == "Player"){ 
 				Debug.Log("A tocat player");
 				curState = FSM.Attack;
  		}
 		if(collision.gameObject.tag =="katana"){
 			setHealthPoints(getHealthPoints()-25);
-		}
-		
-		
+		*/
 	}
+//	void OnCollisionExit(Collision collision){}
+//	void OnCollisionStay(Collision collision){}
 	
 	//Initialization of NPC
 	protected override void Ini(){
+		
+		loadRoutes();
+		selectRoute();
+		
 		setInitialsAtributes();
 		setInitialCollider();
 		setInitialState();
 		setInitialSpawnPoints();
 
-		updatePlayerPosition();
+		updateNextTarget();
 		
 		Debug.Log(curState);
+	}
+	
+	public void jump(){
+		string anim = (derecha)? "caidaDerecha":"caidaIzquierda";
+		//Si esta tocando suelo -> Salta
+		if (Physics.Raycast(transform.position, -Vector3.up, 10) && rigidbody.velocity.y < jumpForce/2){			
+			rigidbody.velocity = rigidbody.velocity + Vector3.up *jumpForce;	
+			
+			anim = (derecha)? "saltarDerecha":"saltarIzquierda";
+			if(animation[anim]!=null)
+				animation.Play(anim);
+			
+		//Si esta caiendo:
+		} else if (rigidbody.velocity.y < -10 && animation[anim]!=null)
+			animation.Play(anim);
 	}
 
 }
