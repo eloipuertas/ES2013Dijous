@@ -20,6 +20,11 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource sonidoLanzamiento;
 	public AudioSource sonidoWalking;
 	
+	//
+	public GameObject bala;
+	public GameObject sortidaBalaDreta;
+	public GameObject sortidaBalaEsquerra;
+	
 	private float animTime;
 	private float animDuration = 0.3f;
 	
@@ -109,8 +114,6 @@ public class PlayerController : MonoBehaviour {
 			}
 			
 			if (!disparo && Input.GetButtonDown("Fire1")) {
-				
-				sonidoDisparo.Play();
 				disparo = true;
 				
 			}
@@ -145,6 +148,10 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarDerCorriendo"].speed = 3;
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
+							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+							nouTir.AddComponent("DestruirBala");
+							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+							sonidoDisparo.Play();
 							disparo = false;
 						}
 						else myAnim.Play("correrDerecha");
@@ -170,6 +177,11 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarIzqCorriendo"].speed = 3;
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
+							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							nouTir.AddComponent("DestruirBala");
+							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+							sonidoDisparo.Play();
+							disparo = false;
 							disparo = false;
 						}
 						else myAnim.Play("correrIzquierda");
@@ -193,6 +205,10 @@ public class PlayerController : MonoBehaviour {
 					if (disparo && currentTime > animDuration) {
 						myAnim["atacarDer"].speed = 3;
 						myAnim.Play("atacarDer",PlayMode.StopAll);
+						GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+						nouTir.AddComponent("DestruirBala");
+						nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+						sonidoDisparo.Play();
 						disparo = false;
 						animTime = Time.time;
 					}
@@ -218,6 +234,10 @@ public class PlayerController : MonoBehaviour {
 					if(currentTime > animDuration && disparo) {
 						myAnim["atacarIzq"].speed = 3;
 						myAnim.Play("atacarIzq",PlayMode.StopAll);
+						GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+						nouTir.AddComponent("DestruirBala");
+						nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+						sonidoDisparo.Play();
 						disparo = false;
 						animTime = Time.time;
 					}
