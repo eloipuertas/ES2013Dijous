@@ -41,7 +41,7 @@ public class AgentNpc : FSM {
 	public int health = 100;
 	public int damage = 15;
 	public int puntuacio = 200;
-	public int jumpForce = 500;
+	public int jumpForce = 400;
 	public int gravity = -800;
 	public int radioVision = 275;
 	public string primaryWeapon;
@@ -61,6 +61,9 @@ public class AgentNpc : FSM {
 	private bool canvia = false;
 	public float stopDistance = 50;
 	private bool attacked = false;
+	
+	private Vector3 lastPos;
+	private bool changeDir = true;
 	
 	// -------NPC interface----------
 	
@@ -142,6 +145,10 @@ public class AgentNpc : FSM {
 		animation["golpearKatanaDer"].speed = 0.7f;
 		animation["golpearKatanaIzq"].speed = 0.7f;
 		
+		animation["giroIzquierdaDerecha"].speed = 5f;
+		animation["giroDerechaIzq"].speed = 5f;
+		
+
 	}
 	void setInitialSpawnPoints(){
 		spawnPoint = transform.position;
@@ -154,12 +161,12 @@ public class AgentNpc : FSM {
 	
 	void selectRoute(){
 		int op = Random.Range(0,rutas.Count);
-		Debug.Log("### NPC HA SELECIONAT RUTA "+op);
-		Debug.Log(rutas.Count);
-		Debug.Log(rutas[0]);
+		//Debug.Log("### NPC HA SELECIONAT RUTA "+op);
+		//Debug.Log(rutas.Count);
+		//Debug.Log(rutas[0]);
 		int i = 0;
 		foreach(Vector3 p in rutas[0]){
-			Debug.Log(p);
+			//Debug.Log(p);
 			rutaActual.Insert(i,p);
 			i+=1;
 		}
@@ -173,12 +180,8 @@ public class AgentNpc : FSM {
 		int fileindex = 0;
 		int posindex = 0;
 		
-		
-		
-		direrutas = Application.dataPath + "/Scripts/RutasNpc/" + direrutas;
-
 		Debug.Log("NOVA RUTA-->ID::"+fileindex);
-		string content = File.ReadAllText(direrutas);
+		string content = File.ReadAllText(Application.dataPath + "/Scripts/RutasNpc/" + direrutas);
 		string []lines = content.Split('|');
 		foreach(string s in lines){
 			string []pos = s.Split(',');
@@ -238,15 +241,33 @@ public class AgentNpc : FSM {
 		//Animation idle
 	}
 	protected void UpdateRunState(){
-			setInitialCollider();
+			bool onGround = Physics.Raycast(transform.position, -Vector3.up, 10);
 		
-			if (derecha != (relPos.x > 0))
-				derecha = !derecha;			
+			//setInitialCollider();
+		
+			if (!changeDir){
+				float posX = transform.position.x - lastPos.x;
+				if(Mathf.Abs(posX) >= 50) {
+					changeDir = true;
+				}
+			}
+		
+		
+			if (changeDir && derecha != (relPos.x > 0)){
+				derecha = !derecha;
+				lastPos = transform.position;
+				changeDir = false;
+				if(onGround)
+					animation.Play((derecha)? "giroIzquierdaDerecha":"giroDerechaIzq");
+			}
 			
+			if (animation.IsPlaying(((derecha)? "giroIzquierdaDerecha":"giroDerechaIzq"))){
+				return;
+			}
 			string anim = (derecha)? "correrDerecha":"correrIzquierda";
 		
 			// Si esta tocando suelo:
-			if(Physics.Raycast(transform.position, -Vector3.up, 10) && rigidbody.velocity.y < jumpForce/2 && animation[anim]!=null)
+			if(onGround && animation[anim]!=null)
 				animation.Play(anim);
 		
 			// Si esta caiendo:
@@ -255,6 +276,8 @@ public class AgentNpc : FSM {
 			// else -> estoy haciendo la animacion de salto
 			
 			transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
+			//rigidbody.velocity = new Vector3(((derecha)?1:-1) *velocity, rigidbody.velocity.y,0f);	
+
 		
 	
 		
@@ -263,6 +286,7 @@ public class AgentNpc : FSM {
 			
 				switch(hit.transform.gameObject.tag){
 					case "Player":
+				
 						curState = FSM.Attack;
 				
 						string anima = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
@@ -444,14 +468,20 @@ public class AgentNpc : FSM {
 	}
 	
 	public void jump(){
+		
 		string anim = (derecha)? "caidaDerecha":"caidaIzquierda";
 		//Si esta tocando suelo -> Salta
-		if (Physics.Raycast(transform.position, -Vector3.up, 10) && rigidbody.velocity.y < jumpForce/2){			
+		if (Physics.Raycast(transform.position, -Vector3.up, 10) && rigidbody.velocity.y < jumpForce/2){	
+			
 			rigidbody.velocity = rigidbody.velocity + Vector3.up *jumpForce;	
 			
-			anim = (derecha)? "saltarDerecha":"saltarIzquierda";
-			if(animation[anim]!=null)
+			anim = (derecha)? "saltoVerticalDer":"saltoVerticalIzq";
+			
+			if(animation[anim]!=null){
+				print("salto2!");
 				animation.Play(anim);
+				
+			}
 			
 		//Si esta caiendo:
 		} else if (rigidbody.velocity.y < -10 && animation[anim]!=null)
