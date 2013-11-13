@@ -24,11 +24,13 @@ function Update () {
 
 function OnCollisionEnter(collision:Collision){
 	
-	//if(collision.gameObject.tag =="Player"){
-	//sistema provisional de deshabilitar el update, ja que no se si es vol que desaparegui l'halo o tota la bandera
-	if (deshabilitat == 0) {
-		audioPowerUp.Play();
-	    bandera.GetComponent("Halo").enabled = false;
-		deshabilitat = 1;
+	if(collision.gameObject.tag =="Player"){
+		//sistema provisional de deshabilitar el update, ja que no se si es vol que desaparegui l'halo o tota la bandera
+		if (deshabilitat == 0) {
+			audioPowerUp.Play();
+		    bandera.GetComponent("Halo").enabled = false;
+		    collider.active=false;
+			deshabilitat = 1;
+		}
 	}
 }
