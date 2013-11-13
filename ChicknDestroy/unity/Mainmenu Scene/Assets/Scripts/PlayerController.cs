@@ -86,7 +86,7 @@ public class PlayerController : MonoBehaviour {
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.tag == "upVida"){ 
 				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
- 				//incrementar vida
+ 				heal(50);
 		}
 		
 		if(collision.gameObject.tag == "escopeta_off") {
@@ -276,6 +276,10 @@ public class PlayerController : MonoBehaviour {
 		if (health <= 0) {
 			fireDeathNotification();
 		}
+	}
+	
+	public void heal(int n){
+		setHealthPoints(Mathf.Min(100,health+n));
 	}
 	
 	
