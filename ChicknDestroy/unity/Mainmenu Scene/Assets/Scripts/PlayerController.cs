@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	private bool isGround() {
-		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.01f);
+		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.5f);
 	}
 	
 	void OnCollisionEnter(Collision collision){
@@ -111,22 +111,20 @@ public class PlayerController : MonoBehaviour {
 		
 		float raw = Input.GetAxisRaw("Horizontal");
 		
+		if (!disparo && Input.GetButtonDown("Fire1")) {
+			disparo = true;		
+		}
+			
+		if (!disparo && Input.GetButtonDown("Fire2")) {
+			disparo = true;
+		}
+		
 		
 		if (isGround()) {
 			if (Input.GetButtonDown("Jump")) {
 				sonidoSalto.Play();
 				rigid.velocity += Vector3.up * jumpHeight;
-			}
-			
-			if (!disparo && Input.GetButtonDown("Fire1")) {
-				disparo = true;
-				
-			}
-			
-			if (!disparo && Input.GetButtonDown("Fire2")) {
-				disparo = true;
-			}
-			
+			}		
 		}
 		
 		//Actualiza la posicion del personaje
