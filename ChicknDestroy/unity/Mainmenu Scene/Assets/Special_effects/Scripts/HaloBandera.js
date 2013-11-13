@@ -1,6 +1,5 @@
 ﻿
 var bandera : GameObject;
-var audioPowerUp : AudioSource;
 
 private var halo;
 private var tempsCanvi = 1;
@@ -27,7 +26,6 @@ function OnCollisionEnter(collision:Collision){
 	if(collision.gameObject.tag =="Player"){
 		//sistema provisional de deshabilitar el update, ja que no se si es vol que desaparegui l'halo o tota la bandera
 		if (deshabilitat == 0) {
-			audioPowerUp.Play();
 		    bandera.GetComponent("Halo").enabled = false;
 		    collider.active=false;
 			deshabilitat = 1;
