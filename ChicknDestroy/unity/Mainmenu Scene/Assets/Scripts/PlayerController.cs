@@ -75,7 +75,6 @@ public class PlayerController : MonoBehaviour {
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
-		//fireHealthNotification();
 		
 		disparo = true;
 		

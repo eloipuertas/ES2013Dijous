@@ -76,6 +76,8 @@ public class HUD : MonoBehaviour{
 		this.player = new PlayerInterface();
 		this.game = new GameInterface();
 		
+		this.notifyHealthChange(100);
+		
 	}
 	
 	void OnGUI() {

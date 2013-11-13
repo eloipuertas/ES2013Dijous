@@ -52,7 +52,6 @@ public class PlayerControllerKatana : MonoBehaviour {
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
-		fireHealthNotification();
 		
 		disparo = true;
 		
@@ -237,7 +236,7 @@ public class PlayerControllerKatana : MonoBehaviour {
 			setHealthPoints(0);
 	}
 	private void fireHealthNotification() {
-		//this.hud.notifyHealthChange(this.health);
+		this.hud.notifyHealthChange(this.health);
 	}
 	private void fireDeathNotification() {
 		this.gameManager.notifyPlayerDeath();
