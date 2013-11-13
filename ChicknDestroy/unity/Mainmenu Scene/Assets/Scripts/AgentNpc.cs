@@ -435,10 +435,12 @@ public class AgentNpc : FSM {
 	//-----------Gestio de collisions----------
 	
 	void OnCollisionEnter(Collision collision){
+		/*
 		if(collision.gameObject.collider){
 			Debug.Log("A tocat alguna cosa");
 			
 		}
+		*/
 		/*
 		if(collision.gameObject.tag == "Player"){ 
 				Debug.Log("A tocat player");
