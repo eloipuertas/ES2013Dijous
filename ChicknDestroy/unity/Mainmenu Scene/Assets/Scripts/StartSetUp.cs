@@ -16,39 +16,27 @@ public class StartSetUp : MonoBehaviour {
 			TeamList.Add ("PhiloChicken");
 			TeamList.Add ("RoboChicken");
 		}
-		setPlayer();//setting Player
+		setPlayer();
 		setAllyTeam();
-		setEnemyTeam();//setting enemy team
+		setEnemyTeam();
 	}
 	
 	//This function sets the player inside the scene
 	void setPlayer(){
-	/*
-		GameObject player = Instantiate(Resources.Load(TeamList[0]+""+Chicken)) as GameObject;//this function create a gameObject dynamically charging a prefab(prefabricated) at Resources folder
-		player.transform.position = new Vector3((float)14700.0,(float)32.39664,(float)341.8011);//then we set all the parametrs the gameObject needs
-		player.name = "Player";
-		player.tag = "Player";
-		//PlayerPhysics PF = (PlayerPhysics)player.AddComponent("PlayerPhysics");
-		PF.collisionMask = 256;
-		PlayerController PC = (PlayerController)player.AddComponent("PlayerController");
-		PC.gravity = 50;
-		PC.speed = 200;
-		PC.acceleration = 1000;
-		PC.jumpHeight = 60;
-		PC.sonidoSalto = (AudioSource)player.GetComponent("AudioSource");
-		*/
+		/*
+		 * CREATE HERE THE PLAYER DINAMICALLY
+		 */
 	}
-	//This function sets the enemy team, will be changed forward when more enemies will be needed
+	
 	void setEnemyTeam(){
-	/*
-		GameObject npc = Instantiate(Resources.Load(TeamList[1]+""+5)) as GameObject;//this function create a gameObject dynamically charging a prefab(prefabricated) at Resources folder
-		npc.transform.position = new Vector3((float)15700.0,(float)32.39664,(float)341.8011);//then we set all the parametrs the gameObject needs
-		npc.name = "NPC";
-		npc.tag = "NPC";
-		AgentNpc AN = (AgentNpc)npc.AddComponent("AgentNpc");
+		/*
+	 	* CREATE HERE THE ENEMY TEAM DINAMICALLY
 		*/
 	}
 	
 	void setAllyTeam(){
+		/*
+	 	* CREATE HERE THE ALLY TEAM DINAMICALLY
+		*/
 	}
 }

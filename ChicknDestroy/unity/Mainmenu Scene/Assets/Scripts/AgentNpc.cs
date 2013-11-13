@@ -50,7 +50,6 @@ public class AgentNpc : FSM {
 	public float velocity = 175f;
 	private bool Dead = false;
 	
-	
 	private float dist;
 	
 	private Vector3 playereulerAngles;
@@ -435,10 +434,13 @@ public class AgentNpc : FSM {
 	//-----------Gestio de collisions----------
 	
 	void OnCollisionEnter(Collision collision){
+		/*
 		if(collision.gameObject.collider){
 			Debug.Log("A tocat alguna cosa");
 			
 		}
+		*/
+		
 		/*
 		if(collision.gameObject.tag == "Player"){ 
 				Debug.Log("A tocat player");
@@ -447,6 +449,12 @@ public class AgentNpc : FSM {
 		if(collision.gameObject.tag =="katana"){
 			setHealthPoints(getHealthPoints()-25);
 		*/
+		
+		if(collision.gameObject.tag =="bala"){
+		    //disminuir vida
+		}
+		
+				
 	}
 //	void OnCollisionExit(Collision collision){}
 //	void OnCollisionStay(Collision collision){}
