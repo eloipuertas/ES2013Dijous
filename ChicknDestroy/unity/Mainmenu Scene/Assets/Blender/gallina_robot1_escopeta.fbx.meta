@@ -100,6 +100,14 @@ ModelImporter:
     7400036: saltarIzquierda
     7400038: saltoVerticalDer
     7400040: saltoVerticalIz
+    7400042: atacarDer
+    7400044: atacarDerCorriendo
+    7400046: atacarIzq
+    7400048: atacarIzqCorriendo
+    7400050: giroDerIzq
+    7400052: giroIzqDer
+    7400054: recogerItemDer
+    7400056: saltoVerticalIzq
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube_002

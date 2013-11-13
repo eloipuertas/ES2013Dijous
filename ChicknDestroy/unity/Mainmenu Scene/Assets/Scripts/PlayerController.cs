@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-//[RequireComponent(typeof(PlayerPhysics))]
 public class PlayerController : MonoBehaviour {
 	
 	//Atributos de personaje
@@ -18,7 +17,8 @@ public class PlayerController : MonoBehaviour {
 	//sonido
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
-	
+	public AudioSource sonidoLanzamiento;
+	public AudioSource sonidoWalking;
 	
 	private float animTime;
 	private float animDuration = 0.3f;
@@ -38,14 +38,32 @@ public class PlayerController : MonoBehaviour {
 	
 	private HUD hud;
 	private GameManager gameManager;
+	private Animation myAnim;
+	
 	private Rigidbody rigid;
 	
+	private GameObject gre;
+	private GameObject grk;
 	
+	public bool isKatana;
 	
 	void Start () {
+		
 		rigid =	GetComponent<Rigidbody>();
 		
-		animation.Play("paradaDerecha");
+		gre = GameObject.Find("gre");
+		grk = GameObject.Find("grk");
+		if (isKatana) {
+			myAnim = gre.animation;
+			grk.SetActive(false);
+			gre.SetActive(true);
+		}
+		else {
+			myAnim = grk.animation;
+			gre.SetActive(false);
+			grk.SetActive(true);
+		}
+	
 		lastDirection = stopDer;
 		
 		
@@ -57,16 +75,10 @@ public class PlayerController : MonoBehaviour {
 		disparo = true;
 		
 		heightHero = rigid.collider.bounds.extents.y;
-		
-		//heightHero = 50f;
-	
 	}
 	
 	private bool isGround() {
-		
-		bool b = Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.1f);
-		//Debug.Log(heightHero + " " + b);
-		return b;
+		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.01f);
 	}
 	
 	void OnCollisionStay(Collision collision) {
@@ -74,6 +86,18 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	void Update () {
+		
+		if (isKatana) {
+			myAnim = gre.animation;
+			grk.SetActive(false);
+			gre.SetActive(true);
+		}
+		else {
+			myAnim = grk.animation;
+			gre.SetActive(false);
+			grk.SetActive(true);
+		}
+		
 		
 		float raw = Input.GetAxisRaw("Horizontal");
 		
@@ -90,6 +114,12 @@ public class PlayerController : MonoBehaviour {
 				disparo = true;
 				
 			}
+			
+			if (!disparo && Input.GetButtonDown("Fire2")) {
+				sonidoLanzamiento.Play();
+				disparo = true;
+			}
+			
 		}
 		
 		//Actualiza la posicion del personaje
@@ -99,46 +129,36 @@ public class PlayerController : MonoBehaviour {
 		
 		if(rigid.velocity.y > 10) {
 		//Si estamos en el aire de subida
-			if(lastDirection == movDer || lastDirection == stopDer) animation.Play("saltoVerticalDer");
-			else animation.Play("saltoVerticalIz");
+			if(lastDirection == movDer || lastDirection == stopDer) myAnim.Play("saltoVerticalDer");
+			else myAnim.Play("saltoVerticalIzq");
 		}else if(rigid.velocity.y < -65){
 		//Si estamos en el aire de bajada
-			if(lastDirection == movDer || lastDirection == stopDer){
-				try{
-						animation.Play("caidaDerecha");
-				}catch{
-						//print ("Exeption caidaDerecha Izq: Null Pointer animation");
-				}
-			}
-			else{
-				try{
-						animation.Play("caidaIzquierda");
-				}catch{
-						//print ("Exeption caidaIzquierda Izq: Null Pointer animation");
-				}
-			}
+			if(lastDirection == movDer || lastDirection == stopDer) myAnim.Play("caidaDerecha");
+			else myAnim.Play("caidaIzquierda");
 		}else {
+
 			float currentTime = Time.time - animTime;
 			
 			if (lastDirection == movDer) {
 				if (rigid.velocity.x > 0) {
 					if(currentTime > animDuration){
 						if(disparo) {
-							animation["disparaEscopetaDerCorriendo"].speed = 3;
-							animation.Play("disparaEscopetaDerCorriendo",PlayMode.StopAll);
+							myAnim["atacarDerCorriendo"].speed = 3;
+							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
 							disparo = false;
 						}
-						else animation.Play("correrDerecha");
+						else myAnim.Play("correrDerecha");
 						animTime = Time.time;
 					}
 					lastDirection = movDer;
-					
+					sonidoWalking.Play(1000);
 				}
 				else if(raw < 0) {
-					animation["giroDerechaIzq"].speed = 2;
-					animation.Play("giroDerechaIzq", PlayMode.StopAll);
+					myAnim["giroDerIzq"].speed = 2;
+					myAnim.Play("giroDerIzq", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movIzq;
+					if(currentTime > animDuration)sonidoWalking.Play();
 				}
 				else {
 					lastDirection = stopDer;
@@ -148,20 +168,22 @@ public class PlayerController : MonoBehaviour {
 				if (rigid.velocity.x < 0) {
 					if(currentTime > animDuration){
 						if(disparo) {
-							animation["disparaEscopetaIzqCorriendo"].speed = 3;
-							animation.Play("disparaEscopetaIzqCorriendo",PlayMode.StopAll);
+							myAnim["atacarIzqCorriendo"].speed = 3;
+							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
 							disparo = false;
 						}
-						else animation.Play("correrIzquierda");
+						else myAnim.Play("correrIzquierda");
 						animTime = Time.time;
 					}
 					lastDirection = movIzq;
+					if(currentTime > animDuration)sonidoWalking.Play();
 				}
 				else if(raw > 0) {
-					animation["giroIzquierdaDerecha"].speed = 2;
-					animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+					myAnim["giroIzqDer"].speed = 2;
+					myAnim.Play("giroIzqDer", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movDer;
+					if(currentTime > animDuration)sonidoWalking.Play();
 				}
 				else {
 					lastDirection = stopIzq;
@@ -169,24 +191,24 @@ public class PlayerController : MonoBehaviour {
 			}else {
 				if (lastDirection == stopDer) {
 					if (disparo && currentTime > animDuration) {
-						animation["disparaEscopetaDer"].speed = 3;
-						animation.Play("disparaEscopetaDer",PlayMode.StopAll);
+						myAnim["atacarDer"].speed = 3;
+						myAnim.Play("atacarDer",PlayMode.StopAll);
 						disparo = false;
 						animTime = Time.time;
 					}
 					else if (rigid.velocity.x > 0) {
-						animation.Play("correrDerecha");
+						myAnim.Play("correrDerecha");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
-						animation["giroDerechaIzq"].speed = 2;
-						animation.Play("giroDerechaIzq", PlayMode.StopAll);
+						myAnim["giroDerIzq"].speed = 2;
+						myAnim.Play("giroDerIzq", PlayMode.StopAll);
 						animTime = Time.time;
 						lastDirection = movIzq;
 					}
 					else {
 						if(currentTime > animDuration){
-							animation.Play("paradaDerecha");
+							myAnim.Play("paradaDerecha");
 							animTime = Time.time;
 						}
 						lastDirection = stopDer;
@@ -194,22 +216,22 @@ public class PlayerController : MonoBehaviour {
 				}
 				else {
 					if(currentTime > animDuration && disparo) {
-						animation["disparaEscopetaIzq"].speed = 3;
-						animation.Play("disparaEscopetaIzq",PlayMode.StopAll);
+						myAnim["atacarIzq"].speed = 3;
+						myAnim.Play("atacarIzq",PlayMode.StopAll);
 						disparo = false;
 						animTime = Time.time;
 					}
 					else if(rigid.velocity.x < 0) {
-						animation.Play("correrIzquierda");
+						myAnim.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
-						animation["giroIzquierdaDerecha"].speed = 2;
-						animation.Play("giroIzquierdaDerecha", PlayMode.StopAll);
+						myAnim["giroIzqDer"].speed = 2;
+						myAnim.Play("giroIzqDer", PlayMode.StopAll);
 						animTime = Time.time;
 						lastDirection = movDer;
 					}else {
 						if (currentTime > animDuration) {	
-							animation.Play("paradaIzquierda");
+							myAnim.Play("paradaIzquierda");
 							animTime = Time.time;
 						}
 						lastDirection = stopIzq;
@@ -254,10 +276,10 @@ public class PlayerController : MonoBehaviour {
 			setHealthPoints(0);
 	}
 	private void fireHealthNotification() {
-		//this.hud.notifyHealthChange(this.health);
+		this.hud.notifyHealthChange(this.health);
 	}
 	private void fireDeathNotification() {
-		//this.gameManager.notifyPlayerDeath();
+		this.gameManager.notifyPlayerDeath();
 		
 	}
 }
