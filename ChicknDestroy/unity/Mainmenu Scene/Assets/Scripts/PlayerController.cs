@@ -17,10 +17,8 @@ public class PlayerController : MonoBehaviour {
 	//sonido
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
-	public AudioSource sonidoLanzamiento;
-	public AudioSource sonidoWalking;
+	public AudioSource sonidoPowerUp;
 	
-	//
 	public GameObject bala;
 	public GameObject sortidaBalaDreta;
 	public GameObject sortidaBalaEsquerra;
@@ -86,8 +84,16 @@ public class PlayerController : MonoBehaviour {
 		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.01f);
 	}
 	
-	void OnCollisionStay(Collision collision) {
-		//TRATAMIENTO DE COLISIONES CON OBJETOS
+	void OnCollisionEnter(Collision collision){
+		if(collision.gameObject.tag == "upVida"){ 
+				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
+ 				//incrementar vida
+		}
+		
+		if(collision.gameObject.tag == "escopeta_off") {
+				sonidoPowerUp.Play();
+		}
+		
 	}
 	
 	void Update () {
@@ -119,7 +125,6 @@ public class PlayerController : MonoBehaviour {
 			}
 			
 			if (!disparo && Input.GetButtonDown("Fire2")) {
-				sonidoLanzamiento.Play();
 				disparo = true;
 			}
 			
@@ -158,14 +163,14 @@ public class PlayerController : MonoBehaviour {
 						animTime = Time.time;
 					}
 					lastDirection = movDer;
-					sonidoWalking.Play(1000);
+					//sonidoWalking.Play(1000);
 				}
 				else if(raw < 0) {
 					myAnim["giroDerIzq"].speed = 2;
 					myAnim.Play("giroDerIzq", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movIzq;
-					if(currentTime > animDuration)sonidoWalking.Play();
+					//if(currentTime > animDuration)sonidoWalking.Play();
 				}
 				else {
 					lastDirection = stopDer;
@@ -188,14 +193,14 @@ public class PlayerController : MonoBehaviour {
 						animTime = Time.time;
 					}
 					lastDirection = movIzq;
-					if(currentTime > animDuration)sonidoWalking.Play();
+					//if(currentTime > animDuration)sonidoWalking.Play();
 				}
 				else if(raw > 0) {
 					myAnim["giroIzqDer"].speed = 2;
 					myAnim.Play("giroIzqDer", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movDer;
-					if(currentTime > animDuration)sonidoWalking.Play();
+					//if(currentTime > animDuration)sonidoWalking.Play();
 				}
 				else {
 					lastDirection = stopIzq;
