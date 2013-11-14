@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
 	private GameObject secondaryWeapon;
 	
 	//Atributos de control
-	private float gravity = 800;
+	private float gravity = 200;
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;

@@ -27,7 +27,6 @@ public class AgentNpc : FSM {
 	protected Vector3 relPos;
 	public string direrutas = "ruta1.txt";
 	//Lectors de rutes
-	private List <List<Vector3>> rutas = new List<List<Vector3>>();
 	private List <Vector3> rutaActual  = new List<Vector3>();
 	private int keyPosActual =0; 
 	private int idruta = 0;
@@ -66,11 +65,17 @@ public class AgentNpc : FSM {
 	
 	// -------NPC interface----------
 	
-	protected int getHealthPoints(){
+	public int getHealthPoints(){
 		return health;
 	}
-	protected void setHealthPoints(int n){
+	public void setHealthPoints(int n){
 		health = n;
+	}
+	public void setDamage(int damage) {
+		if ((health - damage) > 0) 
+			setHealthPoints(health - damage);
+		else 
+			setHealthPoints(0);
 	}
 	protected string getPrimaryWeapon(){
 		return primaryWeapon;
@@ -103,12 +108,12 @@ public class AgentNpc : FSM {
 		}
 		
 		
-		nextTarget = rutas[idruta][keyPosActual];
+		nextTarget = rutaActual[keyPosActual];
 		Debug.Log("####NPC GO TO -------> "+nextTarget);
 		relPos = nextTarget - transform.position;
 		if(Mathf.Abs(relPos.x) <= 15) {
 			keyPosActual+=1;
-			if (keyPosActual == rutas[idruta].Count)
+			if (keyPosActual == rutaActual.Count)
 				keyPosActual = 0;
 			Debug.Log("###NEXT KEY###");
 		}
@@ -141,8 +146,8 @@ public class AgentNpc : FSM {
 		Physics.gravity = new Vector3(0, gravity, 0);
 		animation["correrDerecha"].wrapMode = WrapMode.Loop;
 		animation["correrIzquierda"].wrapMode = WrapMode.Loop;
-		animation["golpearKatanaDer"].speed = 0.7f;
-		animation["golpearKatanaIzq"].speed = 0.7f;
+		animation["golpearKatanaDer"].speed = 1.2f;
+		animation["golpearKatanaIzq"].speed = 1.2f;
 		
 		animation["giroIzquierdaDerecha"].speed = 5f;
 		animation["giroDerechaIzq"].speed = 5f;
@@ -159,28 +164,15 @@ public class AgentNpc : FSM {
 	}
 	
 	void selectRoute(){
-		int op = Random.Range(0,rutas.Count);
-		//Debug.Log("### NPC HA SELECIONAT RUTA "+op);
-		//Debug.Log(rutas.Count);
-		//Debug.Log(rutas[0]);
-		int i = 0;
-		foreach(Vector3 p in rutas[0]){
-			//Debug.Log(p);
-			rutaActual.Insert(i,p);
-			i+=1;
-		}
-//		
-//		
-//		//rutaActual = (Vector3[])rutas[op];
-//		//Debug.Log("###POSICIONS DE LA RUTA####"+rutaActual);
 	}
 	void loadRoutes(){
-		List<Vector3> positions = new List<Vector3>();
+		rutaActual = new List<Vector3>();
 		int fileindex = 0;
 		int posindex = 0;
 		
 		Debug.Log("NOVA RUTA-->ID::"+fileindex);
 		string content = File.ReadAllText(Application.dataPath + "/Scripts/RutasNpc/" + direrutas);
+		
 		string []lines = content.Split('|');
 		foreach(string s in lines){
 			string []pos = s.Split(',');
@@ -188,23 +180,16 @@ public class AgentNpc : FSM {
 			float x = float.Parse(pos[0]);
 			float y = float.Parse(pos[1]);
 			float z = float.Parse(pos[2]);
-			positions.Insert(posindex,(Vector3)new Vector3(x,y,z));
-			Debug.Log("ADD NEW POS"+positions[posindex]);
+			rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
 			posindex +=1;
-			Debug.Log("NOVA POSICIO -->"+x+" "+y+" "+z);
 		}
-		rutas.Insert(fileindex,positions);
+
 		
 		content ="";
 		posindex = 0;
 		
 		fileindex +=1;
 
-		foreach(List<Vector3> ruta in rutas){
-			foreach(Vector3 pos in ruta){
-				Debug.Log("posi,"+pos);
-			}
-		}
 		
 	}
 	
@@ -268,6 +253,7 @@ public class AgentNpc : FSM {
 			// Si esta tocando suelo:
 			if(onGround && animation[anim]!=null)
 				animation.Play(anim);
+		
 		
 			// Si esta caiendo:
 			else if (rigidbody.velocity.y < -10)
@@ -451,7 +437,7 @@ public class AgentNpc : FSM {
 		*/
 		
 		if(collision.gameObject.tag =="bala"){
-		    //disminuir vida
+		    setDamage(60);
 		}
 		
 				
@@ -486,7 +472,6 @@ public class AgentNpc : FSM {
 			anim = (derecha)? "saltoVerticalDer":"saltoVerticalIzq";
 			
 			if(animation[anim]!=null){
-				print("salto2!");
 				animation.Play(anim);
 				
 			}
