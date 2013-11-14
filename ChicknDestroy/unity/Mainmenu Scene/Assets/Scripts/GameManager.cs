@@ -6,7 +6,8 @@ public class GameManager : MonoBehaviour {
 	private static int SCORE_TO_WIN = 1000;
 	//public GameObject player;
 	private GameCamera cam;
-	
+	public bool GameSelRobot = true;
+	private float loseOrWinTime = 5F;//time later the lose or win of a player (5 seconds Timer)
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
 	
@@ -14,7 +15,15 @@ public class GameManager : MonoBehaviour {
 		cam = GetComponent<GameCamera>();
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
-		GameObject go = GameObject.FindGameObjectWithTag("Player");
+		
+		GameObject go;
+		
+		if (GameSelRobot)
+			go = GameObject.FindGameObjectWithTag("Player");
+		else 
+			go = GameObject.FindGameObjectWithTag("NPC");
+		
+		
 		cam.SetTarget(go.transform);
 	}
 	// Update is called once per frame
@@ -31,6 +40,15 @@ public class GameManager : MonoBehaviour {
 		if (endRequested) {
 			endGame();
 		}
+		if(looseCondition() || winCondition())//when win or lose condition is true countdown the timer
+			loseOrWinTime -= Time.deltaTime;
+	}
+	
+	void OnGUI(){//Show the banner only when win condition or lose condition is true
+		if(looseCondition())
+			GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("lose") as  Texture);
+		else if(winCondition())
+			GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("win") as  Texture);
 	}
 	
 	private void fireWinNotification() {
@@ -57,6 +75,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	private void endGame() {
-		Application.LoadLevel(0);
+		if(loseOrWinTime <= 0F || Input.anyKeyDown)//when 5 seconds of the timer elapsed return to main menu
+			Application.LoadLevel(0);
 	}
 }
