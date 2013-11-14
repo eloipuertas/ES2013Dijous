@@ -76,7 +76,7 @@ public class HUD : MonoBehaviour{
 		this.player = new PlayerInterface();
 		this.game = new GameInterface();
 		
-		this.notifyHealthChange(100);
+		notifyFlag (false,false);
 		
 	}
 	
@@ -133,5 +133,8 @@ public class HUD : MonoBehaviour{
 	}
 	public void notifyMessage(Vector2 position, string message) {
 		this.mes.start(position,message,millis);
+	}
+	public void notifyFlag(bool flag, bool robotic) {
+		Debug.Log ("Not implemented yet");
 	}
 }
