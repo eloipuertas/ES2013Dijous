@@ -1,6 +1,6 @@
 ﻿
 //els segons que triga la bala en desapareixer
-var tempsVida = 7;
+var tempsVida = 4;
 
 function Start () {
 	Destroy(this.gameObject, tempsVida);
