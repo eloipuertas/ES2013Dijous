@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour {
 	private GameObject secondaryWeapon;
 	
 	//Atributos de control
-	private float gravity = 800;
+	private float gravity = 200;
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
@@ -17,8 +17,16 @@ public class PlayerController : MonoBehaviour {
 	//sonido
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
+<<<<<<< HEAD
 	public AudioSource sonidoLanzamiento;
 	public AudioSource sonidoWalking;
+=======
+	public AudioSource sonidoPowerUp;
+	
+	public GameObject bala;
+	public GameObject sortidaBalaDreta;
+	public GameObject sortidaBalaEsquerra;
+>>>>>>> origin/devel
 	
 	private float animTime;
 	private float animDuration = 0.3f;
@@ -70,7 +78,6 @@ public class PlayerController : MonoBehaviour {
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
-		//fireHealthNotification();
 		
 		disparo = true;
 		
@@ -78,11 +85,23 @@ public class PlayerController : MonoBehaviour {
 	}
 	
 	private bool isGround() {
+<<<<<<< HEAD
 		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.01f);
+=======
+		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.5f);
+>>>>>>> origin/devel
 	}
 	
-	void OnCollisionStay(Collision collision) {
-		//TRATAMIENTO DE COLISIONES CON OBJETOS
+	void OnCollisionEnter(Collision collision){
+		if(collision.gameObject.tag == "upVida"){ 
+				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
+ 				heal(50);
+		}
+		
+		if(collision.gameObject.tag == "escopeta_off") {
+				sonidoPowerUp.Play();
+		}
+		
 	}
 	
 	void Update () {
@@ -101,11 +120,20 @@ public class PlayerController : MonoBehaviour {
 		
 		float raw = Input.GetAxisRaw("Horizontal");
 		
+		if (!disparo && Input.GetButtonDown("Fire1")) {
+			disparo = true;		
+		}
+			
+		if (!disparo && Input.GetButtonDown("Fire2")) {
+			disparo = true;
+		}
+		
 		
 		if (isGround()) {
 			if (Input.GetButtonDown("Jump")) {
 				sonidoSalto.Play();
 				rigid.velocity += Vector3.up * jumpHeight;
+<<<<<<< HEAD
 			}
 			
 			if (!disparo && Input.GetButtonDown("Fire1")) {
@@ -120,6 +148,9 @@ public class PlayerController : MonoBehaviour {
 				disparo = true;
 			}
 			
+=======
+			}		
+>>>>>>> origin/devel
 		}
 		
 		//Actualiza la posicion del personaje
@@ -145,20 +176,35 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarDerCorriendo"].speed = 3;
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
+<<<<<<< HEAD
+=======
+							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+							nouTir.AddComponent("DestruirBala");
+							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+							sonidoDisparo.Play();
+>>>>>>> origin/devel
 							disparo = false;
 						}
 						else myAnim.Play("correrDerecha");
 						animTime = Time.time;
 					}
 					lastDirection = movDer;
+<<<<<<< HEAD
 					sonidoWalking.Play(1000);
+=======
+					//sonidoWalking.Play(1000);
+>>>>>>> origin/devel
 				}
 				else if(raw < 0) {
 					myAnim["giroDerIzq"].speed = 2;
 					myAnim.Play("giroDerIzq", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movIzq;
+<<<<<<< HEAD
 					if(currentTime > animDuration)sonidoWalking.Play();
+=======
+					//if(currentTime > animDuration)sonidoWalking.Play();
+>>>>>>> origin/devel
 				}
 				else {
 					lastDirection = stopDer;
@@ -170,20 +216,36 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarIzqCorriendo"].speed = 3;
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
+<<<<<<< HEAD
+=======
+							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							nouTir.AddComponent("DestruirBala");
+							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+							sonidoDisparo.Play();
+							disparo = false;
+>>>>>>> origin/devel
 							disparo = false;
 						}
 						else myAnim.Play("correrIzquierda");
 						animTime = Time.time;
 					}
 					lastDirection = movIzq;
+<<<<<<< HEAD
 					if(currentTime > animDuration)sonidoWalking.Play();
+=======
+					//if(currentTime > animDuration)sonidoWalking.Play();
+>>>>>>> origin/devel
 				}
 				else if(raw > 0) {
 					myAnim["giroIzqDer"].speed = 2;
 					myAnim.Play("giroIzqDer", PlayMode.StopAll);
 					animTime = Time.time;
 					lastDirection = movDer;
+<<<<<<< HEAD
 					if(currentTime > animDuration)sonidoWalking.Play();
+=======
+					//if(currentTime > animDuration)sonidoWalking.Play();
+>>>>>>> origin/devel
 				}
 				else {
 					lastDirection = stopIzq;
@@ -193,6 +255,13 @@ public class PlayerController : MonoBehaviour {
 					if (disparo && currentTime > animDuration) {
 						myAnim["atacarDer"].speed = 3;
 						myAnim.Play("atacarDer",PlayMode.StopAll);
+<<<<<<< HEAD
+=======
+						GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+						nouTir.AddComponent("DestruirBala");
+						nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+						sonidoDisparo.Play();
+>>>>>>> origin/devel
 						disparo = false;
 						animTime = Time.time;
 					}
@@ -218,6 +287,13 @@ public class PlayerController : MonoBehaviour {
 					if(currentTime > animDuration && disparo) {
 						myAnim["atacarIzq"].speed = 3;
 						myAnim.Play("atacarIzq",PlayMode.StopAll);
+<<<<<<< HEAD
+=======
+						GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+						nouTir.AddComponent("DestruirBala");
+						nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+						sonidoDisparo.Play();
+>>>>>>> origin/devel
 						disparo = false;
 						animTime = Time.time;
 					}
@@ -254,6 +330,10 @@ public class PlayerController : MonoBehaviour {
 		if (health <= 0) {
 			fireDeathNotification();
 		}
+	}
+	
+	public void heal(int n){
+		setHealthPoints(Mathf.Min(100,health+n));
 	}
 	
 	

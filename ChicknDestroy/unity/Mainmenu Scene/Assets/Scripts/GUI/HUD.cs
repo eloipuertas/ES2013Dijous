@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class HUD : MonoBehaviour{
-	private bool paused;
-	
 	private PlayerInterface player;
 	private GameInterface game;
 	
@@ -13,52 +11,59 @@ public class HUD : MonoBehaviour{
 	private Vector2 points;
 	private Vector2 pause;
 	
-	Rect rhealth;
-	Rect rpweapon;
-	Rect rsweapon;
-	
-	Rect rpause;
-	Rect rpoints;
-	
 	// Definitive Objects
+	private static double millis = 2000;
+	
 	private Lifebar life;
+	private Sprite bg_life;
+	
 	private PauseMenu pause_menu;
 	private Points game_points;
+	
+	private SpriteWeaponControl weapons;
+	
+	private SpriteButton pause_button;
+	
+	private MessagePool mes;
 
 	void initComponents() {
-		this.paused = false;
-		this.rhealth = new Rect(10,10,100,10);
-		this.rpweapon = new Rect(rhealth.xMax+10, rhealth.yMin, 100, 10);
-		this.rsweapon = new Rect(rpweapon.xMax+10,rhealth.yMin, 100, 10);
+		int isegment = Screen.width/10;
 		
-		this.rpause = new Rect(700,rhealth.yMin,50,10);
-		this.rpoints = new Rect(rpause.xMax/2,rhealth.yMin,100,10);
+		this.weapons = new SpriteWeaponControl(new Rect(10,10,100,40));
 		
-		
-		this.life = new Lifebar(new Vector2(10,10),
-			new Vector2(100,20),
+		this.life = new Lifebar(new Vector2((Screen.width/2)-100,20),
+			new Vector2(200,60),
 			"LifeBar/life_bar_",
 			new Vector2(0,0),
 			21, // n-segments of LifeBar
 			150, // Max life with the barrier
 			0); // Current life
+		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-13,
+			this.life.getSize().x+20,this.life.getSize().y+10),"LifeBar/hudVida");
 		
-		this.pause_menu = new PauseMenu(new Vector2(100,40), // Origin
+		/*this.pause_menu = new PauseMenu(this,
+			new Vector2(100,40), // Origin
 			new Vector2(500,500), // end
+			new Vector2(0,20),	// Deviation
 			"PauseMenu", // Menu layout
 			"titulo", // Menu Title
-			"button_"); // Button pattern.
+			"button_"); // Button pattern.*/
 		
-		this.game_points = new Points(new Vector2(350,10),
-			new Vector2(30,30),
+		this.game_points = new Points(new Vector2(this.life.getXY().x+this.life.getSize().x+isegment,20),
+			new Vector2(20,20),
 			"Numbers/",
-			new Vector2(15,0),
+			new Vector2(20,0),
 			10);
+		
+		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
+			"pausa/pause",
+			"pausa/pause1",
+			new ChangeLevelAction(),
+			KeyCode.P);
+		
+		this.mes = new MessagePool(10);
 	}
 	
-	public void notifyHealthChange(int hp) {
-		this.life.setLife(hp);
-	}
 	
 	// Use this for initialization
 	void Start () {
@@ -71,36 +76,30 @@ public class HUD : MonoBehaviour{
 		this.player = new PlayerInterface();
 		this.game = new GameInterface();
 		
+		this.notifyHealthChange(100);
+		
 	}
 	
 	void OnGUI() {
 		GUI.skin = this.skin;
+		this.bg_life.render();
 		
 		// Player Information
-		//GUI.Label(rhealth,player.getHealthPoints().ToString());
-		GUI.Label(rpweapon,player.getPrimaryWeapon());
-		GUI.Label(rsweapon,player.getSecondaryWeapon());
+		this.weapons.render ();
 		
 		this.life.render();
 		this.game_points.render(this.player.getPlayerPoints());
 		
-		//GUI.Label(rpoints,game.getPoints().ToString());
-		if(GUI.Button(rpause, "Pause")) {
-			//this.paused = true;
-			//this.pause_menu.setVisible(true);
-			stub_pauseMenu();
-		}
-		if(this.paused) pauseMenu();
+		this.pause_button.render();
+		
+		this.mes.render();
+		
+		if(isPaused())this.pause_menu.render();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//GUI.Label(rhealth,player.getHealthPoints().ToString());
-	}
-	
-	void pauseMenu() {
-		this.paused = this.pause_menu.isVisible();
-		this.pause_menu.render();
 	}
 	
 	void stub_pauseMenu() {
@@ -113,9 +112,26 @@ public class HUD : MonoBehaviour{
 	}
 	
 	public bool isPaused() {
-		return paused;
+		return this.pause_button.isToggled();
 	}
-	public void setPaused(bool paused) {
-		this.paused = paused;
+	
+	public void resume() {
+		this.pause_button.setToggled(false);
+	}
+	
+	// Notify section.
+	public void notifyHealthChange(int hp) {
+		this.life.setLife(hp);
+	}
+	
+	public void notifyPrimaryWeapon(string weapon) {
+		this.weapons.notifyPrimaryWeapon(weapon);
+	}
+	
+	public void notifySecondaryWeapon(string weapon) {
+		this.weapons.notifySecondaryWeapon(weapon);
+	}
+	public void notifyMessage(Vector2 position, string message) {
+		this.mes.start(position,message,millis);
 	}
 }

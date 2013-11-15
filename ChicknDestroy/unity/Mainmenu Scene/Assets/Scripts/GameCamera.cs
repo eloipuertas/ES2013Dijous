@@ -19,7 +19,7 @@ public class GameCamera : MonoBehaviour {
 			
 			float x = IncrementTowards(transform.position.x, target.position.x+200, trackSpeed);
 			float y = IncrementTowards(transform.position.y, (target.position.y + 100), trackSpeed);
-			transform.position = new Vector3(x,y, transform.position.z);
+			transform.position = new Vector3(x,y, target.position.z - 600);
 		}
 	}
 	
