@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8669b650f76abd44d87e48ee6699d7fb
+guid: 6dc641137645ea44a8bacfc0b4f02318
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -80,28 +80,25 @@ ModelImporter:
     4300000: Cylinder
     4300002: Cube_002
     7400000: Default Take
-    7400002: atacarDer
-    7400004: atacarDerCorriendo
-    7400006: atacarIzq
-    7400008: atacarIzqCorriendo
-    7400010: caidaDerecha
-    7400012: caidaIzquierda
-    7400014: correrDerecha
-    7400016: correrIzquierda
-    7400018: giroDerIzq
-    7400020: giroIzqDer
+    7400002: caidaDerecha
+    7400004: caidaIzquierda
+    7400006: correrDerecha
+    7400008: correrIzquierda
+    7400010: disparaEscopetaDer
+    7400012: disparaEscopetaDerCorriendo
+    7400014: disparaEscopetaIzq
+    7400016: disparaEscopetaIzqCorriendo
+    7400018: giroDerechaIzq
+    7400020: giroIzquierdaDerecha
     7400022: golpearkatanaDer
     7400024: golpearkatanaIzq
     7400026: paradaDerecha
     7400028: paradaIzquierda
-    7400030: recogerItemDer
+    7400030: RecogerItemDer
     7400032: recogerItemIzq
     7400034: saltarDerecha
     7400036: saltarIzquierda
     7400038: saltoVerticalDer
-<<<<<<< HEAD
-    7400040: saltoVerticalIzq
-=======
     7400040: saltoVerticalIz
     7400042: atacarDer
     7400044: atacarDerCorriendo
@@ -111,7 +108,6 @@ ModelImporter:
     7400052: giroIzqDer
     7400054: recogerItemDer
     7400056: saltoVerticalIzq
->>>>>>> origin/devel
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube_002
