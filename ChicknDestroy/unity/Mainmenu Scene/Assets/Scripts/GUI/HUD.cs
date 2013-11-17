@@ -2,6 +2,8 @@
 using System.Collections;
 
 public class HUD : MonoBehaviour{
+	private static int MESSAGE_POOL = 10;
+	
 	private PlayerInterface player;
 	private GameInterface game;
 	
@@ -25,8 +27,15 @@ public class HUD : MonoBehaviour{
 	private SpriteButton pause_button;
 	
 	private MessagePool mes;
+	
+	// Flag Control
+	private bool robotic;
+	private bool philo;
 
 	void initComponents() {
+		this.robotic = false;
+		this.philo = false;
+		
 		int isegment = Screen.width/10;
 		
 		this.weapons = new SpriteWeaponControl(new Rect(10,10,100,40));
@@ -58,10 +67,13 @@ public class HUD : MonoBehaviour{
 		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
 			"pausa/pause",
 			"pausa/pause1",
-			new ChangeLevelAction(),
+			new PauseAction(),
 			KeyCode.P);
 		
-		this.mes = new MessagePool(10);
+		this.mes = new MessagePool(MESSAGE_POOL);
+		
+		this.player = new PlayerInterface();
+		this.game = new GameInterface();
 	}
 	
 	
@@ -71,10 +83,6 @@ public class HUD : MonoBehaviour{
 		this.skin = new GUISkin();
 		
 		initComponents();
-		
-		
-		this.player = new PlayerInterface();
-		this.game = new GameInterface();
 		
 		notifyFlag (false,false);
 		
@@ -94,7 +102,8 @@ public class HUD : MonoBehaviour{
 		
 		this.mes.render();
 		
-		if(isPaused())this.pause_menu.render();
+		//if(isPaused())this.pause_menu.render();
+		if(isPaused())stub_pauseMenu();
 	}
 	
 	// Update is called once per frame
@@ -109,6 +118,7 @@ public class HUD : MonoBehaviour{
 		print("Current Health: "+this.player.getHealthPoints().ToString());
 		this.life.setLife(this.player.getHealthPoints());
 		this.player.setPlayerPoints(this.player.getPlayerPoints()+10);
+		this.pause_button.setToggled (false);
 	}
 	
 	public bool isPaused() {
@@ -120,6 +130,9 @@ public class HUD : MonoBehaviour{
 	}
 	
 	// Notify section.
+	/**
+	 * Notify the new HP and update the lifebar (with the current value of HP).
+	 */
 	public void notifyHealthChange(int hp) {
 		this.life.setLife(hp);
 	}
@@ -135,6 +148,7 @@ public class HUD : MonoBehaviour{
 		this.mes.start(position,message,millis);
 	}
 	public void notifyFlag(bool flag, bool robotic) {
-		Debug.Log ("Not implemented yet");
+		if (robotic)this.robotic = flag;
+		else this.philo = flag;
 	}
 }

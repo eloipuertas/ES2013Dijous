@@ -10,9 +10,10 @@ public class Lifebar : SpriteGroup{
 	{
 		this.xy_size = new Rect(xy.x,xy.y,size.x,size.y);
 		this.sprites = new Sprite[max_elements];
-		for (int i = 0; i<max_elements; i++)
+		for (int i = 0; i<max_elements; i++) {
 			this.sprites[i] = new Sprite(new Rect(xy.x+(dev.x*i),xy.y+(dev.y*i),size.x,size.y),
 				img_pattern+i);
+		}
 		this.xy = xy;
 		this.dev = dev;
 		this.n = max_elements;
@@ -31,7 +32,9 @@ public class Lifebar : SpriteGroup{
 		if (this.irender>=this.n)this.irender = this.n-1;
 	}
 	public void render() {
-		this.sprites[(this.n-1)-this.irender].render();
+		if(this.current_life>100)this.sprites[(this.n-1)-this.irender].render();
+		else this.sprites[(this.n-1)-(int)((this.current_life)*(this.n-1)/100)].render ();
+		//Debug.Log ((this.n-1)-(int)((this.current_life)*this.n/this.max_life));
 	}
 }
 
