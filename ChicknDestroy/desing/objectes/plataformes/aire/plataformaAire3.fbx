@@ -12,8 +12,8 @@ FBXHeaderExtension:  {
 		Month: 11
 		Day: 18
 		Hour: 14
-		Minute: 06
-		Second: 54
+		Minute: 11
+		Second: 23
 		Millisecond: 0
 	}
 	Creator: "FBX SDK/FBX Plugins build 20070228"
@@ -21,7 +21,7 @@ FBXHeaderExtension:  {
 		FlagPLE: 0
 	}
 }
-CreationTime: "2013-11-18 14:06:54:000"
+CreationTime: "2013-11-18 14:11:23:000"
 Creator: "Blender version 2.68 (sub 0)"
 
 ; Object definitions
@@ -147,9 +147,9 @@ Objects:  {
 		Properties60:  {
 			Property: "QuaternionInterpolate", "bool", "",0
 			Property: "Visibility", "Visibility", "A+",1
-			Property: "Lcl Translation", "Lcl Translation", "A+",7.481131553649902,5.343665122985840,6.507639884948730
-			Property: "Lcl Rotation", "Lcl Rotation", "A+",23.240195056629602,142.362356870423241,34.212069212897042
-			Property: "Lcl Scaling", "Lcl Scaling", "A+",1.000000000000000,0.999999940395355,1.000000000000000
+			Property: "Lcl Translation", "Lcl Translation", "A+",8.084737777709961,3.593825578689575,7.136097908020020
+			Property: "Lcl Rotation", "Lcl Rotation", "A+",-69.859980793112101,37.637641308085293,-145.787928965611485
+			Property: "Lcl Scaling", "Lcl Scaling", "A+",1.000000000000000,1.000000119209290,1.000000119209290
 			Property: "RotationOffset", "Vector3D", "",0,0,0
 			Property: "RotationPivot", "Vector3D", "",0,0,0
 			Property: "ScalingOffset", "Vector3D", "",0,0,0
@@ -289,9 +289,9 @@ Objects:  {
 		Culling: "CullingOff"
 		TypeFlags: "Camera"
 		GeometryVersion: 124
-		Position: 7.481132,5.343665,6.507640
-		Up: -0.317370,0.895343,-0.312469
-		LookAt: -0.685881,0.010817,0.727634
+		Position: 8.084738,3.593826,7.136098
+		Up: 0.667713,0.037621,-0.743468
+		LookAt: -0.353999,0.894618,-0.272660
 		ShowInfoOnMoving: 1
 		ShowAudio: 0
 		AudioColor: 0,1,0
@@ -2167,54 +2167,54 @@ Takes:  {
 			Channel: "Transform" {
 				Channel: "T" {
 					Channel: "X" {
-						Default: 7.481131553649902
+						Default: 8.084737777709961
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,7.481131553649902,L
+							1924423250,8.084737777709961,L
 						Color: 1,0,0
 					}
 					Channel: "Y" {
-						Default: 5.343665122985840
+						Default: 3.593825578689575
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,5.343665122985840,L
+							1924423250,3.593825578689575,L
 						Color: 0,1,0
 					}
 					Channel: "Z" {
-						Default: 6.507639884948730
+						Default: 7.136097908020020
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,6.507639884948730,L
+							1924423250,7.136097908020020,L
 						Color: 0,0,1
 					}
 					LayerType: 1
 				}
 				Channel: "R" {
 					Channel: "X" {
-						Default: 23.240198471724188
+						Default: -69.859980793112101
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,23.240198471724188,L
+							1924423250,-69.859980793112101,L
 						Color: 1,0,0
 					}
 					Channel: "Y" {
-						Default: 142.362356870423241
+						Default: 37.637644723179882
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,142.362356870423241,L
+							1924423250,37.637644723179882,L
 						Color: 0,1,0
 					}
 					Channel: "Z" {
-						Default: 34.212069212897042
+						Default: -145.787928965611485
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,34.212069212897042,L
+							1924423250,-145.787928965611485,L
 						Color: 0,0,1
 					}
 					LayerType: 2
@@ -2229,19 +2229,19 @@ Takes:  {
 						Color: 1,0,0
 					}
 					Channel: "Y" {
-						Default: 0.999999940395355
+						Default: 1.000000119209290
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,0.999999940395355,L
+							1924423250,1.000000119209290,L
 						Color: 0,1,0
 					}
 					Channel: "Z" {
-						Default: 1.000000000000000
+						Default: 1.000000119209290
 						KeyVer: 4005
 						KeyCount: 1
 						Key: 
-							1924423250,1.000000000000000,L
+							1924423250,1.000000119209290,L
 						Color: 0,0,1
 					}
 					LayerType: 3
