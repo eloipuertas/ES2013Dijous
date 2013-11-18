@@ -42,13 +42,19 @@ function Update () {
 				case "6":
 				case "5":
 				case "4":
+						text1.GetComponent(TextMesh).text = "0" + numero;
+						text2.GetComponent(TextMesh).text = "0" + numero;
+						text3.GetComponent(TextMesh).text = "0" + numero;
+						break;
 				case "3":
 				case "2":
 				case "1": 
 						text1.GetComponent(TextMesh).text = "0" + numero;
 						text2.GetComponent(TextMesh).text = "0" + numero;
 						text3.GetComponent(TextMesh).text = "0" + numero;
-						//text.renderer.material.color = 
+						text1.renderer.material.color = Color(255,0,0);
+						text2.renderer.material.color = Color(255,0,0);
+						text3.renderer.material.color = Color(255,0,0);
 						break;
 				
 				case "10":
