@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour {
 	public GameObject bala;
 	public GameObject sortidaBalaDreta;
 	public GameObject sortidaBalaEsquerra;
+	public GameObject sortidaBalaDretaCorrent;
+	public GameObject sortidaBalaEsquerraCorrent;
 	
 	private float animTime;
 	private float animDuration = 0.3f;
@@ -150,7 +152,7 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarDerCorriendo"].speed = 3;
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
-							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDretaCorrent.transform.position, sortidaBalaDretaCorrent.transform.rotation);
 							nouTir.AddComponent("DestruirBala");
 							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 							sonidoDisparo.Play();
@@ -179,7 +181,7 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarIzqCorriendo"].speed = 3;
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
-							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerraCorrent.transform.position, sortidaBalaEsquerraCorrent.transform.rotation);
 							nouTir.AddComponent("DestruirBala");
 							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 							sonidoDisparo.Play();
