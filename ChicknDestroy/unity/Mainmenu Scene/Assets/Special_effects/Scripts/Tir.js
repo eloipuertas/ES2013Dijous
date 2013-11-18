@@ -29,11 +29,11 @@ function Update () {
 			nouTir.rigidbody.AddForce(new Vector3(velocitatBala, 0, 0), ForceMode.VelocityChange);
 		else
 			nouTir.rigidbody.AddForce(new Vector3(-velocitatBala, 0, 0), ForceMode.VelocityChange);
-		audioTir.Play();
+		//audioTir.Play();
 	}
 	
 	if (Input.GetKeyDown(KeyCode.R)) {;
-		audioRecarga.Play();
+		//audioRecarga.Play();
 	}
 
 }
