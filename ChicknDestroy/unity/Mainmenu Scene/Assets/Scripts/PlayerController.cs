@@ -50,6 +50,8 @@ public class PlayerController : MonoBehaviour {
 	
 	public bool isKatana;
 	
+	private int team;
+	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
@@ -308,4 +310,9 @@ public class PlayerController : MonoBehaviour {
 		this.gameManager.notifyPlayerDeath();
 		
 	}
+	
+	public void setTeam(int team){ this.team=team; }
+	
+	public int getTeam(){ return team; }
+	
 }
