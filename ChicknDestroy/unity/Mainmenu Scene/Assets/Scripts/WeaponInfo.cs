@@ -12,6 +12,7 @@ public class WeaponInfo : MonoBehaviour {
 	private Rect posTextName;
 	private Rect posTextDmg;
 	private GUIStyle style;
+	private HUD hud;
 	
 	/*void OnCollisionEnter(Collision whoIs) {//we set at true when player enters in the weapon object box collider
         if(whoIs.gameObject.CompareTag("Player")){
@@ -28,6 +29,7 @@ public class WeaponInfo : MonoBehaviour {
 		style = new GUIStyle();
 		style.normal.textColor = Color.red;
 		style.fontSize = 30;
+		hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 	}
 	
 	void OnTriggerEnter(Collider whoIs) {//we set at true when player enters in the weapon object box collider
@@ -40,6 +42,39 @@ public class WeaponInfo : MonoBehaviour {
 		 if(whoIs.CompareTag("Player")){
 			isPlayer = false;	
 		}
+	}
+	
+	void OnTriggerStay(Collider whoIs){
+		
+		if(whoIs.CompareTag("Player") && Input.GetKeyDown(KeyCode.E)){
+			PlayerController c = whoIs.gameObject.GetComponent("PlayerController") as PlayerController;
+			if(isEscopeta){//if is escopeta type
+				c.isKatana = true;
+				hud.notifyPrimaryWeapon("escopeta");
+			}
+			if(isRevolver){//if is revolver type
+				
+			}
+			if(isKatana){//if is katana type
+				c.isKatana = false;
+				hud.notifyPrimaryWeapon("katana");
+			}
+			if(isRifle){//if is rifle type
+				
+			}
+			if(isMina){//if is mina type
+				
+			}
+			if(isGranada){//if is granada type
+		
+			}
+			if(isMetralleta){//if is metralleta type
+			}
+			Destroy(this.gameObject);	
+		}else{
+			/*AI interaction with npc chickens required*/
+		}
+		
 	}
 	
 	void OnGUI(){//show on gui
@@ -81,9 +116,9 @@ public class WeaponInfo : MonoBehaviour {
 		w = new WWW("file://"+Application.dataPath+"/Resources/primarios/"+fileName);//Loading the weapon.png file
 		t = w.texture;//getting the texture of the file
 		Vector2 pos2d = GameObject.Find("Main Camera").camera.WorldToScreenPoint(this.transform.position);//getting the 2d possition of the weapon object at the main camera screen(this.transform.position is the 3d position of the weapon object)
-		posImg = new Rect(pos2d.x-80,pos2d.y-100,500,100);
-		posTextName = new Rect(pos2d.x-80,pos2d.y-130,500,100);
-		posTextDmg = new Rect(pos2d.x-80,pos2d.y-105,500,100);
+		posImg = new Rect(pos2d.x-80,pos2d.y+200,500,100);
+		posTextName = new Rect(pos2d.x-80,pos2d.y+170,500,100);
+		posTextDmg = new Rect(pos2d.x-80,pos2d.y+195,500,100);
 		GUI.Label(posImg,t);//painting the texture on gui
 		GUI.Label(posTextName,TextName,style);//painting text info on gui
 		GUI.Label(posTextDmg,TextDmg,style);

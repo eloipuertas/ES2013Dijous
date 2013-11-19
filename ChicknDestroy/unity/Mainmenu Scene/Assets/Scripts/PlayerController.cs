@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour {
 	public bool isKatana;
 	
 	void Start () {
+		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		
 		rigid =	GetComponent<Rigidbody>();
 		
@@ -70,12 +71,11 @@ public class PlayerController : MonoBehaviour {
 		lastDirection = stopDer;
 		
 		
-		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		
+		
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		health = 100;
-		
-		disparo = true;
-		
+		disparo = false;
 		heightHero = rigid.collider.bounds.extents.y;
 	}
 	
@@ -89,9 +89,9 @@ public class PlayerController : MonoBehaviour {
  				heal(50);
 		}
 		
-		if(collision.gameObject.tag == "escopeta_off") {
+		/*if(collision.gameObject.tag == "escopeta_off") {
 				sonidoPowerUp.Play();
-		}
+		}*/
 		
 	}
 	

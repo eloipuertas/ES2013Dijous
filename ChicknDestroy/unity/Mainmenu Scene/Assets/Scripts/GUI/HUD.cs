@@ -46,7 +46,7 @@ public class HUD : MonoBehaviour{
 			new Vector2(0,0),
 			21, // n-segments of LifeBar
 			150, // Max life with the barrier
-			0); // Current life
+			100); // Current life
 		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-13,
 			this.life.getSize().x+20,this.life.getSize().y+10),"LifeBar/hudVida");
 		
