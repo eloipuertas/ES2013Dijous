@@ -71,7 +71,7 @@ public class AgentNpc : FSM {
 	public void setHealthPoints(int n){
 		health = n;
 	}
-	public void setDamage(int damage) {
+	public void dealDamage(int damage) {
 		if ((health - damage) > 0) 
 			setHealthPoints(health - damage);
 		else 
@@ -308,7 +308,7 @@ public class AgentNpc : FSM {
 				if (hit.transform.gameObject.tag == "Player"){
 						
 						animation.Play(anim);
-						playerScript.setDamage(damage);
+						playerScript.dealDamage(damage);
 					
 						print("HIT");
 				} else {
@@ -437,7 +437,7 @@ public class AgentNpc : FSM {
 		*/
 		
 		if(collision.gameObject.tag =="bala"){
-		    setDamage(60);
+		    dealDamage(60);
 		}
 		
 				

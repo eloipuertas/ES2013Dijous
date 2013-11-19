@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour {
 	private GameObject gre;
 	private GameObject grk;
 	
-	public bool isKatana;
+	public int weapon;
 	
 	private int team;
 	
@@ -58,15 +58,15 @@ public class PlayerController : MonoBehaviour {
 		
 		gre = GameObject.Find("gre");
 		grk = GameObject.Find("grk");
-		if (isKatana) {
-			myAnim = gre.animation;
-			grk.SetActive(false);
-			gre.SetActive(true);
-		}
-		else {
+		if (weapon==1) {
 			myAnim = grk.animation;
-			gre.SetActive(false);
 			grk.SetActive(true);
+			gre.SetActive(false);
+		}
+		else if(weapon==2) {
+			myAnim = gre.animation;
+			gre.SetActive(true);
+			grk.SetActive(false);
 		}
 	
 		lastDirection = stopDer;
@@ -99,15 +99,15 @@ public class PlayerController : MonoBehaviour {
 	
 	void Update () {
 		
-		if (isKatana) {
-			myAnim = gre.animation;
-			grk.SetActive(false);
-			gre.SetActive(true);
-		}
-		else {
+		if (weapon==1) {
 			myAnim = grk.animation;
-			gre.SetActive(false);
 			grk.SetActive(true);
+			gre.SetActive(false);
+		}
+		else if(weapon==2) {
+			myAnim = gre.animation;
+			gre.SetActive(true);
+			grk.SetActive(false);
 		}
 		
 		
@@ -268,41 +268,16 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 	
-	public int getHealthPoints() {
-		return health;
-	}
 	
-	public void setHealthPoints(int n) {
+	
+	public void setHealth(int n) {
 		health = n;
 		fireHealthNotification();
 		if (health <= 0) {
 			fireDeathNotification();
 		}
 	}
-	
-	public void heal(int n){
-		setHealthPoints(Mathf.Min(100,health+n));
-	}
-	
-	
-	public string getPrimaryWeapon() {
-		return primaryWeapon.ToString();
-	}
-	
-	public string getSecondaryWeapon() {
-		return secondaryWeapon.ToString();
-	}
-	
-	public Vector3 getCoordinates() {
-		return transform.position;
-	}
-	
-	public void setDamage(int damage) {
-		if ((health - damage) > 0) 
-			setHealthPoints(health - damage);
-		else 
-			setHealthPoints(0);
-	}
+		
 	private void fireHealthNotification() {
 		this.hud.notifyHealthChange(this.health);
 	}
@@ -311,8 +286,19 @@ public class PlayerController : MonoBehaviour {
 		
 	}
 	
-	public void setTeam(int team){ this.team=team; }
+	public string getPrimaryWeapon(){ return primaryWeapon.ToString(); }
+	public string getSecondaryWeapon(){ return secondaryWeapon.ToString(); }
 	
+	public int getHealth(){ return health; }
+	public void dealDamage(int damage) { setHealth(health - damage); }
+	public void heal(int h){ setHealth(Mathf.Min(100,health+h)); }
+	
+	public void setWeapon(int weapon){ this.weapon=weapon; }
+	public int getWeapon(){ return weapon; }
+
+	public void setTeam(int team){ this.team=team; }
 	public int getTeam(){ return team; }
+	
+	public Vector3 getCoordinates(){ return transform.position; }
 	
 }
