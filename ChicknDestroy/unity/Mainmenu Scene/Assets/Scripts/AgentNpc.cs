@@ -25,7 +25,7 @@ public class AgentNpc : FSM {
 	
 	protected Vector3 direction;
 	protected Vector3 relPos;
-	public string direrutas = "ruta1.txt";
+	public string direrutas = "ruta1";
 	//Lectors de rutes
 	private List <Vector3> rutaActual  = new List<Vector3>();
 	private int keyPosActual =0; 
@@ -171,7 +171,11 @@ public class AgentNpc : FSM {
 		int posindex = 0;
 		
 		Debug.Log("NOVA RUTA-->ID::"+fileindex);
-		string content = File.ReadAllText(Application.dataPath + "/Scripts/RutasNpc/" + direrutas);
+		
+		
+		TextAsset bindata= (TextAsset) Resources.Load(direrutas, typeof(TextAsset));
+		print ("textASSERT: "+bindata);
+		string content = bindata.text;
 		
 		string []lines = content.Split('|');
 		foreach(string s in lines){
