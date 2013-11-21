@@ -4,6 +4,8 @@ using System.Collections;
 public class HUD : MonoBehaviour{
 	private static int MESSAGE_POOL = 10;
 	
+	private bool current_player_robotic;
+	
 	private PlayerInterface player;
 	private GameInterface game;
 	
@@ -18,6 +20,8 @@ public class HUD : MonoBehaviour{
 	
 	private Lifebar life;
 	private Sprite bg_life;
+	private Lifebar shield;
+	private Sprite bg_shield;
 	
 	private PauseMenu pause_menu;
 	private Points game_points;
@@ -45,10 +49,20 @@ public class HUD : MonoBehaviour{
 			"LifeBar/life_bar_",
 			new Vector2(0,0),
 			21, // n-segments of LifeBar
-			150, // Max life with the barrier
+			100, // Max life
 			100); // Current life
 		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-13,
 			this.life.getSize().x+20,this.life.getSize().y+10),"LifeBar/hudVida");
+		
+		this.shield = new Lifebar(new Vector2(this.life.getXY().x+(this.life.getSize().x+10),this.life.getXY ().y),
+			new Vector2(40,40),
+			"Shield/shield_",
+			new Vector2(0,0),
+			21, // n-Images of the Shield
+			50, // Barrier max points
+			0); // barrier current points.
+		this.bg_shield = new Sprite(new Rect(this.shield.getXY ().x-5,this.shield.getXY ().y-5,
+			this.shield.getSize ().x+10,this.shield.getSize ().y+10),"Shield/hudEscudo");
 		
 		/*this.pause_menu = new PauseMenu(this,
 			new Vector2(100,40), // Origin
@@ -137,12 +151,40 @@ public class HUD : MonoBehaviour{
 		this.life.setLife(hp);
 	}
 	
-	public void notifyPrimaryWeapon(string weapon) {
-		this.weapons.notifyPrimaryWeapon(weapon);
+	public void notifyPrimaryWeapon(int weapon) {
+		switch(weapon) {
+			case 1:
+				this.weapons.notifyPrimaryWeapon("katana");
+				break;
+			case 2:
+				this.weapons.notifyPrimaryWeapon("escopeta");
+				break;
+			case 3:
+				this.weapons.notifyPrimaryWeapon("revolver");
+				break;
+			case 4:
+				this.weapons.notifyPrimaryWeapon("metralleta");
+				break;
+			case 5:
+				this.weapons.notifyPrimaryWeapon("carpeta");
+				break;
+			case 6:
+				this.weapons.notifyPrimaryWeapon("rifle");
+				break;
+		}
+		//this.weapons.notifyPrimaryWeapon(weapon);
 	}
 	
-	public void notifySecondaryWeapon(string weapon) {
-		this.weapons.notifySecondaryWeapon(weapon);
+	public void notifySecondaryWeapon(int weapon) {
+		switch(weapon) {
+			case 1:
+			this.weapons.notifySecondaryWeapon("granada");
+				break;
+			case 2:
+				this.weapons.notifySecondaryWeapon("mina");
+				break;
+		}
+		//this.weapons.notifySecondaryWeapon(weapon);
 	}
 	public void notifyMessage(Vector2 position, string message) {
 		this.mes.start(position,message,millis);

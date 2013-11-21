@@ -32,9 +32,10 @@ public class Lifebar : SpriteGroup{
 		if (this.irender>=this.n)this.irender = this.n-1;
 	}
 	public void render() {
-		if(this.current_life>100)this.sprites[(this.n-1)-this.irender].render();
-		else this.sprites[(this.n-1)-(int)((this.current_life)*(this.n-1)/100)].render ();
+		//if(this.current_life>100)this.sprites[(this.n-1)-this.irender].render();
+		//else this.sprites[(this.n-1)-(int)((this.current_life)*(this.n-1)/100)].render ();
 		//Debug.Log ((this.n-1)-(int)((this.current_life)*this.n/this.max_life));
+		this.sprites[(this.n-1)-this.irender].render();
 	}
 }
 
