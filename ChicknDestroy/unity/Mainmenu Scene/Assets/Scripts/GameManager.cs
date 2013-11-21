@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	//public GameObject player;
 	private GameCamera cam;
 	public bool GameSelRobot = true;
+	public int gravity = 800;
 	private float loseOrWinTime = 5F;//time later the lose or win of a player (5 seconds Timer)
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
@@ -15,7 +16,7 @@ public class GameManager : MonoBehaviour {
 		cam = GetComponent<GameCamera>();
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
-		
+		Physics.gravity = new Vector3(0, -gravity, 0);
 		GameObject go;
 		
 		if (GameSelRobot)

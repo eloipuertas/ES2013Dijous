@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class FSM : MonoBehaviour {
-	
+
 	//Next target
 	protected Vector3 target;
 	
