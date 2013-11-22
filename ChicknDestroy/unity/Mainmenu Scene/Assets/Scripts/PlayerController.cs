@@ -18,6 +18,7 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
 	public AudioSource sonidoPowerUp;
+	public AudioSource sonidoEscudo;
 	
 	public GameObject bala;
 	public GameObject sortidaBalaDreta;
@@ -93,6 +94,10 @@ public class PlayerController : MonoBehaviour {
 		
 		if(collision.gameObject.tag == "escopeta_off" || collision.gameObject.tag == "katana" || collision.gameObject.tag == "granada") {
 				sonidoPowerUp.Play();
+		}
+		
+		if(collision.gameObject.tag == "escut") {
+				sonidoEscudo.Play();
 		}
 		
 	}
