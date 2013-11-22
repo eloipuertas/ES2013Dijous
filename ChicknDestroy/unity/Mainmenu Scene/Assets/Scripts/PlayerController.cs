@@ -18,9 +18,10 @@ public class PlayerController : MonoBehaviour {
 	public AudioSource sonidoSalto;
 	public AudioSource sonidoDisparo;
 	public AudioSource sonidoPowerUp;
-	public AudioSource sonidoEscudo;
+	public AudioSource sonidoEscudo; 
 	
 	public GameObject bala;
+	public GameObject granada;
 	public GameObject sortidaBalaDreta;
 	public GameObject sortidaBalaEsquerra;
 	public GameObject sortidaBalaDretaCorrent;
@@ -123,7 +124,10 @@ public class PlayerController : MonoBehaviour {
 		}
 			
 		if (!disparo && Input.GetButtonDown("Fire2")) {
-			disparo = true;
+			GameObject nouTir = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+			nouTir.AddComponent("ExplosioGranada");
+			nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+			//disparo = true;
 		}
 		
 		
