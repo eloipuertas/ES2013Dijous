@@ -1,8 +1,7 @@
 ﻿var text1:GameObject;
 var text2:GameObject;
-var text3:GameObject;
 var foc1:GameObject;
-var foc2:GameObject;
+var boto:GameObject;
 var audioCountdown:AudioSource;
 
 private var timer:float;
@@ -13,10 +12,9 @@ private var countdown_activada;
 function Start () {
 	text1.active = false;
 	text2.active = false;
-	text3.active = false;
 	countdown_activada = 0;
 	startTimer = 0;
-	timer = 10;
+	timer = 15;
 }
 
 function Update () {
@@ -30,13 +28,12 @@ function Update () {
 						startTimer = 0;
 						text1.active = false;
 						text2.active = false;
-						text3.active = false;
 						foc1.active = true;
-						foc2.active = true;
 						countdown_activada = 0;
 						break;
 						
 				case "9":  //canviar colors per cada numero, funcio o assignant directament el color?
+						 boto.animation.Stop();
 				case "8":
 				case "7":
 				case "6":
@@ -44,23 +41,25 @@ function Update () {
 				case "4":
 						text1.GetComponent(TextMesh).text = "0" + numero;
 						text2.GetComponent(TextMesh).text = "0" + numero;
-						text3.GetComponent(TextMesh).text = "0" + numero;
 						break;
 				case "3":
 				case "2":
 				case "1": 
 						text1.GetComponent(TextMesh).text = "0" + numero;
 						text2.GetComponent(TextMesh).text = "0" + numero;
-						text3.GetComponent(TextMesh).text = "0" + numero;
 						text1.renderer.material.color = Color(255,0,0);
 						text2.renderer.material.color = Color(255,0,0);
-						text3.renderer.material.color = Color(255,0,0);
 						break;
 				
+				case "15":
+				case "14":
+				case "13":
+				case "12":
+				case "11":
 				case "10":
+						
 						text1.GetComponent(TextMesh).text = numero;
 						text2.GetComponent(TextMesh).text = numero;
-						text3.GetComponent(TextMesh).text = numero;
 						break;
 				
 				default:break;
@@ -74,13 +73,12 @@ function Update () {
 function OnCollisionEnter(collision:Collision){
 	if(collision.gameObject.tag =="Player"){
 		if (countdown_activada == 0) {
+			boto.animation.Play();
 			startTimer = 1;
 			audioCountdown.Play();
 			text1.active = true;
 			text2.active = true;
-			text3.active = true;
 			foc1.active = false;
-			foc2.active = false;
 			countdown_activada = 1;
 			timer = 10;
 		}
