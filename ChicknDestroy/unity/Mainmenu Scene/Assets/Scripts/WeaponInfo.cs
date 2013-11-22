@@ -46,18 +46,20 @@ public class WeaponInfo : MonoBehaviour {
 	
 	void OnTriggerStay(Collider whoIs){
 		
-		if(whoIs.CompareTag("Player") && Input.GetKeyDown(KeyCode.E)){
+		if(isPlayer && Input.GetKeyDown(KeyCode.E)){//if the player is in the collider and the key 'E' is pressed
 			PlayerController c = whoIs.gameObject.GetComponent("PlayerController") as PlayerController;
 			if(isEscopeta){//if is escopeta type
-				c.isKatana = true;
-				hud.notifyPrimaryWeapon("escopeta");
+				//c.playAnimation();//we report the player that must play the pickUp weapon animation
+				c.isKatana = true;//we report to the Player that must change the weapon
+				hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
 			}
 			if(isRevolver){//if is revolver type
 				
 			}
 			if(isKatana){//if is katana type
+				//c.playAnimation();
 				c.isKatana = false;
-				hud.notifyPrimaryWeapon("katana");
+				hud.notifyPrimaryWeapon(1);
 			}
 			if(isRifle){//if is rifle type
 				
@@ -66,13 +68,13 @@ public class WeaponInfo : MonoBehaviour {
 				
 			}
 			if(isGranada){//if is granada type
-		
+				//c.playAnimation();
+				//c.weapon = 7;
+				//hud.notifySecondaryWeapon(7);
 			}
 			if(isMetralleta){//if is metralleta type
 			}
-			Destroy(this.gameObject);	
-		}else{
-			/*AI interaction with npc chickens required*/
+			Destroy(this.gameObject);//once the weapon is picked up the object is destroyed
 		}
 		
 	}
