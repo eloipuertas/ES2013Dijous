@@ -1,8 +1,8 @@
 using UnityEngine;
 using System.Collections;
 
-public class FSM : MonoBehaviour {
-	
+public class FSM : Actor {
+
 	//Next target
 	protected Vector3 target;
 	

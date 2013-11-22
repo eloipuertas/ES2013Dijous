@@ -1,15 +1,11 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : Actor {
 	
-	//Atributos de personaje
-	private int health;
-	private GameObject primaryWeapon;
-	private GameObject secondaryWeapon;
 	
 	//Atributos de control
-	private float gravity = 200;
+	//private float gravity = 0;
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
@@ -50,9 +46,6 @@ public class PlayerController : MonoBehaviour {
 	private const int DIR_IZQUIERDA = 1;
 	private const int DIR_DERECHA = 2;
 	
-	private HUD hud;
-	
-	private GameManager gameManager;
 	private Animation myAnim;
 	
 	private Rigidbody rigid;
@@ -60,21 +53,11 @@ public class PlayerController : MonoBehaviour {
 	private GameObject gre;
 	private GameObject grk;
 	
-	// ARMAS
-	private int WEAPON;
-	
-	private const int WEAPON_KATANA = 1;
-	private const int WEAPON_ESCOPETA = 2;
-	
-	
-	private int team;
-	
 
 	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		
 		gre = GameObject.Find("gre");
 		grk = GameObject.Find("grk");
 		
@@ -85,16 +68,18 @@ public class PlayerController : MonoBehaviour {
 		currentState = STATE_ALIVE;
 		
 		
-		disparo = true;
+		
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
-		WEAPON = WEAPON_ESCOPETA;
+		weapon = WEAPON_ESCOPETA;
 		updateModelWeapon();
 		lastDirection = stopDer;
+		
+		disparo = false;
 	}
 	
-	void Update () {
+	void FixedUpdate(){
 		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
@@ -117,7 +102,7 @@ public class PlayerController : MonoBehaviour {
 		
 		//Actualiza la posicion del personaje
 		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
-		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
+		//rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
 	
 		
 		if(rigid.velocity.y > 10) {
@@ -234,13 +219,20 @@ public class PlayerController : MonoBehaviour {
 				
 			}
 		}
-		
+	}
+	
+	void Update () {
+		// Va muy rapido, nada aqui :D
 	}
 	
 	/********* CODIGO AUXILIAR **************/
-		
+	
 	private bool isGround() {
-		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.5f);
+		bool ret = false;
+		for (int i = -2; i < 2 && !ret; ++i) {
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, heightHero + 0.01f);
+		}
+		return ret;
 	}
 	
 	void OnCollisionEnter(Collision collision){
@@ -254,9 +246,10 @@ public class PlayerController : MonoBehaviour {
 		}
 		
 	}
+	
 	void updateModelWeapon() {
 		
-		switch(WEAPON){
+		switch(weapon){
 			case WEAPON_KATANA:
 				myAnim = grk.animation;
 				grk.SetActive(true);
@@ -294,38 +287,6 @@ public class PlayerController : MonoBehaviour {
 		disparo = false;
 	}
 	
-	
-	/********* SCRIPTING PUBLIC *************/
-	
-	public void setHealth(int n) {
-		health = n;
-		fireHealthNotification();
-		if (health <= 0) {
-			fireDeathNotification();
-		}
-	}
-		
-	private void fireHealthNotification() {
-		this.hud.notifyHealthChange(this.health);
-	}
-	private void fireDeathNotification() {
-		this.gameManager.notifyPlayerDeath();
-		
-	}
-	
-	public string getPrimaryWeapon(){ return primaryWeapon.ToString(); }
-	public string getSecondaryWeapon(){ return secondaryWeapon.ToString(); }
-	
-	public int getHealth(){ return health; }
-	public void dealDamage(int damage) { setHealth(health - damage); }
-	public void heal(int h){ setHealth(Mathf.Min(100,health+h)); }
-	
-	public void setWeapon(int weapon){ this.WEAPON = weapon; }
-	public int getWeapon(){ return WEAPON; }
 
-	public void setTeam(int team){ this.team=team; }
-	public int getTeam(){ return team; }
-	
-	public Vector3 getCoordinates(){ return transform.position; }
 	
 }

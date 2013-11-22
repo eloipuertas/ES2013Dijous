@@ -53,6 +53,7 @@ ModelImporter:
     4300002: Cuerpo_MeshPart0
     4300004: Cuerpo_MeshPart1
     4300006: Cuerpo_MeshPart2
+    4300008: Cuerpo
     7400000: Default Take
     7400002: caidaDerecha
     7400004: caidaIzquierda
@@ -78,6 +79,7 @@ ModelImporter:
     13700002: Cuerpo_MeshPart0
     13700004: Cuerpo_MeshPart1
     13700006: Cuerpo_MeshPart2
+    13700008: Cuerpo
   materials:
     importMaterials: 1
     materialName: 0
