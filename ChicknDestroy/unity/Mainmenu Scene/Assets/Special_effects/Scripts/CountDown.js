@@ -78,7 +78,7 @@ function Update () {
 
 
 function OnCollisionEnter(collision:Collision){
-	if(collision.gameObject.tag =="Player"){
+	if(collision.gameObject.tag =="Player" || collision.gameObject.tag =="NPC"){
 		if (countdown_activada == 0) {
 			boto.animation.Play();
 			startTimer = 1;
