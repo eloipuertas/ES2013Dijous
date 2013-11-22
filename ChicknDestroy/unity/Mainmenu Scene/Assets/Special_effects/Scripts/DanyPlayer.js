@@ -37,7 +37,7 @@ function Update () {
 }
 
 function OnCollisionEnter(collision:Collision){
-	if(collision.gameObject.tag =="foc"){
+	if(collision.gameObject.tag =="foc" || collision.gameObject.tag =="punxes" || collision.gameObject.tag =="guillotina"){
 		if (fetDany == 0) {
 			fetDany = 1;
 			cosPlayer.renderer.enabled = false;
