@@ -20,18 +20,20 @@ public class AgentNpc : FSM {
 	private int keyPosActual =0; 
 	public string direrutas = "ruta1";
 	private List <Vector3> rutaActual  = new List<Vector3>();
+	private bool routeJump = false;	
+	
 	//Target
 	private Vector3 nextTarget;
-	private Vector3 actualTarget;
 	private Vector3 relPos;
+	private bool targetEnemy = false;
 	//Especifications
-	private int jumpForce = 400;
+	private int jumpForce = 500;
 	private float velocity = 175f;
 	
 	//Npc atributes
 	private int puntuacio = 200;
 	private int radioVision = 425;
-	private int stopDistance = 50;
+	private int stopDistance = 40;
 	private string primaryWeapon="katana";
 	private string secondaryWeapon;
 	
@@ -86,19 +88,34 @@ public class AgentNpc : FSM {
 		}
 		
 		if (closestEnemy != null){
-			relPos = closestEnemy.transform.position - transform.position;
+			nextTarget = closestEnemy.transform.position;
+			nextTarget.z = 0;
+			relPos = nextTarget - transform.position;
+			targetEnemy = true;
 			return;
 		}
 		
+		targetEnemy = false;
 		nextTarget = rutaActual[keyPosActual];
 		Debug.Log("####NPC GO TO -------> "+nextTarget);
 		relPos = nextTarget - transform.position;
-		if(Mathf.Abs(relPos.x) <= 15) {
+		bool next = false;
+		
+		// Pasar al siguiente target.
+			// Si z=3 espera a que haya algo en (x,y)
+		if (((nextTarget.z == 3) && (anythingOn(nextTarget))) ||			
+			// Si z=2 debera acercarse al punto (x,y) almenos en 30
+			((nextTarget.z == 2) && (distance3D(nextTarget,transform.position) <= 30)) ||
+			// Si z=1 debera estar cerca respecto al eje x almenos en 15, y tendra que estar tocando el suelo
+			((nextTarget.z == 1) && (Mathf.Abs(relPos.x) <= 15) && onGround()) || 
+			// Si z=0 debera estar cerca respecto al eje x almenos en 15
+			((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 15))){
+			
 			keyPosActual+=1;
 			if (keyPosActual == rutaActual.Count)
 				keyPosActual = 0;
-			Debug.Log("###NEXT KEY###");
 		}
+
 	
 	}
 	
@@ -141,7 +158,7 @@ public class AgentNpc : FSM {
 		Debug.Log("NOVA RUTA-->ID::"+fileindex);
 		
 		
-		TextAsset bindata= (TextAsset) Resources.Load(direrutas, typeof(TextAsset));
+		TextAsset bindata= (TextAsset) Resources.Load("routes/"+direrutas, typeof(TextAsset));
 		print ("textASSERT: "+bindata);
 		string content = bindata.text;
 		
@@ -195,6 +212,11 @@ public class AgentNpc : FSM {
 	//#########################################
 	protected void UpdateNoneState(){
 		//Animation idle
+		animateIfExist("paradaDerecha","paradaIzquierda");
+		updateNextTarget();
+		if (nextTarget.z != 3){
+			curState = FSM.Run;
+		}
 	}
 	protected void UpdateRunState(){		
 			// Si esta activa la animacion de girar, no me puedo mover
@@ -202,7 +224,15 @@ public class AgentNpc : FSM {
 				return;
 			}
 		
+			if (nextTarget.z == 3){
+				animateIfExist("paradaDerecha","paradaIzquierda");
+				updateNextTarget();
+				return;
+			}
+		
 			bool ground = onGround();
+		
+
 		
 			// Sistema para que no cambie de direccion muy rapido cuando el pollo se encuentre en
 			// las mismas x, pero en diferentes y. 
@@ -212,9 +242,10 @@ public class AgentNpc : FSM {
 					changeDir = true;	// Permite cambiar de direccion
 				}
 			}
+		 
 		
 			// Cambio de direccion si changeDir me lo permite, y estoy de espaldas al target
-			if (changeDir && derecha != (relPos.x > 0)){
+			if ((!targetEnemy || changeDir) && derecha != (relPos.x > 0)){
 				derecha = !derecha;
 				lastPos = transform.position;
 				changeDir = false;	// No voy a permitir cambiar de direccion en la siguiente iteracion
@@ -224,22 +255,27 @@ public class AgentNpc : FSM {
 				}
 			}
 			
+			if (nextTarget.z == 2 && ground){
+				//curState = FSM.Jump;
+				jump();
+				return;
+			}
 
 		
 			// Si esta tocando suelo:
 			if(ground)
-				animateIfExist("correrDerecha","correrIzquierda");
-		
-		
+				animateIfExist("correrDerecha","correrIzquierda");		
 			// Si esta caiendo:
 			else if (rigidbody.velocity.y < -10)
 				animateIfExist("caidaDerecha","caidaIzquierda");
-		
 			// else -> estoy haciendo la animacion de salto
-			
-			// Camino:
-			transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
+
 		
+			// Camino:
+			if (nextTarget.z < 1 || Mathf.Abs(relPos.x) > 15)
+				transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
+
+
 			// Ha detectado algo a distancia "stopDistance" delante del player?:
 			GameObject detected = raycastFront(stopDistance);
 			if(detected != null){	
@@ -261,8 +297,9 @@ public class AgentNpc : FSM {
 				}
 
 			}
+		
+			updateNextTarget();
 
-		updateNextTarget();
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
@@ -390,8 +427,8 @@ public class AgentNpc : FSM {
 	
 	//Initialization of NPC
 	protected override void Ini(){
+		Physics.gravity = new Vector3(0,-800,0);
 		loadRoute();
-		
 		setInitialsAtributes();
 		setInitialCollider();
 		setInitialState();
@@ -401,7 +438,7 @@ public class AgentNpc : FSM {
 		Debug.Log(curState);
 	}
 	
-	public void jump(){
+	public bool jump(){
 		
 		string anim = (derecha)? "caidaDerecha":"caidaIzquierda";
 		//Si esta tocando suelo -> Salta
@@ -415,10 +452,12 @@ public class AgentNpc : FSM {
 				animation.Play(anim);
 				
 			}
+			return true;
 			
 		//Si esta caiendo:
 		} else if (rigidbody.velocity.y < -10 && animation[anim]!=null)
 			animation.Play(anim);
+		return false;
 	}
 	
 	
@@ -452,8 +491,18 @@ public class AgentNpc : FSM {
 			return null;
 		return hit.collider.gameObject;
 	}
+	private bool anythingOn(Vector3 pos){
+		Vector3 vec = new Vector3(pos.x,pos.y,-200);
+		Vector3 vec2 = vec; vec2.z = 200;
+		return Physics.Linecast(vec,vec2);
+	}
 	private bool onGround(){
-		return Physics.Raycast(transform.position, Vector3.down, 10);
+		float mitadAmplada = rigidbody.collider.bounds.extents.x;
+		bool ground = false;
+		for (int i=-1;i<2 && !ground;i++){
+			ground = Physics.Raycast(transform.position+Vector3.right*mitadAmplada*i, Vector3.down, 3);
+		}
+		return ground;
 	}
 	
 }
