@@ -34,8 +34,6 @@ public class AgentNpc : FSM {
 	private int puntuacio = 200;
 	private int radioVision = 425;
 	private int stopDistance = 40;
-	private string primaryWeapon="katana";
-	private string secondaryWeapon;
 	
 	//Npc propierties
 	private Vector3 spawnPoint;
@@ -52,19 +50,6 @@ public class AgentNpc : FSM {
 	private Vector3 lastPos;
 	private bool changeDir = true;
 	
-	//#######TO DELETE:
-	private int health = 100;
-	public int getHealthPoints(){return health;}
-	public void setHealthPoints(int n){health = n;	}
-	public void dealDamage(int damage) {
-		if ((health - damage) > 0) setHealthPoints(health - damage);
-		else setHealthPoints(0);
-	}
-	protected string getPrimaryWeapon(){return primaryWeapon;}
-	protected string getSecondaryWeapon(){return secondaryWeapon;}
-	protected Vector3 getCoordinates(){return transform.position;}
-	protected int getPuntuacio(){return puntuacio;}
-	//#######END TO DELETE */
 
 	//-------------Utility Functions---------------
 	
@@ -128,17 +113,20 @@ public class AgentNpc : FSM {
 	void setInitialsAtributes(){
 		try{
 			animator = GetComponent<Animator>();
+			animation["correrDerecha"].wrapMode = WrapMode.Loop;
+			animation["correrIzquierda"].wrapMode = WrapMode.Loop;
+			animation["golpearKatanaDer"].speed = 1.2f;
+			animation["golpearKatanaIzq"].speed = 1.2f;
+			
+			animation["giroIzquierdaDerecha"].speed = 5f;
+			animation["giroDerechaIzq"].speed = 5f;
+			this.setHealth(100);
+			
 		}catch{
 			//print("Exception GetComponent animator");
 		}
 		
-		animation["correrDerecha"].wrapMode = WrapMode.Loop;
-		animation["correrIzquierda"].wrapMode = WrapMode.Loop;
-		animation["golpearKatanaDer"].speed = 1.2f;
-		animation["golpearKatanaIzq"].speed = 1.2f;
-		
-		animation["giroIzquierdaDerecha"].speed = 5f;
-		animation["giroDerechaIzq"].speed = 5f;
+
 		
 
 	}
@@ -391,7 +379,7 @@ public class AgentNpc : FSM {
 
  		//Go to dead state is no health left
 		//Debug.Log(this.getHealthPoints());
-		if (this.getHealthPoints() <= 0) curState = FSM.Dead;
+		if (this.getHealth() <= 0) curState = FSM.Dead;
 		//if (pla.getHealthPoints() <=0) curState = FSM.None;
 		Debug.Log("Current STATE: "+curState);
 
