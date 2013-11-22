@@ -19,6 +19,7 @@ function Start () {
 	timer = 15;
 }
 
+/* MILLORAR CODI !! */
 function Update () {
 	if (startTimer == 1) {
 		timer -= Time.deltaTime;
@@ -36,7 +37,6 @@ function Update () {
 						break;
 						
 				case "9":  //canviar colors per cada numero, funcio o assignant directament el color?
-						 boto.animation.Stop();
 				case "8":
 				case "7":
 				case "6":
@@ -54,9 +54,13 @@ function Update () {
 						text2.renderer.material.color = Color(255,0,0);
 						break;
 				
+				case "14": boto.animation.Stop();
+						   text1.GetComponent(TextMesh).text = numero;
+						   text2.GetComponent(TextMesh).text = numero;
+						   break;
+						   
 				case "13": obstacle.active = true;
 				case "15":
-				case "14":
 				case "12":
 				case "11":
 				case "10":
