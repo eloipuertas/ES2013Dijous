@@ -4,8 +4,7 @@ var audioImpacte : AudioSource;
 
 function OnCollisionEnter(collision:Collision){
 	
-	//colisio del NPC amb la bala (s'hauria de gestionar la perdua de vida aqui dins)
-	if(collision.gameObject.tag =="bala"){ //hauria de ser el player pero no te rigidbody i crec que per aquest motiu no detecta el power-up tot i tenir box collider
+	if(collision.gameObject.tag =="bala"){
 	    audioImpacte.Play();
 	    //obtenim el contacte de la bala amb el personatge
 	    var contact = collision.contacts[0];
