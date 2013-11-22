@@ -298,10 +298,10 @@ public class AgentNpc : FSM {
 			GameObject detected = raycastFront(stopDistance+5);
 			if(detected != null){	
 				if (detected.tag == "Player"){
-						PlayerController playerScript = (PlayerController) detected.GetComponent(typeof(PlayerController));
+						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
 					
 						animation.Play(anim);
-						playerScript.dealDamage(25);
+						actor.dealDamage(25);
 					
 						print("HIT");
 				} else {
