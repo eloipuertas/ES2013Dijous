@@ -5,7 +5,7 @@ public class PlayerController : Actor {
 	
 	
 	//Atributos de control
-	private float gravity = 200;
+	//private float gravity = 0;
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
@@ -58,7 +58,6 @@ public class PlayerController : Actor {
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		
 		gre = GameObject.Find("gre");
 		grk = GameObject.Find("grk");
 		
@@ -69,16 +68,18 @@ public class PlayerController : Actor {
 		currentState = STATE_ALIVE;
 		
 		
-		disparo = true;
+		
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
 		weapon = WEAPON_ESCOPETA;
 		updateModelWeapon();
 		lastDirection = stopDer;
+		
+		disparo = false;
 	}
 	
-	void Update () {
+	void FixedUpdate(){
 		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
@@ -101,7 +102,7 @@ public class PlayerController : Actor {
 		
 		//Actualiza la posicion del personaje
 		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
-		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
+		//rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
 	
 		
 		if(rigid.velocity.y > 10) {
@@ -218,13 +219,20 @@ public class PlayerController : Actor {
 				
 			}
 		}
-		
+	}
+	
+	void Update () {
+		// Va muy rapido, nada aqui :D
 	}
 	
 	/********* CODIGO AUXILIAR **************/
-		
+	
 	private bool isGround() {
-		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.5f);
+		bool ret = false;
+		for (int i = -2; i < 2 && !ret; ++i) {
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, heightHero + 0.01f);
+		}
+		return ret;
 	}
 	
 	void OnCollisionEnter(Collision collision){
@@ -238,6 +246,7 @@ public class PlayerController : Actor {
 		}
 		
 	}
+	
 	void updateModelWeapon() {
 		
 		switch(weapon){
