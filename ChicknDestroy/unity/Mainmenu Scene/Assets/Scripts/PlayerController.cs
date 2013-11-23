@@ -16,7 +16,8 @@ public class PlayerController : MonoBehaviour {
 	
 	//sonido
 	public AudioSource sonidoSalto;
-	public AudioSource sonidoDisparo;
+	public AudioSource sonidoDisparoEscopeta;
+	public AudioSource sonidoDisparoPistola;
 	public AudioSource sonidoPowerUp;
 	public AudioSource sonidoEscudo; 
 	
@@ -126,6 +127,8 @@ public class PlayerController : MonoBehaviour {
 			
 		if (!disparo && Input.GetButtonDown("Fire2")) {
 			GameObject novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+			GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
+			b.setEquip(1);
 			novaGranada.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 			//disparo = true;
 		}
@@ -162,10 +165,10 @@ public class PlayerController : MonoBehaviour {
 							myAnim["atacarDerCorriendo"].speed = 3;
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
 							GameObject nouTirEscopeta = (GameObject) Instantiate (balaEscopeta, sortidaBalaDretaCorrent.transform.position, sortidaBalaDretaCorrent.transform.rotation);
-							GestioBala b = nouTirEscopeta.GetComponent("GestioBala") as GestioBala;
+							GestioTir b = nouTirEscopeta.GetComponent("GestioTir") as GestioTir;
 							b.setEquip(1);
 							nouTirEscopeta.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-							sonidoDisparo.Play();
+							sonidoDisparoEscopeta.Play();
 							disparo = false;
 						}
 						else myAnim.Play("correrDerecha");
@@ -192,10 +195,10 @@ public class PlayerController : MonoBehaviour {
 							myAnim["atacarIzqCorriendo"].speed = 3;
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);;
 							GameObject nouTirEscopeta = (GameObject) Instantiate (balaEscopeta, sortidaBalaEsquerraCorrent.transform.position, sortidaBalaEsquerraCorrent.transform.rotation);
-							GestioBala b = nouTirEscopeta.GetComponent("GestioBala") as GestioBala;
+							GestioTir b = nouTirEscopeta.GetComponent("GestioTir") as GestioTir;
 							b.setEquip(1);
 							nouTirEscopeta.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-							sonidoDisparo.Play();
+							sonidoDisparoEscopeta.Play();
 							disparo = false;
 							disparo = false;
 						}
@@ -221,10 +224,10 @@ public class PlayerController : MonoBehaviour {
 						myAnim["atacarDer"].speed = 3;
 						myAnim.Play("atacarDer",PlayMode.StopAll);
 						GameObject nouTirPistola = (GameObject) Instantiate (balaPistola, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-						GestioBala b = nouTirPistola.GetComponent("GestioBala") as GestioBala;
+						GestioTir b = nouTirPistola.GetComponent("GestioTir") as GestioTir;
 						b.setEquip(1);
 						nouTirPistola.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-						sonidoDisparo.Play();
+						sonidoDisparoPistola.Play();
 						disparo = false;
 						animTime = Time.time;
 					}
@@ -251,10 +254,10 @@ public class PlayerController : MonoBehaviour {
 						myAnim["atacarIzq"].speed = 3;
 						myAnim.Play("atacarIzq",PlayMode.StopAll);
 						GameObject nouTirEscopeta = (GameObject) Instantiate (balaEscopeta, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-						GestioBala b = nouTirEscopeta.GetComponent("GestioBala") as GestioBala;
+						GestioTir b = nouTirEscopeta.GetComponent("GestioTir") as GestioTir;
 						b.setEquip(1);
 						nouTirEscopeta.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-						sonidoDisparo.Play();
+						sonidoDisparoEscopeta.Play();
 						disparo = false;
 						animTime = Time.time;
 					}
