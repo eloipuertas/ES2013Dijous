@@ -82,7 +82,7 @@ public class AgentNpc : FSM {
 		
 		targetEnemy = false;
 		nextTarget = rutaActual[keyPosActual];
-		Debug.Log("####NPC GO TO -------> "+nextTarget);
+		//Debug.Log("####NPC GO TO -------> "+nextTarget);
 		relPos = nextTarget - transform.position;
 		bool next = false;
 		
@@ -381,7 +381,7 @@ public class AgentNpc : FSM {
 		//Debug.Log(this.getHealthPoints());
 		if (this.getHealth() <= 0) curState = FSM.Dead;
 		//if (pla.getHealthPoints() <=0) curState = FSM.None;
-		Debug.Log("Current STATE: "+curState);
+	//	Debug.Log("Current STATE: "+curState);
 
 	}
 	

@@ -12,13 +12,9 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	public AudioSource sonidoSalto;
-	public AudioSource sonidoDisparo;
-	public AudioSource sonidoPowerUp;
+	public AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
 	
-	public GameObject bala;
-	public GameObject sortidaBalaDreta;
-	public GameObject sortidaBalaEsquerra;
+	public GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra;
 	
 	private float animTime;
 	private float animDuration = 0.3f;
@@ -50,10 +46,10 @@ public class PlayerController : Actor {
 	
 	private Rigidbody rigid;
 	
-	private GameObject gre;
-	private GameObject grk;
+	private GameObject gre, grk;
 	
-
+	
+	private bool esBajable;
 	
 	void Start () {
 		
@@ -76,6 +72,7 @@ public class PlayerController : Actor {
 		updateModelWeapon();
 		lastDirection = stopDer;
 		
+		esBajable = false;
 		disparo = false;
 	}
 	
@@ -83,6 +80,7 @@ public class PlayerController : Actor {
 		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
+		float rawVertical = Input.GetAxisRaw("Vertical");
 		
 		if (!disparo && Input.GetButtonDown("Fire1")) {
 			disparo = true;		
@@ -94,10 +92,13 @@ public class PlayerController : Actor {
 		
 		
 		if (isGround()) {
-			if (Input.GetButtonDown("Jump")) {
+			if (rawVertical > 0) {
 				sonidoSalto.Play();
 				rigid.velocity += Vector3.up * jumpHeight;
-			}		
+			}
+			else if(rawVertical < 0 && esBajable) {
+				transform.position = new Vector3(transform.position.x, transform.position.y - 50, transform.position.z);
+			}
 		}
 		
 		//Actualiza la posicion del personaje
@@ -244,7 +245,11 @@ public class PlayerController : Actor {
 		if(collision.gameObject.tag == "escopeta_off") {
 				sonidoPowerUp.Play();
 		}
-		
+		if (collision.gameObject.layer == 8) {
+			esBajable = true;
+		}else {
+			esBajable = false;
+		}
 	}
 	
 	void updateModelWeapon() {
