@@ -1,18 +1,15 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController : Actor {
 	
-	//Atributos de personaje
-	private int health;
-	private GameObject primaryWeapon;
-	private GameObject secondaryWeapon;
 	
 	//Atributos de control
-	private float gravity = 200;
+	//private float gravity = 0;
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
+	private float heightHero;
 	
 	//sonido
 	public AudioSource sonidoSalto;
@@ -25,22 +22,30 @@ public class PlayerController : MonoBehaviour {
 	
 	private float animTime;
 	private float animDuration = 0.3f;
-	
+/*	
 	private float currentSpeed;
 	private float targetSpeed;
-	
-	
+*/
 	private int movDer = 1;
 	private int movIzq = 2;
 	private int stopDer = 3;
 	private int stopIzq = 4;
 	private bool disparo= false;
-
-	private int lastDirection;
-	private float heightHero;
 	
-	private HUD hud;
-	private GameManager gameManager;
+	private int lastMovement;
+	private int lastDirection;
+	private int currentState;
+	
+	private const int STATE_ALIVE = 1;
+	private const int STATE_DEAD = 2;
+	
+	private const int MOV_STOP = 1;
+	private const int MOV_RUNNING = 2;
+	private const int MOV_ATACKING = 3;
+	
+	private const int DIR_IZQUIERDA = 1;
+	private const int DIR_DERECHA = 2;
+	
 	private Animation myAnim;
 	
 	private Rigidbody rigid;
@@ -48,66 +53,34 @@ public class PlayerController : MonoBehaviour {
 	private GameObject gre;
 	private GameObject grk;
 	
-	public bool isKatana;
+
 	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		
 		gre = GameObject.Find("gre");
 		grk = GameObject.Find("grk");
-		if (isKatana) {
-			myAnim = gre.animation;
-			grk.SetActive(false);
-			gre.SetActive(true);
-		}
-		else {
-			myAnim = grk.animation;
-			gre.SetActive(false);
-			grk.SetActive(true);
-		}
-	
-		lastDirection = stopDer;
-		
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
-		health = 100;
 		
-		disparo = true;
+		health = 100;
+		currentState = STATE_ALIVE;
+		
+		
+		
 		
 		heightHero = rigid.collider.bounds.extents.y;
+		
+		weapon = WEAPON_ESCOPETA;
+		updateModelWeapon();
+		lastDirection = stopDer;
+		
+		disparo = false;
 	}
 	
-	private bool isGround() {
-		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.5f);
-	}
-	
-	void OnCollisionEnter(Collision collision){
-		if(collision.gameObject.tag == "upVida"){ 
-				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
- 				heal(50);
-		}
-		
-		if(collision.gameObject.tag == "escopeta_off") {
-				sonidoPowerUp.Play();
-		}
-		
-	}
-	
-	void Update () {
-		
-		if (isKatana) {
-			myAnim = gre.animation;
-			grk.SetActive(false);
-			gre.SetActive(true);
-		}
-		else {
-			myAnim = grk.animation;
-			gre.SetActive(false);
-			grk.SetActive(true);
-		}
-		
+	void FixedUpdate(){
+		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
 		
@@ -129,7 +102,7 @@ public class PlayerController : MonoBehaviour {
 		
 		//Actualiza la posicion del personaje
 		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
-		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
+		//rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
 	
 		
 		if(rigid.velocity.y > 10) {
@@ -150,11 +123,7 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarDerCorriendo"].speed = 3;
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
-							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-							nouTir.AddComponent("DestruirBala");
-							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-							sonidoDisparo.Play();
-							disparo = false;
+							realizarTiro(DIR_DERECHA);
 						}
 						else myAnim.Play("correrDerecha");
 						animTime = Time.time;
@@ -179,12 +148,7 @@ public class PlayerController : MonoBehaviour {
 						if(disparo) {
 							myAnim["atacarIzqCorriendo"].speed = 3;
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
-							GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-							nouTir.AddComponent("DestruirBala");
-							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-							sonidoDisparo.Play();
-							disparo = false;
-							disparo = false;
+							realizarTiro(DIR_IZQUIERDA);
 						}
 						else myAnim.Play("correrIzquierda");
 						animTime = Time.time;
@@ -207,11 +171,7 @@ public class PlayerController : MonoBehaviour {
 					if (disparo && currentTime > animDuration) {
 						myAnim["atacarDer"].speed = 3;
 						myAnim.Play("atacarDer",PlayMode.StopAll);
-						GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-						nouTir.AddComponent("DestruirBala");
-						nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-						sonidoDisparo.Play();
-						disparo = false;
+						realizarTiro(DIR_DERECHA);
 						animTime = Time.time;
 					}
 					else if (rigid.velocity.x > 0) {
@@ -236,11 +196,7 @@ public class PlayerController : MonoBehaviour {
 					if(currentTime > animDuration && disparo) {
 						myAnim["atacarIzq"].speed = 3;
 						myAnim.Play("atacarIzq",PlayMode.StopAll);
-						GameObject nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-						nouTir.AddComponent("DestruirBala");
-						nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-						sonidoDisparo.Play();
-						disparo = false;
+						realizarTiro(DIR_IZQUIERDA);
 						animTime = Time.time;
 					}
 					else if(rigid.velocity.x < 0) {
@@ -263,49 +219,74 @@ public class PlayerController : MonoBehaviour {
 				
 			}
 		}
-		
 	}
 	
-	public int getHealthPoints() {
-		return health;
+	void Update () {
+		// Va muy rapido, nada aqui :D
 	}
 	
-	public void setHealthPoints(int n) {
-		health = n;
-		fireHealthNotification();
-		if (health <= 0) {
-			fireDeathNotification();
+	/********* CODIGO AUXILIAR **************/
+	
+	private bool isGround() {
+		bool ret = false;
+		for (int i = -2; i < 2 && !ret; ++i) {
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, heightHero + 0.01f);
 		}
+		return ret;
 	}
 	
-	public void heal(int n){
-		setHealthPoints(Mathf.Min(100,health+n));
-	}
-	
-	
-	public string getPrimaryWeapon() {
-		return primaryWeapon.ToString();
-	}
-	
-	public string getSecondaryWeapon() {
-		return secondaryWeapon.ToString();
-	}
-	
-	public Vector3 getCoordinates() {
-		return transform.position;
-	}
-	
-	public void setDamage(int damage) {
-		if ((health - damage) > 0) 
-			setHealthPoints(health - damage);
-		else 
-			setHealthPoints(0);
-	}
-	private void fireHealthNotification() {
-		this.hud.notifyHealthChange(this.health);
-	}
-	private void fireDeathNotification() {
-		this.gameManager.notifyPlayerDeath();
+	void OnCollisionEnter(Collision collision){
+		if(collision.gameObject.tag == "upVida"){ 
+				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
+ 				heal(50);
+		}
+		
+		if(collision.gameObject.tag == "escopeta_off") {
+				sonidoPowerUp.Play();
+		}
 		
 	}
+	
+	void updateModelWeapon() {
+		
+		switch(weapon){
+			case WEAPON_KATANA:
+				myAnim = grk.animation;
+				grk.SetActive(true);
+				gre.SetActive(false);
+				break;
+			case WEAPON_ESCOPETA:
+				myAnim = gre.animation;
+				gre.SetActive(true);
+				grk.SetActive(false);
+				break;
+			default:
+				break;
+		}
+		
+	}
+	
+	void realizarTiro(int direccion) {
+		GameObject nouTir = null;
+		
+		switch(direccion){
+			case DIR_IZQUIERDA:
+				nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+				nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+				break;
+			case DIR_DERECHA:
+				nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+				nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+				break;
+			default:
+				break;
+		}
+		
+		nouTir.AddComponent("DestruirBala");
+		sonidoDisparo.Play();
+		disparo = false;
+	}
+	
+
+	
 }
