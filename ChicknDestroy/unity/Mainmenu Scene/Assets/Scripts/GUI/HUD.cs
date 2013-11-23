@@ -5,6 +5,7 @@ public class HUD : MonoBehaviour{
 	private static int MESSAGE_POOL = 10;
 	
 	private bool current_player_robotic;
+	private string team;
 	
 	private PlayerInterface player;
 	private GameInterface game;
@@ -40,11 +41,16 @@ public class HUD : MonoBehaviour{
 		this.robotic = false;
 		this.philo = false;
 		
+		this.current_player_robotic = true;
+		
+		if (this.current_player_robotic == true) this.team = "robot";
+		else this.team = "philo";
+		
 		int isegment = Screen.width/10;
 		
 		this.weapons = new SpriteWeaponControl(new Rect(10,10,100,40));
 		
-		this.life = new Lifebar(new Vector2((Screen.width/2)-100,20),
+		this.life = new Lifebar(new Vector2((Screen.width/2)-180,20),
 			new Vector2(200,60),
 			"LifeBar/life_bar_",
 			new Vector2(0,0),
@@ -54,25 +60,24 @@ public class HUD : MonoBehaviour{
 		this.bg_life = new Sprite(new Rect(this.life.getXY().x-10,this.life.getXY().y-13,
 			this.life.getSize().x+20,this.life.getSize().y+10),"LifeBar/hudVida");
 		
-		this.shield = new Lifebar(new Vector2(this.life.getXY().x+(this.life.getSize().x+10),this.life.getXY ().y),
-			new Vector2(40,40),
-			"Shield/shield_",
+		this.shield = new Lifebar(new Vector2(this.life.getXY().x+(this.life.getSize().x+20),this.life.getXY ().y-7),
+			new Vector2(100,100),
+			"escudo/escudo",
 			new Vector2(0,0),
-			21, // n-Images of the Shield
-			50, // Barrier max points
+			10, // n-Images of the Shield
+			100, // Barrier max points
 			0); // barrier current points.
 		this.bg_shield = new Sprite(new Rect(this.shield.getXY ().x-5,this.shield.getXY ().y-5,
-			this.shield.getSize ().x+10,this.shield.getSize ().y+10),"Shield/hudEscudo");
+			this.shield.getSize ().x+10,this.shield.getSize ().y+10),"escudo/hudEscudo");
 		
-		/*this.pause_menu = new PauseMenu(this,
-			new Vector2(100,40), // Origin
-			new Vector2(500,500), // end
-			new Vector2(0,20),	// Deviation
-			"PauseMenu", // Menu layout
-			"titulo", // Menu Title
-			"button_"); // Button pattern.*/
+		this.pause_menu = new PauseMenu(this,
+			new Vector2((Screen.width/2)-isegment+10,Screen.height/5), // Origin
+			new Vector2((Screen.width/2)+2*isegment,(int)(Screen.height*3.5)/5), // end
+			new Vector2(0,50),	// Deviation
+			"pausa/pauseMenu"+this.team, // Menu layout
+			this.team); // Team
 		
-		this.game_points = new Points(new Vector2(this.life.getXY().x+this.life.getSize().x+isegment,20),
+		this.game_points = new Points(new Vector2(this.bg_shield.getXY().x+this.bg_shield.getSize ().x+20,20),
 			new Vector2(20,20),
 			"Numbers/",
 			new Vector2(20,0),
@@ -93,7 +98,6 @@ public class HUD : MonoBehaviour{
 	
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("Starting HUD debug message");
 		this.skin = new GUISkin();
 		
 		initComponents();
@@ -105,11 +109,13 @@ public class HUD : MonoBehaviour{
 	void OnGUI() {
 		GUI.skin = this.skin;
 		this.bg_life.render();
+		this.bg_shield.render ();
 		
 		// Player Information
 		this.weapons.render ();
 		
 		this.life.render();
+		this.shield.render ();
 		this.game_points.render(this.player.getPlayerPoints());
 		
 		this.pause_button.render();
@@ -117,12 +123,21 @@ public class HUD : MonoBehaviour{
 		this.mes.render();
 		
 		//if(isPaused())this.pause_menu.render();
-		if(isPaused())stub_pauseMenu();
+		if(isPaused())pauseMenu();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//GUI.Label(rhealth,player.getHealthPoints().ToString());
+	}
+	private void pauseMenu() {
+		this.pause_menu.setVisible(true);
+		this.pause_menu.render();
+	}
+	
+	public void resume() {
+		this.pause_menu.setVisible (false);
+		this.pause_button.setToggled (false);
 	}
 	
 	void stub_pauseMenu() {
@@ -137,10 +152,6 @@ public class HUD : MonoBehaviour{
 	
 	public bool isPaused() {
 		return this.pause_button.isToggled();
-	}
-	
-	public void resume() {
-		this.pause_button.setToggled(false);
 	}
 	
 	// Notify section.

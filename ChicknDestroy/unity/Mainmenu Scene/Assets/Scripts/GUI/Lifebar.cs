@@ -20,6 +20,7 @@ public class Lifebar : SpriteGroup{
 		this.max_life = max_life;
 		this.current_life = clife;
 		this.irender = calculateIRender();
+		if (this.irender>=this.n)this.irender = this.n-1;
 	}
 	
 	private int calculateIRender() {
