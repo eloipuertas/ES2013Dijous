@@ -11,7 +11,7 @@ public class DynamicObjects : MonoBehaviour {
 	private float [] timeLife = {0F,0F,0F};//30F
 	private float [] timeShields = {0F};//60F
 	private float [] timeGranades = {0F,0F,0F};//30F
-	private float [] timeGuns = {0F,0F};//30F
+	private float [] timeGuns = {0F};//30F
 	
 	// Use this for initialization
 	void Start () {//creation of all dyynamic objects
@@ -118,7 +118,7 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void checkGuns(){
 		bool respawn = false;
-		for(int i=0;i<2;i++){
+		for(int i=0;i<1;i++){
 			if(GameObject.FindWithTag("gun"+(i+1)) == null){
 				timeGuns[i] -= Time.deltaTime;
 				if(timeGuns[i] <= 0F)
@@ -276,18 +276,10 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.FindWithTag("gun1") == null && timeGuns[0] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/gun")) as GameObject;
 			x.tag = "gun1";
-			x.transform.position = new Vector3(7530.288F,595.5858F,2.900288F);
+			x.transform.position = new Vector3(-291.5449F,115.6344F,-8.241943F);
 			x.transform.eulerAngles = new Vector3(0F,0F,0F);
-			x.transform.localScale = new Vector3(50.72319F,26.71242F,41.89515F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
 			timeGuns[0] = 30F;
-		}
-		if(GameObject.FindWithTag("gun2") == null && timeGuns[1] <= 0){
-			x = Instantiate(Resources.Load("ObjectPrefabs/gun")) as GameObject;
-			x.tag = "gun2";
-			x.transform.position = new Vector3(7530.288F,595.5858F,2.900288F);
-			x.transform.eulerAngles = new Vector3(0F,0F,0F);
-			x.transform.localScale = new Vector3(50.72319F,26.71242F,41.89515F);
-			timeGuns[1] = 30F;
 		}
 	}
 	
