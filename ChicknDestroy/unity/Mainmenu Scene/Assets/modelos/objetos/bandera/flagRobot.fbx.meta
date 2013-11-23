@@ -1,18 +1,14 @@
 fileFormatVersion: 2
-guid: cb07569179391f043b2c3e0baf1fa727
+guid: 74dabfb9ccd56ed489f1945374840c29
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
-    100000: Camera
-    100002: Cylinder_001
-    100004: //RootNode
-    100006: Lamp
-    100008: Plane_001
-    400000: Camera
-    400002: Cylinder_001
-    400004: //RootNode
-    400006: Lamp
-    400008: Plane_001
+    100000: Cylinder_001
+    100002: //RootNode
+    100004: Plane_001
+    400000: Cylinder_001
+    400002: //RootNode
+    400004: Plane_001
     2300000: Cylinder_001
     2300002: Plane_001
     3300000: Cylinder_001
@@ -21,7 +17,6 @@ ModelImporter:
     4300002: Cylinder_001
     7400000: Default Take
     9500000: //RootNode
-    11100000: //RootNode
   materials:
     importMaterials: 1
     materialName: 0
@@ -34,28 +29,7 @@ ModelImporter:
     animationPositionError: .5
     animationScaleError: .5
     animationWrapMode: 0
-    clipAnimations:
-    - name: Default Take
-      takeName: Default Take
-      firstFrame: 1
-      lastFrame: 2
-      wrapMode: 2
-      orientationOffsetY: 0
-      level: 0
-      cycleOffset: 0
-      loop: 0
-      loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
-      loopBlendPositionXZ: 0
-      keepOriginalOrientation: 0
-      keepOriginalPositionY: 1
-      keepOriginalPositionXZ: 0
-      heightFromFeet: 0
-      mirror: 0
-      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-      curves: []
-      transformMask: []
+    clipAnimations: []
     isReadable: 1
   meshes:
     lODScreenPercentages: []
@@ -93,5 +67,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   additionalBone: 1
-  animationType: 0
+  animationType: 2
   userData: 
