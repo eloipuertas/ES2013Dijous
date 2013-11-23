@@ -15,17 +15,21 @@ public class GestioBala : MonoBehaviour {
 	
 	void OnCollisionEnter(Collision collision){
 		
-		if (collision.gameObject.tag == "NPC" && equip == 1){
+		if (collision.gameObject.tag == "NPC" && equip == 1){ //tir del player i impacte amb el NPC
 			
 			GameObject expl = null;
 			audioDany.Play();
 			
 			ContactPoint contact = collision.contacts[0]; //punt de contacte de la bala amb el NPC
 			
-			if (gameObject.tag == "balaPistola") 
+			if (gameObject.tag == "balaPistola") {
 				expl = Instantiate(sangPistola, contact.point, Quaternion.identity) as GameObject;
-			else if (gameObject.tag == "balaEscopeta")
+				//fer dany al NPC (menys que l'escopeta)
+			}
+			else if (gameObject.tag == "balaEscopeta") {
 				expl = Instantiate(sangEscopeta, contact.point, Quaternion.identity) as GameObject;
+				//fer dany al NPC
+			}
 			
 	    	Destroy(expl, (float)0.2);
 		}
