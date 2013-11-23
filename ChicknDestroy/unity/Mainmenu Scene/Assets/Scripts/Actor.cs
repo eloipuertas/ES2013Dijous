@@ -16,6 +16,8 @@ public class Actor : MonoBehaviour {
 	
 	protected const int WEAPON_KATANA = 1;
 	protected const int WEAPON_ESCOPETA = 2;
+	protected const int PHILO_TEAM = 1;
+	protected const int ROBOT_TEAM = 2;
 	
 	protected int team;
 

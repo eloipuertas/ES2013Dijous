@@ -63,7 +63,10 @@ public class AgentNpc : FSM {
 		float d,distance = float.PositiveInfinity;
 		// detecta el enemigo mas cercano
 		for (int i=0; i<colls.Length; i++){
-			if(colls[i].CompareTag("Player")){ // Comprobar rivales
+			/* Para cuando este disponible getTeam().
+			Actor a = colls[i].gameObject.GetComponent(typeof(Actor)) as Actor;
+			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
+			if(colls[i].CompareTag("Player")){ // Comprobar rivales*/
 				d = distance3D(transform.position, colls[i].transform.position);
 				if (d < distance){
 					d = distance;
@@ -263,7 +266,11 @@ public class AgentNpc : FSM {
 			if (nextTarget.z < 1 || Mathf.Abs(relPos.x) > 15)
 				transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
 
-
+		
+		
+			/*Actor a = colls[i].gameObject.GetComponent(typeof(Actor)) as Actor;
+			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
+		
 			// Ha detectado algo a distancia "stopDistance" delante del player?:
 			GameObject detected = raycastFront(stopDistance);
 			if(detected != null){	
@@ -277,6 +284,23 @@ public class AgentNpc : FSM {
 						curState = FSM.Jump;
 
 						break;
+				
+				
+
+				/* Para cuando este disponible getTeam().
+				 	case "Player":
+					case "NPC":
+					case "Allied":
+						Actor a = detected.GetComponent(typeof(Actor)) as Actor;
+						if(isEnemy(a)){ // Comprobar rivales
+							curState = FSM.Attack;
+							animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+						} else {
+							curState = FSM.Jump;
+						}
+						break;
+				*/
+				
 					default:
 						curState = FSM.Jump;
 						//print("There is something in front of the object!");
@@ -492,6 +516,8 @@ public class AgentNpc : FSM {
 		}
 		return ground;
 	}
-	
+	private bool isEnemy(Actor a){
+		return getTeam() != a.getTeam();
+	}
 }
 
