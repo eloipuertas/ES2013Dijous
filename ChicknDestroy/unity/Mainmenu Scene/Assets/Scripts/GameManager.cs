@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void notifyPlayerDeath() {
-		audio.Play();
+		//audio.Play();
 		this.looseConditionLastUpdate = true;
 	}
 	
