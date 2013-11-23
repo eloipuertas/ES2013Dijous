@@ -124,9 +124,8 @@ public class PlayerController : MonoBehaviour {
 		}
 			
 		if (!disparo && Input.GetButtonDown("Fire2")) {
-			GameObject nouTir = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-			nouTir.AddComponent("ExplosioGranada");
-			nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+			GameObject novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+			novaGranada.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 			//disparo = true;
 		}
 		
