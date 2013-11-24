@@ -11,7 +11,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 		Team = PlayerPrefs.GetInt("Team");
 		
 		Chicken = 1;
-		Team = Actor.PHILO_TEAM;	
+		Team = Actor.ROBOT_TEAM;
 		
 		setPlayer();
 		setAllyTeam();
@@ -106,13 +106,13 @@ public class DynamicChickenCreation : MonoBehaviour {
 	}
 	
 	GameObject setPhiloChicken3(){
-		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_graduated")) as GameObject;
 		c.name = "Philo3";
 		return c;
 	}
 	
 	GameObject setPhiloChicken4(){
-		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_4eyes")) as GameObject;
 		c.name = "Philo4";
 		return c;
 	}
