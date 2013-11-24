@@ -12,10 +12,13 @@ public class Actor : MonoBehaviour {
 	protected HUD hud =  null;
 	protected GameManager gameManager = null;
 
-	protected int weapon;
+	public int weapon;
 	
-	protected const int WEAPON_KATANA = 1;
-	protected const int WEAPON_ESCOPETA = 2;
+	public const int WEAPON_KATANA = 1;
+	public const int WEAPON_ESCOPETA = 2;
+	public const int WEAPON_PISTOLA = 3;
+	public const int PHILO_TEAM = 1;
+	public const int ROBOT_TEAM = 2;
 	
 	protected int team;
 
@@ -66,7 +69,8 @@ public class Actor : MonoBehaviour {
 	public int getShield(){ return shield; }
 	public void addShield(int s){ setShield(Mathf.Min(100,shield+s)); }
 	
-	public void setWeapon(int weapon){ this.weapon = weapon; }
+	protected virtual void updateModelWeapon(){}
+	public void setWeapon(int weapon){ this.weapon = weapon; updateModelWeapon();}
 	public int getWeapon(){ return weapon; }
 
 	public void setTeam(int team){ this.team=team; }

@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour {
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
 		Physics.gravity = new Vector3(0, -gravity, 0);
+		/*
 		GameObject go;
 		
 		if (GameSelRobot)
@@ -25,7 +26,7 @@ public class GameManager : MonoBehaviour {
 			go = GameObject.FindGameObjectWithTag("NPC");
 		
 		
-		cam.SetTarget(go.transform);
+		cam.SetTarget(go.transform);*/
 	}
 	// Update is called once per frame
 	void Update () {
@@ -78,5 +79,9 @@ public class GameManager : MonoBehaviour {
 	private void endGame() {
 		if(loseOrWinTime <= 0F || Input.anyKeyDown)//when 5 seconds of the timer elapsed return to main menu
 			Application.LoadLevel(0);
+	}
+	
+	public void setTarget(Transform tr){
+		cam.SetTarget(tr.transform);
 	}
 }

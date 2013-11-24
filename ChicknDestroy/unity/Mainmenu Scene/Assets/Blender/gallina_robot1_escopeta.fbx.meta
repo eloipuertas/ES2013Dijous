@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 6dc641137645ea44a8bacfc0b4f02318
+guid: cce98c10338e699418edcea73f47b68e
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -80,34 +80,32 @@ ModelImporter:
     4300000: Cylinder
     4300002: Cube_002
     7400000: Default Take
-    7400002: caidaDerecha
-    7400004: caidaIzquierda
-    7400006: correrDerecha
-    7400008: correrIzquierda
-    7400010: disparaEscopetaDer
-    7400012: disparaEscopetaDerCorriendo
-    7400014: disparaEscopetaIzq
-    7400016: disparaEscopetaIzqCorriendo
-    7400018: giroDerechaIzq
-    7400020: giroIzquierdaDerecha
-    7400022: golpearkatanaDer
-    7400024: golpearkatanaIzq
-    7400026: paradaDerecha
-    7400028: paradaIzquierda
-    7400030: RecogerItemDer
-    7400032: recogerItemIzq
-    7400034: saltarDerecha
-    7400036: saltarIzquierda
-    7400038: saltoVerticalDer
-    7400040: saltoVerticalIz
-    7400042: atacarDer
-    7400044: atacarDerCorriendo
-    7400046: atacarIzq
-    7400048: atacarIzqCorriendo
-    7400050: giroDerIzq
-    7400052: giroIzqDer
-    7400054: recogerItemDer
-    7400056: saltoVerticalIzq
+    7400002: atacarDer
+    7400004: atacarDerCorriendo
+    7400006: atacarIzq
+    7400008: atacarIzqCorriendo
+    7400010: atacarSecDer
+    7400012: atacarSecDerCorriendo
+    7400014: atacarSecIzq
+    7400016: atacarSecIzqCorriendo
+    7400018: caidaDerecha
+    7400020: caidaIzquierda
+    7400022: correrDerecha
+    7400024: correrIzquierda
+    7400026: giroDerIzq
+    7400028: giroIzqDer
+    7400030: golpearkatanaDer
+    7400032: golpearkatanaIzq
+    7400034: muerteDerecha
+    7400036: muerteIzquierda
+    7400038: paradaDerecha
+    7400040: paradaIzquierda
+    7400042: recogerItemDer
+    7400044: recogerItemIzq
+    7400046: saltarDerecha
+    7400048: saltarIzquierda
+    7400050: saltoVerticalDer
+    7400052: saltoVerticalIzq
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube_002

@@ -5,27 +5,19 @@ public class PlayerController : Actor {
 	
 	
 	//Atributos de control
-	//private float gravity = 0;
+	
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
 	private float heightHero;
 	
 	//sonido
-	public AudioSource sonidoSalto;
-	public AudioSource sonidoDisparo;
-	public AudioSource sonidoPowerUp;
-	
-	public GameObject bala;
-	public GameObject sortidaBalaDreta;
-	public GameObject sortidaBalaEsquerra;
+	private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
+	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra;
 	
 	private float animTime;
 	private float animDuration = 0.3f;
-/*	
-	private float currentSpeed;
-	private float targetSpeed;
-*/
+
 	private int movDer = 1;
 	private int movIzq = 2;
 	private int stopDer = 3;
@@ -50,25 +42,42 @@ public class PlayerController : Actor {
 	
 	private Rigidbody rigid;
 	
-	private GameObject gre;
-	private GameObject grk;
+	private GameObject gre, grk, grp;
 	
-
+	
+	private bool esBajable;
 	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		gre = GameObject.Find("gre");
-		grk = GameObject.Find("grk");
+		Debug.Log("NAME: "+this.gameObject.name);
+		gre = GameObject.Find(gameObject.name+"/gre");
+		grk = GameObject.Find(gameObject.name+"/grk");
+		grp = GameObject.Find(gameObject.name+"/grp");
+		
+		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
+		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
+		
+		bala = GameObject.FindGameObjectWithTag("bala");
+		
+		sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
+		sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
+		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
+		
+		
+		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
+		//sortidaBalaDreta.transform.rotation = Quaternion.identity;
+		
+		sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
+		//sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
+		gameManager.setTarget(this.transform);
+		
 		health = 100;
 		currentState = STATE_ALIVE;
-		
-		
-		
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
@@ -76,13 +85,16 @@ public class PlayerController : Actor {
 		updateModelWeapon();
 		lastDirection = stopDer;
 		
+		esBajable = false;
 		disparo = false;
 	}
 	
 	void FixedUpdate(){
+		
 		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
+		float rawVertical = Input.GetAxisRaw("Vertical");
 		
 		if (!disparo && Input.GetButtonDown("Fire1")) {
 			disparo = true;		
@@ -94,10 +106,13 @@ public class PlayerController : Actor {
 		
 		
 		if (isGround()) {
-			if (Input.GetButtonDown("Jump")) {
+			if (rawVertical > 0) {
 				sonidoSalto.Play();
 				rigid.velocity += Vector3.up * jumpHeight;
-			}		
+			}
+			else if(rawVertical < 0 && esBajable) {
+				transform.position = new Vector3(transform.position.x, transform.position.y - 50, transform.position.z);
+			}
 		}
 		
 		//Actualiza la posicion del personaje
@@ -230,7 +245,7 @@ public class PlayerController : Actor {
 	private bool isGround() {
 		bool ret = false;
 		for (int i = -2; i < 2 && !ret; ++i) {
-			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, heightHero + 0.01f);
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
 		}
 		return ret;
 	}
@@ -244,21 +259,30 @@ public class PlayerController : Actor {
 		if(collision.gameObject.tag == "escopeta_off") {
 				sonidoPowerUp.Play();
 		}
-		
+		if (collision.gameObject.layer == 8) {
+			esBajable = true;
+		}else {
+			esBajable = false;
+		}
 	}
 	
 	void updateModelWeapon() {
 		
 		switch(weapon){
 			case WEAPON_KATANA:
+				
 				myAnim = grk.animation;
 				grk.SetActive(true);
 				gre.SetActive(false);
+				grp.SetActive(false);
+				
+			
 				break;
 			case WEAPON_ESCOPETA:
 				myAnim = gre.animation;
 				gre.SetActive(true);
 				grk.SetActive(false);
+				grp.SetActive(false);
 				break;
 			default:
 				break;
