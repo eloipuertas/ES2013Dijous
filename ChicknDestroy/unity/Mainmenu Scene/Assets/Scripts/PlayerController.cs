@@ -46,7 +46,7 @@ public class PlayerController : Actor {
 	
 	private Rigidbody rigid;
 	
-	private GameObject gre, grk;
+	private GameObject bgre, bgrk, bgrp;
 	
 	
 	private bool esBajable;
@@ -54,8 +54,10 @@ public class PlayerController : Actor {
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		gre = GameObject.Find("gre");
-		grk = GameObject.Find("grk");
+		
+		bgre = GameObject.Find("bcgre");
+		bgrk = GameObject.Find("bcgrk");
+		bgrp = GameObject.Find("bcgrp");
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
@@ -126,7 +128,7 @@ public class PlayerController : Actor {
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
 							realizarTiro(DIR_DERECHA);
 						}
-						else myAnim.Play("correrDerecha");
+						else myAnim.Play("correrDer");
 						animTime = Time.time;
 					}
 					lastDirection = movDer;
@@ -151,7 +153,7 @@ public class PlayerController : Actor {
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
 							realizarTiro(DIR_IZQUIERDA);
 						}
-						else myAnim.Play("correrIzquierda");
+						else myAnim.Play("correrIzq");
 						animTime = Time.time;
 					}
 					lastDirection = movIzq;
@@ -176,7 +178,7 @@ public class PlayerController : Actor {
 						animTime = Time.time;
 					}
 					else if (rigid.velocity.x > 0) {
-						myAnim.Play("correrDerecha");
+						myAnim.Play("correrDer");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
@@ -201,7 +203,7 @@ public class PlayerController : Actor {
 						animTime = Time.time;
 					}
 					else if(rigid.velocity.x < 0) {
-						myAnim.Play("correrIzquierda");
+						myAnim.Play("correrIzq");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
 						myAnim["giroIzqDer"].speed = 2;
@@ -256,14 +258,19 @@ public class PlayerController : Actor {
 		
 		switch(weapon){
 			case WEAPON_KATANA:
-				myAnim = grk.animation;
-				grk.SetActive(true);
-				gre.SetActive(false);
+				
+				myAnim = bgrk.animation;
+				bgrk.SetActive(true);
+				bgre.SetActive(false);
+				bgrp.SetActive(false);
+				
+			
 				break;
 			case WEAPON_ESCOPETA:
-				myAnim = gre.animation;
-				gre.SetActive(true);
-				grk.SetActive(false);
+				myAnim = bgre.animation;
+				bgre.SetActive(true);
+				bgrk.SetActive(false);
+				bgrp.SetActive(false);
 				break;
 			default:
 				break;
