@@ -436,9 +436,11 @@ public class AgentNpc : FSM {
 			setHealthPoints(getHealthPoints()-25);
 		*/
 		
+		/* HA D'ANAR A L'ARXIU GESTIOBALA
 		if(collision.gameObject.tag =="bala"){
 		    setDamage(60);
 		}
+		*/
 		
 				
 	}

@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
 	
+	public AudioSource audio;
+	
 	void Start () {
 		cam = GetComponent<GameCamera>();
 		this.winConditionLastUpdate = false;
@@ -59,6 +61,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void notifyPlayerDeath() {
+		//audio.Play();
 		this.looseConditionLastUpdate = true;
 	}
 	
