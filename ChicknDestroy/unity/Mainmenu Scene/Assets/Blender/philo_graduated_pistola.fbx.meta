@@ -85,6 +85,8 @@ ModelImporter:
     7400040: recogerItemIzq
     7400042: saltoVerticalDer
     7400044: saltoVerticalIzq
+    7400046: correrDerecha
+    7400048: correrIzquierda
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cylinder
