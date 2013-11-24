@@ -58,8 +58,8 @@ public class PlayerController : Actor {
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		gre = GameObject.Find("gre");
-		grk = GameObject.Find("grk");
+		gre = GameObject.Find(gameObject.name+"/gre");
+		grk = GameObject.Find(gameObject.name+"/grk");
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
@@ -247,7 +247,7 @@ public class PlayerController : Actor {
 		
 	}
 	
-	void updateModelWeapon() {
+	protected override void updateModelWeapon() {
 		
 		switch(weapon){
 			case WEAPON_KATANA:
