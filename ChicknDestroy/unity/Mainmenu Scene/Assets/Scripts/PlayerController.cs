@@ -108,7 +108,7 @@ public class PlayerController : MonoBehaviour {
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
 	void OnCollisionStay (Collision hit) { 
 		
-	    if (hit.gameObject.tag == "pl_horitzontal")
+	    if (hit.gameObject.tag == "plataforma_moviment")
 	        transform.parent = hit.transform ; 
 	    else
 	        transform.parent = null;
