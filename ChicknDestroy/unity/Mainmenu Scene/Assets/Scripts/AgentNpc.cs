@@ -36,8 +36,12 @@ public class AgentNpc : FSM {
 	private int puntuacio = 200;
 	private int radioVision = 425;
 	private int stopDistance = 40;
+	private int rangeWeapon = 0;
+	
 	
 	//Npc propierties
+	GameObject nouTir;
+	GameObject bala;
 	private Vector3 spawnPoint;
 	private Collider col;
 	private Rigidbody mas;
@@ -47,6 +51,7 @@ public class AgentNpc : FSM {
 	private Animation animations;
 	private bool derecha = true;
 	private bool dead = false;
+	private float elapsedTime = 0;
 	
 
 	
@@ -290,12 +295,26 @@ public class AgentNpc : FSM {
 			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
 		
 			// Ha detectado algo a distancia "stopDistance" delante del player?:
-			GameObject detected = raycastFront(stopDistance);
+			switch(a.getWeapon()){
+				case WEAPON_KATANA:
+						rangeWeapon = 0;
+						break;
+				case WEAPON_PISTOLA:
+						rangeWeapon = 300;
+						break;
+				case WEAPON_ESCOPETA:
+						rangeWeapon = 50;
+						break;
+				default:
+						rangeWeapon = 0;
+						break;
+			}
+			GameObject detected = raycastFront(stopDistance+rangeWeapon);
 			if(detected != null){	
 				switch(detected.tag){
 					case "Player":
 						curState = FSM.Attack;
-						animateIfExist("atacarDer","atacarIzq");
+						animateIfExist("golpearKatanaDer","golpearKatanaIzq");
 						
 						break;
 					case "NPC":
@@ -335,25 +354,208 @@ public class AgentNpc : FSM {
 		//Destroy(mas);
 		string anim = (derecha)? "atacarDer":"atacarIzq";
 		
-		if(!animations.IsPlaying(anim) && animations[anim]!=null){
+		Actor a = (Actor) this.GetComponent(typeof(Actor));
+		a.setWeapon(2);
+		animation.Stop();
+		Debug.Log("WEAPON"+a.getWeapon());
+		if(a.getWeapon() == WEAPON_KATANA){
+			Debug.Log("PORTE KATANA");
+			string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
 			
-			GameObject detected = raycastFront(stopDistance+5);
-			if(detected != null){	
-				if (detected.tag == "Player"){
-						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+			if(!animation.IsPlaying(anim) && animation[anim]!=null){
+//				if(elapsedTime > 5 && stopDistance + 60){
+//					
+//				}
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					if (detected.tag == "Player"){
+							Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+							animation.Play(anim);
+							actor.dealDamage(25);
+						
+							print("HIT");
+					} else {
+							curState = FSM.Run;
+					}
 					
-						animations.Play(anim);
-						actor.dealDamage(25);
-					
-						print("HIT");
 				} else {
-						curState = FSM.Run;
+					curState = FSM.Run;
 				}
-				
-			} else {
-				curState = FSM.Run;
 			}
 		}
+		if(a.getWeapon() == WEAPON_PISTOLA){
+			animation.Stop();
+			Debug.Log("PORTE PISTOLA");
+			//Animacion disparar
+			string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
+			
+			
+			if(!animation.IsPlaying(anim) && animation[anim]!=null){
+//				if(elapsedTime > 5 && stopDistance + 60){
+//					elapsedTime = 0;
+//				}
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					if (detected.tag == "Player"){
+							Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+							//animation.Play(anim);
+						if(elapsedTime > 1.0f){
+							
+							if(!derecha){
+						    	Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.back));
+								nouTir.rigidbody.AddForce(new Vector3(-400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}else{
+								
+								Vector3 spawnBullet = new Vector3(transform.position.x + rigidbody.collider.bounds.extents.x + 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.forward));
+								nouTir.rigidbody.AddForce(new Vector3(400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+								
+						}
+						
+							print("HIT");
+					}else if(detected.tag =="NPC"){
+						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+						if(actor.getTeam() == PHILO_TEAM){
+							curState = FSM.Run;
+							
+						}else if(actor.getTeam() == ROBOT_TEAM){
+							 
+							if(elapsedTime > 3.0f){
+							Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 90,transform.position.y+35,transform.position.z);
+							nouTir = (GameObject)Instantiate(bala,spawnBullet,transform.rotation);
+							
+							
+							nouTir.rigidbody.AddForce(new Vector3(-1000, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+							
+						}else{
+							curState = FSM.Run;
+						}
+							
+						
+					}else {
+							curState = FSM.Run;
+					}
+					
+				} else {
+					curState = FSM.Run;
+				}
+			}
+		}
+		if(a.getWeapon() == WEAPON_ESCOPETA){
+			animation.Stop();
+			Debug.Log("PORTE PISTOLA");
+			//Animacion disparar
+			string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
+			
+			
+			if(!animation.IsPlaying(anim) && animation[anim]!=null){
+//				if(elapsedTime > 5 && stopDistance + 60){
+//					elapsedTime = 0;
+//				}
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					if (detected.tag == "Player"){
+							Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+							//animation.Play(anim);
+						if(elapsedTime > 1.0f){
+							
+							if(!derecha){
+						    	Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.back));
+								nouTir.rigidbody.AddForce(new Vector3(-400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}else{
+								
+								Vector3 spawnBullet = new Vector3(transform.position.x + rigidbody.collider.bounds.extents.x + 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.forward));
+								nouTir.rigidbody.AddForce(new Vector3(400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+								
+						}
+						
+							print("HIT");
+					}else if(detected.tag =="NPC"){
+						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+						if(actor.getTeam() == PHILO_TEAM){
+							curState = FSM.Run;
+							
+						}else if(actor.getTeam() == ROBOT_TEAM){
+							 
+							if(elapsedTime > 3.0f){
+							Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 90,transform.position.y+35,transform.position.z);
+							nouTir = (GameObject)Instantiate(bala,spawnBullet,transform.rotation);
+							
+							
+							nouTir.rigidbody.AddForce(new Vector3(-1000, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+							
+						}else{
+							curState = FSM.Run;
+						}
+							
+						
+					}else {
+							curState = FSM.Run;
+					}
+					
+				} else {
+					curState = FSM.Run;
+				}
+			}
+		}
+		
+		
+		
+	}
+	
+    protected void UpdateJumpState(){
+		Debug.Log("Salte");
+
+		
+			GameObject detected = raycastFront(stopDistance);
+			if(detected != null){
+			
+				switch(detected.tag){
+					case "Player":
+						curState = FSM.Attack;
+						animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+				
+						//print("Player in front me!");
+					 	//Invoke("UpdateAttackState",0.5f);
+						break;
+					case "NPC":
+						jump ();
+						//GameObject npc = GameObject.FindGameObjectWithTag("NPC");
+						//Physics.IgnoreCollision(npc.collider,col);
+						break;
+					default:
+						jump ();
+						//print("There is something in front of the object!");
+						//Invoke("UpdateJumpState",0.4f);
+						break;
+				}
+
+			} else
+				curState = FSM.Run;
 		
 		
 		
