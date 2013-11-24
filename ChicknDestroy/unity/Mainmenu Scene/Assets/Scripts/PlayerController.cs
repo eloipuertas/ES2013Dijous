@@ -50,10 +50,13 @@ public class PlayerController : Actor {
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		
+		Debug.Log("NAME: "+this.gameObject.name);
 		gre = GameObject.Find(gameObject.name+"/gre");
 		grk = GameObject.Find(gameObject.name+"/grk");
 		grp = GameObject.Find(gameObject.name+"/grp");
+		
+		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
+		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
 		bala = GameObject.FindGameObjectWithTag("bala");
 		
@@ -61,17 +64,12 @@ public class PlayerController : Actor {
 		sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
 		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
 		
-		sortidaBalaDreta = new GameObject("sbd");
-		sortidaBalaEsquerra = new GameObject("sbe");
 		
 		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
-		sortidaBalaDreta.transform.rotation = Quaternion.identity;
+		//sortidaBalaDreta.transform.rotation = Quaternion.identity;
 		
 		sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
-		sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
-		
-		
-		
+		//sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
@@ -92,6 +90,7 @@ public class PlayerController : Actor {
 	}
 	
 	void FixedUpdate(){
+		Debug.Log("NAME: "+this.gameObject.name);
 		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
