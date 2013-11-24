@@ -2,8 +2,6 @@
 using System.Collections;
 
 public class DynamicChickenCreation : MonoBehaviour {
-	public const int PHILO_TEAM = 1;
-	public const int ROBOT_TEAM = 2;
 	
 	private int Chicken, Team;//Chicken means the chicken model's choice at StartGame scene, and Team the team's choice
 	//private ArrayList TeamList = new ArrayList();//the first element at this list will be the team chosen at StartGame scene
@@ -13,7 +11,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 		Team = PlayerPrefs.GetInt("Team");
 		
 		Chicken = 1;
-		Team = ROBOT_TEAM;	
+		Team = Actor.PHILO_TEAM;	
 		
 		setPlayer();
 		setAllyTeam();
@@ -25,20 +23,23 @@ public class DynamicChickenCreation : MonoBehaviour {
 	//This function sets the player inside the scene
 	void setPlayer(){
 		GameObject ob = CreateChicken(Team,Chicken);	
-		initAsPlayer(ob);	// EQUIPO A ACABAD ESTA FUNCION
+		initAsPlayer(ob);
+		ob.GetComponent<PlayerController>().setTeam(Team);
 	}
 	
 	void setEnemyTeam(){
 		/*
 	 	* CREATE HERE THE ENEMY TEAM DINAMICALLY
 		*/
-		int enemyTeam = (Team == PHILO_TEAM)? ROBOT_TEAM:PHILO_TEAM;
+		int enemyTeam = Team ^ 3;
 		for(int i=1; i<6; i++){
 			GameObject ob = CreateChicken(enemyTeam,i);	
 			initAsNPC(ob,false,i);	
+			ob.GetComponent<AgentNpc>().setTeam(enemyTeam);
+			ob.tag = "NPC";
 		}
 	}
-	
+
 	void setAllyTeam(){
 		/*
 	 	* CREATE HERE THE ALLY TEAM DINAMICALLY
@@ -47,6 +48,8 @@ public class DynamicChickenCreation : MonoBehaviour {
 			if (i==Chicken) continue;
 			GameObject ob = CreateChicken(Team,i);	
 			initAsNPC(ob,true,i);
+			ob.GetComponent<AgentNpc>().setTeam(Team);
+			ob.tag = "Allied";
 		}
 	}
 	
@@ -156,22 +159,27 @@ public class DynamicChickenCreation : MonoBehaviour {
 				case 1:
 					c.transform.position = new Vector3(2884.105f,-91.74977f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta3";
+					c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
 					break;
 				case 2:
 					c.transform.position = new Vector3(6099.58f,118.5825f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta4";
+					c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
 					break;
 				case 3:
 					c.transform.position = new Vector3(7870.028f,-81.72346f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta5";
+					c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
 					break;
 				case 4:
 					c.transform.position = new Vector3(10051.11f,118.5825f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta6";
+					c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
 					break;
 				default: // case 5
 					c.transform.position = new Vector3(14806.89f,414.3137f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta7";
+					c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
 					break;
 			}
 		}
@@ -181,7 +189,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 		
 		GameObject chicken = null;
 		
-		if(team == PHILO_TEAM){
+		if(team == Actor.PHILO_TEAM){
 			switch(chickenNum){
 				case 1:
 					chicken = setPhiloChicken1();
@@ -205,7 +213,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 				
 			
 			}
-		}else if(team == ROBOT_TEAM){
+		}else if(team == Actor.ROBOT_TEAM){
 			switch(chickenNum){
 				case 1:
 					chicken = setRoboChicken1();

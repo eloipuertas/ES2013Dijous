@@ -60,17 +60,15 @@ public class AgentNpc : FSM {
 
 	void updateNextTarget(){
 		//Raycast en esfera. Para detectar multiples enemigos
-		Collider[] colls = Physics.OverlapSphere(transform.position,radioVision);
+		Collider[] colls = Physics.OverlapSphere(getPosition(),radioVision);
 
 		GameObject closestEnemy = null;
 		float d,distance = float.PositiveInfinity;
 		// detecta el enemigo mas cercano
 		for (int i=0; i<colls.Length; i++){
-			/* Para cuando este disponible getTeam().
 			Actor a = colls[i].gameObject.GetComponent(typeof(Actor)) as Actor;
-			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
-			if(colls[i].CompareTag("Player")){ // Comprobar rivales*/
-				d = distance3D(transform.position, colls[i].transform.position);
+			if(isEnemy(a)){ // Comprobar rivales*/
+				d = distance3D(getPosition(), colls[i].transform.position);
 				if (d < distance){
 					d = distance;
 					closestEnemy = colls[i].gameObject;
@@ -81,7 +79,7 @@ public class AgentNpc : FSM {
 		if (closestEnemy != null){
 			nextTarget = closestEnemy.transform.position;
 			nextTarget.z = 0;
-			relPos = nextTarget - transform.position;
+			relPos = nextTarget - getPosition();
 			targetEnemy = true;
 			return;
 		}
@@ -89,14 +87,14 @@ public class AgentNpc : FSM {
 		targetEnemy = false;
 		nextTarget = rutaActual[keyPosActual];
 		//Debug.Log("####NPC GO TO -------> "+nextTarget);
-		relPos = nextTarget - transform.position;
+		relPos = nextTarget - getPosition();
 		bool next = false;
 		
 		// Pasar al siguiente target.
 			// Si z=3 espera a que haya algo en (x,y)
 		if (((nextTarget.z == 3) && (anythingOn(nextTarget))) ||			
 			// Si z=2 debera acercarse al punto (x,y) almenos en 30
-			((nextTarget.z == 2) && (distance3D(nextTarget,transform.position) <= 30)) ||
+			((nextTarget.z == 2) && (distance3D(nextTarget,getPosition()) <= 30)) ||
 			// Si z=1 debera estar cerca respecto al eje x almenos en 15, y tendra que estar tocando el suelo
 			((nextTarget.z == 1) && (Mathf.Abs(relPos.x) <= 15) && onGround()) || 
 			// Si z=0 debera estar cerca respecto al eje x almenos en 15
@@ -146,6 +144,7 @@ public class AgentNpc : FSM {
 			weap_mod[WEAPON_ESCOPETA-1] = GameObject.Find(gameObject.name+"/gre");
 			weap_mod[WEAPON_PISTOLA-1]  = GameObject.Find(gameObject.name+"/grp");
 			setWeapon(WEAPON_KATANA);
+		
 			initAnimationsSettings();
 			
 			
@@ -246,7 +245,7 @@ public class AgentNpc : FSM {
 			// Sistema para que no cambie de direccion muy rapido cuando el pollo se encuentre en
 			// las mismas x, pero en diferentes y. 
 			if (!changeDir){
-				float posX = transform.position.x - lastPos.x;
+				float posX = getPosition().x - lastPos.x;
 				if(Mathf.Abs(posX) >= 80) {
 					changeDir = true;	// Permite cambiar de direccion
 				}
@@ -256,7 +255,7 @@ public class AgentNpc : FSM {
 			// Cambio de direccion si changeDir me lo permite, y estoy de espaldas al target
 			if ((!targetEnemy || changeDir) && derecha != (relPos.x > 0)){
 				derecha = !derecha;
-				lastPos = transform.position;
+				lastPos = getPosition();
 				changeDir = false;	// No voy a permitir cambiar de direccion en la siguiente iteracion
 				if(ground){
 					animateIfExist("giroIzqDer","giroDerIzq");
@@ -286,26 +285,12 @@ public class AgentNpc : FSM {
 
 		
 		
-			/*Actor a = colls[i].gameObject.GetComponent(typeof(Actor)) as Actor;
-			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
+
 		
 			// Ha detectado algo a distancia "stopDistance" delante del player?:
 			GameObject detected = raycastFront(stopDistance);
 			if(detected != null){	
 				switch(detected.tag){
-					case "Player":
-						curState = FSM.Attack;
-						animateIfExist("atacarDer","atacarIzq");
-						
-						break;
-					case "NPC":
-						curState = FSM.Jump;
-
-						break;
-				
-				
-
-				/* Para cuando este disponible getTeam().
 				 	case "Player":
 					case "NPC":
 					case "Allied":
@@ -317,7 +302,7 @@ public class AgentNpc : FSM {
 							curState = FSM.Jump;
 						}
 						break;
-				*/
+
 				
 					default:
 						curState = FSM.Jump;
@@ -339,8 +324,9 @@ public class AgentNpc : FSM {
 			
 			GameObject detected = raycastFront(stopDistance+5);
 			if(detected != null){	
-				if (detected.tag == "Player"){
-						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+				
+				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
+				if(isEnemy(actor)){
 					
 						animations.Play(anim);
 						actor.dealDamage(25);
@@ -367,16 +353,16 @@ public class AgentNpc : FSM {
 			if(detected != null){
 			
 				switch(detected.tag){
-					case "Player":
-						curState = FSM.Attack;
-						animateIfExist("atacarDer","atacarIzq");
-						//print("Player in front me!");
-					 	//Invoke("UpdateAttackState",0.5f);
-						break;
+				 	case "Player":
 					case "NPC":
-						jump ();
-						//GameObject npc = GameObject.FindGameObjectWithTag("NPC");
-						//Physics.IgnoreCollision(npc.collider,col);
+					case "Allied":
+						Actor a = detected.GetComponent(typeof(Actor)) as Actor;
+						if(isEnemy(a)){ // Comprobar rivales
+							curState = FSM.Attack;
+							animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+						} else {
+							jump();
+						}
 						break;
 					default:
 						jump ();
@@ -511,7 +497,7 @@ public class AgentNpc : FSM {
 	private GameObject raycastFront(int dist){
 		RaycastHit hit;
 		float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
-		Vector3 pos = transform.position;
+		Vector3 pos = getPosition();
 		bool trobat = false;
 		for (int i=0;i<3 && !trobat;i++){
 			if(Physics.Raycast(pos, (derecha)?Vector3.right:Vector3.left, out hit,dist))
@@ -532,11 +518,13 @@ public class AgentNpc : FSM {
 		float mitadAmplada = rigidbody.collider.bounds.extents.x;
 		bool ground = false;
 		for (int i=-1;i<2 && !ground;i++){
-			ground = Physics.Raycast(transform.position+Vector3.right*mitadAmplada*i, Vector3.down, 3);
+			ground = Physics.Raycast(getPosition()+Vector3.right*mitadAmplada*i, Vector3.down, 3);
 		}
+			print ("onGround ->"+ground);
 		return ground;
 	}
 	private bool isEnemy(Actor a){
+		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
 	
@@ -550,6 +538,17 @@ public class AgentNpc : FSM {
 			else{
 				weap_mod[i].SetActive(false);
 			}
+		}
+		
+	}
+	
+	private Vector3 getPosition(){
+		if(getTeam() == PHILO_TEAM){
+			
+			return transform.position;
+		} else {
+			
+			return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-0.1f);
 		}
 		
 	}

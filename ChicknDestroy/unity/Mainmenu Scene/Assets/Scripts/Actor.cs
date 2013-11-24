@@ -12,13 +12,13 @@ public class Actor : MonoBehaviour {
 	protected HUD hud =  null;
 	protected GameManager gameManager = null;
 
-	protected int weapon;
+	public int weapon;
 	
-	protected const int WEAPON_KATANA = 1;
-	protected const int WEAPON_ESCOPETA = 2;
-	protected const int WEAPON_PISTOLA = 3;
-	protected const int PHILO_TEAM = 1;
-	protected const int ROBOT_TEAM = 2;
+	public const int WEAPON_KATANA = 1;
+	public const int WEAPON_ESCOPETA = 2;
+	public const int WEAPON_PISTOLA = 3;
+	public const int PHILO_TEAM = 1;
+	public const int ROBOT_TEAM = 2;
 	
 	protected int team;
 
