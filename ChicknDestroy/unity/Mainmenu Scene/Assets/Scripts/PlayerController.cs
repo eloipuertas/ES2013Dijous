@@ -5,7 +5,7 @@ public class PlayerController : Actor {
 	
 	
 	//Atributos de control
-	//private float gravity = 0;
+	
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
@@ -90,7 +90,7 @@ public class PlayerController : Actor {
 	}
 	
 	void FixedUpdate(){
-		Debug.Log("NAME: "+this.gameObject.name);
+		
 		updateModelWeapon();
 		
 		float raw = Input.GetAxisRaw("Horizontal");
@@ -140,7 +140,7 @@ public class PlayerController : Actor {
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
 							realizarTiro(DIR_DERECHA);
 						}
-						else myAnim.Play("correrDer");
+						else myAnim.Play("correrDerecha");
 						animTime = Time.time;
 					}
 					lastDirection = movDer;
@@ -165,7 +165,7 @@ public class PlayerController : Actor {
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
 							realizarTiro(DIR_IZQUIERDA);
 						}
-						else myAnim.Play("correrIzq");
+						else myAnim.Play("correrIzquierda");
 						animTime = Time.time;
 					}
 					lastDirection = movIzq;
@@ -190,7 +190,7 @@ public class PlayerController : Actor {
 						animTime = Time.time;
 					}
 					else if (rigid.velocity.x > 0) {
-						myAnim.Play("correrDer");
+						myAnim.Play("correrDerecha");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
@@ -215,7 +215,7 @@ public class PlayerController : Actor {
 						animTime = Time.time;
 					}
 					else if(rigid.velocity.x < 0) {
-						myAnim.Play("correrIzq");
+						myAnim.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
 						myAnim["giroIzqDer"].speed = 2;
@@ -245,7 +245,7 @@ public class PlayerController : Actor {
 	private bool isGround() {
 		bool ret = false;
 		for (int i = -2; i < 2 && !ret; ++i) {
-			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, heightHero + 0.01f);
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
 		}
 		return ret;
 	}
