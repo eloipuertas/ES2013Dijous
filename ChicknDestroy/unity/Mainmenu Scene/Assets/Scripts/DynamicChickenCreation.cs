@@ -15,8 +15,8 @@ public class DynamicChickenCreation : MonoBehaviour {
 		Chicken = 1;
 		Team = ROBOT_TEAM;	
 		
-		//setPlayer();
-		//setAllyTeam();
+		setPlayer();
+		setAllyTeam();
 
 		
 		setEnemyTeam();
@@ -61,23 +61,33 @@ public class DynamicChickenCreation : MonoBehaviour {
 	
 	
 	GameObject setRoboChicken1(){
-		return null;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+		c.name = "Robot1";
+		return c;
 	}
 	
 	GameObject setRoboChicken2(){
-		return null;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+		c.name = "Robot2";
+		return c;
 	}
 	
 	GameObject setRoboChicken3(){
-		return null;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+		c.name = "Robot3";
+		return c;
 	}
 	
 	GameObject setRoboChicken4(){
-		return null;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+		c.name = "Robot4";
+		return c;
 	}
 	
 	GameObject setRoboChicken5(){
-		return null;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+		c.name = "Robot5";
+		return c;
 	}
 	
 	GameObject setPhiloChicken1(){
@@ -113,6 +123,8 @@ public class DynamicChickenCreation : MonoBehaviour {
 	
 	void initAsPlayer(GameObject c){
 		c.AddComponent<PlayerController>();
+		c.tag = "Player";
+		
 		// Y mas cosas
 	}
 	

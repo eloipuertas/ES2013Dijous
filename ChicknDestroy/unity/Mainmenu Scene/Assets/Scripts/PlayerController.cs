@@ -12,9 +12,8 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	public AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
-	
-	public GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra;
+	private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
+	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra;
 	
 	private float animTime;
 	private float animDuration = 0.3f;
@@ -46,7 +45,7 @@ public class PlayerController : Actor {
 	
 	private Rigidbody rigid;
 	
-	private GameObject bgre, bgrk, bgrp;
+	private GameObject gre, grk, grp;
 	
 	
 	private bool esBajable;
@@ -55,18 +54,36 @@ public class PlayerController : Actor {
 		
 		rigid =	GetComponent<Rigidbody>();
 		
-		bgre = GameObject.Find("bcgre");
-		bgrk = GameObject.Find("bcgrk");
-		bgrp = GameObject.Find("bcgrp");
+		gre = GameObject.Find(gameObject.name+"/gre");
+		grk = GameObject.Find(gameObject.name+"/grk");
+		grp = GameObject.Find(gameObject.name+"/grp");
+		
+		bala = GameObject.FindGameObjectWithTag("bala");
+		
+		sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
+		sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
+		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
+
+		
+		sortidaBalaDreta = new GameObject("sbd");
+		sortidaBalaEsquerra = new GameObject("sbe");
+		
+		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
+		sortidaBalaDreta.transform.rotation = Quaternion.identity;
+		
+		sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
+		sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
+		
+		
+		
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
+		gameManager.setTarget(this.transform);
+		
 		health = 100;
 		currentState = STATE_ALIVE;
-		
-		
-		
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
@@ -259,18 +276,18 @@ public class PlayerController : Actor {
 		switch(weapon){
 			case WEAPON_KATANA:
 				
-				myAnim = bgrk.animation;
-				bgrk.SetActive(true);
-				bgre.SetActive(false);
-				bgrp.SetActive(false);
+				myAnim = grk.animation;
+				grk.SetActive(true);
+				gre.SetActive(false);
+				grp.SetActive(false);
 				
 			
 				break;
 			case WEAPON_ESCOPETA:
-				myAnim = bgre.animation;
-				bgre.SetActive(true);
-				bgrk.SetActive(false);
-				bgrp.SetActive(false);
+				myAnim = gre.animation;
+				gre.SetActive(true);
+				grk.SetActive(false);
+				grp.SetActive(false);
 				break;
 			default:
 				break;
