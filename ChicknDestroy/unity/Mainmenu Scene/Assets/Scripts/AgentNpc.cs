@@ -14,7 +14,9 @@ public class AgentNpc : FSM {
 		Attack,
 		Dead,
 	}
-
+	
+	//Modelos de armas
+	private GameObject[] weap_mod;
 	
 	//Lectors de rutes
 	private int keyPosActual =0; 
@@ -42,8 +44,9 @@ public class AgentNpc : FSM {
 
 	//Status
 	private FSM curState;
-	private Animator animator;
+	private Animation animations;
 	private bool derecha = true;
+	private bool dead = false;
 	
 
 	
@@ -113,17 +116,38 @@ public class AgentNpc : FSM {
 		npc.transform.localScale = s;
 		return npc;
 	}
+	
+	void initAnimationsSettings(){
+		
+		for (int i=0;i<weap_mod.Length; i++){
+			weap_mod[i].animation["correrDerecha"].wrapMode = WrapMode.Loop;
+			weap_mod[i].animation["correrIzquierda"].wrapMode = WrapMode.Loop;
+			
+			weap_mod[i].animation["atacarDer"].speed = 1.5f;
+			weap_mod[i].animation["atacarIzq"].speed = 1.5f;
+			
+			weap_mod[i].animation["muerteDerecha"].speed = 1.5f;
+			weap_mod[i].animation["muerteIzquierda"].speed = 1.5f;
+
+			weap_mod[i].animation["giroIzqDer"].speed = 5f;
+			weap_mod[i].animation["giroDerIzq"].speed = 5f;
+		}
+
+
+	}
+	
 	void setInitialsAtributes(){
 		try{
-			animator = GetComponent<Animator>();
-			animation["correrDerecha"].wrapMode = WrapMode.Loop;
-			animation["correrIzquierda"].wrapMode = WrapMode.Loop;
-			animation["golpearKatanaDer"].speed = 1.2f;
-			animation["golpearKatanaIzq"].speed = 1.2f;
-			
-			animation["giroIzquierdaDerecha"].speed = 5f;
-			animation["giroDerechaIzq"].speed = 5f;
+
 			this.setHealth(100);
+			
+			weap_mod = new GameObject[3];
+			weap_mod[WEAPON_KATANA-1]   = GameObject.Find(gameObject.name+"/grk");
+			weap_mod[WEAPON_ESCOPETA-1] = GameObject.Find(gameObject.name+"/gre");
+			weap_mod[WEAPON_PISTOLA-1]  = GameObject.Find(gameObject.name+"/grp");
+			setWeapon(WEAPON_KATANA);
+			initAnimationsSettings();
+			
 			
 		}catch{
 			//print("Exception GetComponent animator");
@@ -136,7 +160,6 @@ public class AgentNpc : FSM {
 
 	void setInitialState(){
 		nextTarget = rutaActual[keyPosActual];
-		Debug.Log("###INITIAL TARGET"+rutaActual[keyPosActual]);
 		curState = FSM.Run;
 	}
 	
@@ -146,11 +169,8 @@ public class AgentNpc : FSM {
 		int fileindex = 0;
 		int posindex = 0;
 		
-		Debug.Log("NOVA RUTA-->ID::"+fileindex);
-		
 		
 		TextAsset bindata= (TextAsset) Resources.Load("routes/"+direrutas, typeof(TextAsset));
-		print ("textASSERT: "+bindata);
 		string content = bindata.text;
 		
 		string []lines = content.Split('|');
@@ -178,9 +198,7 @@ public class AgentNpc : FSM {
 	}
 	void setInitialCollider(){
 		col = GetComponent<Collider>();
-		Debug.Log(col);
 		mas = gameObject.rigidbody;
-		Debug.Log(mas);
 		
 		//mas.GetComponent(RigidBody);
 	}
@@ -211,7 +229,7 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateRunState(){		
 			// Si esta activa la animacion de girar, no me puedo mover
-			if (animation.IsPlaying(((derecha)? "giroIzquierdaDerecha":"giroDerechaIzq"))){
+			if (animations.IsPlaying(((derecha)? "giroIzqDer":"giroDerIzq"))){
 				return;
 			}
 		
@@ -241,7 +259,7 @@ public class AgentNpc : FSM {
 				lastPos = transform.position;
 				changeDir = false;	// No voy a permitir cambiar de direccion en la siguiente iteracion
 				if(ground){
-					animateIfExist("giroIzquierdaDerecha","giroDerechaIzq");
+					animateIfExist("giroIzqDer","giroDerIzq");
 					return;
 				}
 			}
@@ -277,7 +295,7 @@ public class AgentNpc : FSM {
 				switch(detected.tag){
 					case "Player":
 						curState = FSM.Attack;
-						animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+						animateIfExist("atacarDer","atacarIzq");
 						
 						break;
 					case "NPC":
@@ -315,16 +333,16 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
-		string anim = (derecha)? "golpearKatanaDer":"golpearKatanaIzq";
+		string anim = (derecha)? "atacarDer":"atacarIzq";
 		
-		if(!animation.IsPlaying(anim) && animation[anim]!=null){
+		if(!animations.IsPlaying(anim) && animations[anim]!=null){
 			
 			GameObject detected = raycastFront(stopDistance+5);
 			if(detected != null){	
 				if (detected.tag == "Player"){
 						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
 					
-						animation.Play(anim);
+						animations.Play(anim);
 						actor.dealDamage(25);
 					
 						print("HIT");
@@ -351,8 +369,7 @@ public class AgentNpc : FSM {
 				switch(detected.tag){
 					case "Player":
 						curState = FSM.Attack;
-						animateIfExist("golpearKatanaDer","golpearKatanaIzq");
-				
+						animateIfExist("atacarDer","atacarIzq");
 						//print("Player in front me!");
 					 	//Invoke("UpdateAttackState",0.5f);
 						break;
@@ -371,14 +388,19 @@ public class AgentNpc : FSM {
 			} else
 				curState = FSM.Run;
 		
-//		if(animation["Salto_Derecha"]!=null){
-//				animation.Play("Salto_Derecha", PlayMode.StopAll);
-//		}
 		
 	}
 	protected void UpdateDeadState(){
 		//Animacio morirs
-		Destroy(gameObject);
+		if(!animations.IsPlaying((derecha)?"muerteDerecha":"muerteIzquierda")){
+			if (!dead){
+				animateIfExist("muerteDerecha","muerteIzquierda");
+				dead = true;
+			}else
+				Destroy(gameObject);
+		}
+		
+		
 		// Dar puntos a player
 		
 		/*
@@ -452,33 +474,31 @@ public class AgentNpc : FSM {
 	
 	public bool jump(){
 		
-		string anim = (derecha)? "caidaDerecha":"caidaIzquierda";
 		//Si esta tocando suelo -> Salta
 		if (onGround() && rigidbody.velocity.y < jumpForce/2){	
 			
 			rigidbody.velocity = rigidbody.velocity + Vector3.up *jumpForce;	
-			
-			anim = (derecha)? "saltoVerticalDer":"saltoVerticalIzq";
-			
-			if(animation[anim]!=null){
-				animation.Play(anim);
-				
-			}
+
+			animateIfExist ("saltoVerticalDer","saltoVerticalIzq");
+
 			return true;
 			
 		//Si esta caiendo:
-		} else if (rigidbody.velocity.y < -10 && animation[anim]!=null)
-			animation.Play(anim);
+		} else if (rigidbody.velocity.y < -10)
+			animateIfExist("caidaDerecha","caidaIzquierda");
 		return false;
 	}
 	
 	
 	private bool animateIfExist(string der,string izq){
 		string anim = (derecha)?der:izq;
-		if (animation[anim]!=null)
-			animation.Play(anim);
-		else
+		if (animations[anim]!=null){
+			print("PLAYING ANIMATION - "+anim);	
+			animations.Play(anim);
+		}else{
+			print("ANIMATION DOESNT EXIST - "+anim);
 			return false;
+		}
 		return true;
 	}
 	private float distanceX(Vector3 a, Vector3 b){
@@ -518,6 +538,20 @@ public class AgentNpc : FSM {
 	}
 	private bool isEnemy(Actor a){
 		return getTeam() != a.getTeam();
+	}
+	
+	protected override void updateModelWeapon() {
+		for (int i=0;i<weap_mod.Length; i++){
+			if ((weapon-1) == i){
+						
+				weap_mod[i].SetActive(true);
+				this.animations = weap_mod[i].animation;
+			}
+			else{
+				weap_mod[i].SetActive(false);
+			}
+		}
+		
 	}
 }
 

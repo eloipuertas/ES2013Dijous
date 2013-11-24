@@ -82,26 +82,31 @@ public class DynamicChickenCreation : MonoBehaviour {
 	
 	GameObject setPhiloChicken1(){
 		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+		c.name = "Philo1";
 		return c;
 	}
 	
 	GameObject setPhiloChicken2(){
 		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_crazy")) as GameObject;
+		c.name = "Philo2";
 		return c;
 	}
 	
 	GameObject setPhiloChicken3(){
 		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+		c.name = "Philo3";
 		return c;
 	}
 	
 	GameObject setPhiloChicken4(){
 		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+		c.name = "Philo4";
 		return c;
 	}
 	
 	GameObject setPhiloChicken5(){
 		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+		c.name = "Philo5";
 		return c;
 	}
 	
