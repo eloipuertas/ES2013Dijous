@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d10aade3db03274fbe7d2b15e4a7481
+guid: 35a0803b96ee73748ba6a829f2c7a8d8
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -76,8 +76,8 @@ ModelImporter:
     7400016: atacarSecIzqCorriendo
     7400018: caidaDerecha
     7400020: caidaIzquierda
-    7400022: correrDer
-    7400024: correrIzq
+    7400022: correrDerecha
+    7400024: correrIzquierda
     7400026: giroDerIzq
     7400028: giroIzqDer
     7400030: muerteDerecha
@@ -88,8 +88,6 @@ ModelImporter:
     7400040: recogerItemIzq
     7400042: saltoVerticalDer
     7400044: saltoVerticalIzq
-    7400046: correrDerecha
-    7400048: correrIzquierda
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cylinder
