@@ -17,10 +17,7 @@ public class PlayerController : Actor {
 	
 	private float animTime;
 	private float animDuration = 0.3f;
-/*	
-	private float currentSpeed;
-	private float targetSpeed;
-*/
+
 	private int movDer = 1;
 	private int movIzq = 2;
 	private int stopDer = 3;
@@ -63,7 +60,6 @@ public class PlayerController : Actor {
 		sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
 		sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
 		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
-
 		
 		sortidaBalaDreta = new GameObject("sbd");
 		sortidaBalaEsquerra = new GameObject("sbe");
