@@ -3,15 +3,6 @@ using System.Collections;
 
 public class PlayerController : Actor {
 	
-<<<<<<< HEAD
-	//Atributos de personaje
-	private int health;
-	private GameObject primaryWeapon;
-	private GameObject secondaryWeapon;
-	
-	//Atributos de control
-	private float gravity = 200;
-=======
 	private int[] animSpeed = {4,4,4,4,2,2,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
 	private string[] animNames = {
 		"atacarIzq",
@@ -44,49 +35,17 @@ public class PlayerController : Actor {
 	
 	//Atributos de control
 	
->>>>>>> origin/devel-A
 	private float speed = 300;
 	private float jumpHeight = 500;
 	private float acceleration = 50;
+	private float heightHero;
 	
 	//sonido
-<<<<<<< HEAD
-	public AudioSource sonidoSalto;
-	public AudioSource sonidoDisparoEscopeta;
-	public AudioSource sonidoDisparoPistola;
-	public AudioSource sonidoPowerUp;
-	public AudioSource sonidoEscudo; 
-	
-	public GameObject balaEscopeta;
-	public GameObject balaPistola;
-	public GameObject granada;
-	public GameObject sortidaBalaDreta;
-	public GameObject sortidaBalaEsquerra;
-	public GameObject sortidaBalaDretaCorrent;
-	public GameObject sortidaBalaEsquerraCorrent;
-=======
 	private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
 	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra, detected;
->>>>>>> origin/devel-A
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
-<<<<<<< HEAD
-	private float animDuration = 0.3f;
-	
-	private float currentSpeed;
-	private float targetSpeed;
-	
-	
-	private int movDer = 1;
-	private int movIzq = 2;
-	private int stopDer = 3;
-	private int stopIzq = 4;
-	private bool disparo= false;
-
-	private int lastDirection;
-	private float heightHero;
-=======
 	
 	//indica el tiempo de duracion de animacion
 	private float animDuration;
@@ -101,29 +60,17 @@ public class PlayerController : Actor {
 	
 	private const int DIR_IZQUIERDA = 1;
 	private const int DIR_DERECHA = 2;
->>>>>>> origin/devel-A
 	
-	private HUD hud;
-	private GameManager gameManager;
 	private Animation myAnim;
 	
 	private Rigidbody rigid;
 	
-<<<<<<< HEAD
-	private GameObject gre;
-	private GameObject grk;
-	
-	public bool isKatana;
-=======
 	private GameObject gre, grk, grp;
 	private bool esBajable, disparoActivo, ataque, dead;
->>>>>>> origin/devel-A
 	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-<<<<<<< HEAD
-=======
 		
 		gre = GameObject.Find(gameObject.name+"/gre");
 		grk = GameObject.Find(gameObject.name+"/grk");
@@ -133,31 +80,20 @@ public class PlayerController : Actor {
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
 		bala = GameObject.FindGameObjectWithTag("bala");
->>>>>>> origin/devel-A
 		
-		gre = GameObject.Find("gre");
-		grk = GameObject.Find("grk");
-		if (isKatana) {
-			myAnim = gre.animation;
-			grk.SetActive(false);
-			gre.SetActive(true);
-		}
-		else {
-			myAnim = grk.animation;
-			gre.SetActive(false);
-			grk.SetActive(true);
-		}
-	
-		lastDirection = stopDer;
+		sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
+		sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
+		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
 		
+		
+		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
+		//sortidaBalaDreta.transform.rotation = Quaternion.identity;
+		
+		sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
+		//sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
-<<<<<<< HEAD
-		health = 100;
-		
-		disparo = true;
-=======
 		
 		gameManager.setTarget(this.transform);
 		
@@ -167,58 +103,9 @@ public class PlayerController : Actor {
 		
 		health = 100;
 		currentState = STATE_STOP;
->>>>>>> origin/devel-A
 		
 		heightHero = rigid.collider.bounds.extents.y;
-	}
-	
-	private bool isGround() {
-		return Physics.Raycast(transform.position, -Vector3.up, heightHero + 0.5f);
-	}
-	
-	void OnCollisionEnter(Collision collision){
-		if(collision.gameObject.tag == "upVida"){ 
-				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
- 				heal(50);
-		}
 		
-<<<<<<< HEAD
-		if(collision.gameObject.tag == "escopeta_off" || collision.gameObject.tag == "katana" || collision.gameObject.tag == "granada") {
-				sonidoPowerUp.Play();
-		}
-		
-		if(collision.gameObject.tag == "escut") {
-				sonidoEscudo.Play();
-		}
-		
-	}
-	
-	/* Para que se mueva conjuntamente con las plataformas horizontales */
-	void OnCollisionStay (Collision hit) { 
-		
-	    if (hit.gameObject.tag == "plataforma_moviment")
-	        transform.parent = hit.transform ; 
-	    else
-	        transform.parent = null;
-		
-	}
-	
-	void Update () {
-		
-		if (isKatana) {
-			myAnim = gre.animation;
-			grk.SetActive(false);
-			gre.SetActive(true);
-		}
-		else {
-			myAnim = grk.animation;
-			gre.SetActive(false);
-			grk.SetActive(true);
-		}
-		
-		
-		float raw = Input.GetAxisRaw("Horizontal");
-=======
 		weapon = WEAPON_KATANA;
 		updateModelWeapon();
 		
@@ -234,41 +121,18 @@ public class PlayerController : Actor {
 	void FixedUpdate(){
 		
 		if(health <= 0) currentState = STATE_DEAD;
->>>>>>> origin/devel-A
 		
 		if(currentState != STATE_DEAD){	
 			
-<<<<<<< HEAD
-		if (!disparo && Input.GetButtonDown("Fire2")) {
-			GameObject novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-			GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
-			b.setEquip(1);
-			novaGranada.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-			//disparo = true;
-		}
-=======
 			// deteccion de enemigos, mediante acercamiento.
-			detected = raycastFront(currentDirection);
+			detected = raycastFront();
 			
 			updateModelWeapon();
->>>>>>> origin/devel-A
 		
 			float rawHori = Input.GetAxisRaw("Horizontal");
 			float rawVert = Input.GetAxisRaw("Vertical");
 	    
 		
-<<<<<<< HEAD
-		if (isGround()) {
-			if (Input.GetButtonDown("Jump")) {
-				sonidoSalto.Play();
-				rigid.velocity += Vector3.up * jumpHeight;
-			}		
-		}
-		
-		//Actualiza la posicion del personaje
-		rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
-		rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
-=======
 			if (!ataque && Input.GetButtonDown("Fire1")) {
 				ataque = true;		
 			}
@@ -309,7 +173,6 @@ public class PlayerController : Actor {
 	void Update () {
 		// Va muy rapido, nada aqui :D
 	}
->>>>>>> origin/devel-A
 	
 	/********* CODIGO AUXILIAR **************/
 	
@@ -332,54 +195,6 @@ public class PlayerController : Actor {
 			
 		}else {
 			
-<<<<<<< HEAD
-			if (lastDirection == movDer) {
-				if (rigid.velocity.x > 0) {
-					if(currentTime > animDuration){
-						if(disparo) {
-							myAnim["atacarDerCorriendo"].speed = 3;
-							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
-							GameObject nouTirEscopeta = (GameObject) Instantiate (balaEscopeta, sortidaBalaDretaCorrent.transform.position, sortidaBalaDretaCorrent.transform.rotation);
-							GestioTir b = nouTirEscopeta.GetComponent("GestioTir") as GestioTir;
-							b.setEquip(1);
-							nouTirEscopeta.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-							sonidoDisparoEscopeta.Play();
-							disparo = false;
-						}
-						else myAnim.Play("correrDerecha");
-						animTime = Time.time;
-					}
-					lastDirection = movDer;
-					//sonidoWalking.Play(1000);
-				}
-				else if(raw < 0) {
-					myAnim["giroDerIzq"].speed = 2;
-					myAnim.Play("giroDerIzq", PlayMode.StopAll);
-					animTime = Time.time;
-					lastDirection = movIzq;
-					//if(currentTime > animDuration)sonidoWalking.Play();
-				}
-				else {
-					lastDirection = stopDer;
-				}
-				
-			}else if (lastDirection == movIzq) {
-				if (rigid.velocity.x < 0) {
-					if(currentTime > animDuration){
-						if(disparo) {
-							myAnim["atacarIzqCorriendo"].speed = 3;
-							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);;
-							GameObject nouTirEscopeta = (GameObject) Instantiate (balaEscopeta, sortidaBalaEsquerraCorrent.transform.position, sortidaBalaEsquerraCorrent.transform.rotation);
-							GestioTir b = nouTirEscopeta.GetComponent("GestioTir") as GestioTir;
-							b.setEquip(1);
-							nouTirEscopeta.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-							sonidoDisparoEscopeta.Play();
-							disparo = false;
-							disparo = false;
-						}
-						else myAnim.Play("correrIzquierda");
-						animTime = Time.time;
-=======
 			if (velX != 0) {
 				//Hay movimiento, STATE_RUNNING
 				
@@ -408,69 +223,12 @@ public class PlayerController : Actor {
 					} else {
 						doAnim("giroIzqDer");
 						currentDirection = DIR_DERECHA;
->>>>>>> origin/devel-A
 					}
 				}else{
 					currentState = STATE_RUNNING;
 				}
 				
 			}else {
-<<<<<<< HEAD
-				if (lastDirection == stopDer) {
-					if (disparo && currentTime > animDuration) {
-						myAnim["atacarDer"].speed = 3;
-						myAnim.Play("atacarDer",PlayMode.StopAll);
-						GameObject nouTirPistola = (GameObject) Instantiate (balaPistola, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-						GestioTir b = nouTirPistola.GetComponent("GestioTir") as GestioTir;
-						b.setEquip(1);
-						nouTirPistola.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-						sonidoDisparoPistola.Play();
-						disparo = false;
-						animTime = Time.time;
-					}
-					else if (rigid.velocity.x > 0) {
-						myAnim.Play("correrDerecha");
-						lastDirection = movDer;
-					}
-					else if(raw < 0) {
-						myAnim["giroDerIzq"].speed = 2;
-						myAnim.Play("giroDerIzq", PlayMode.StopAll);
-						animTime = Time.time;
-						lastDirection = movIzq;
-					}
-					else {
-						if(currentTime > animDuration){
-							myAnim.Play("paradaDerecha");
-							animTime = Time.time;
-						}
-						lastDirection = stopDer;
-					}
-				}
-				else {
-					if(currentTime > animDuration && disparo) {
-						myAnim["atacarIzq"].speed = 3;
-						myAnim.Play("atacarIzq",PlayMode.StopAll);
-						GameObject nouTirEscopeta = (GameObject) Instantiate (balaEscopeta, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-						GestioTir b = nouTirEscopeta.GetComponent("GestioTir") as GestioTir;
-						b.setEquip(1);
-						nouTirEscopeta.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-						sonidoDisparoEscopeta.Play();
-						disparo = false;
-						animTime = Time.time;
-					}
-					else if(rigid.velocity.x < 0) {
-						myAnim.Play("correrIzquierda");
-						lastDirection = movIzq;
-					}else if(raw > 0) {
-						myAnim["giroIzqDer"].speed = 2;
-						myAnim.Play("giroIzqDer", PlayMode.StopAll);
-						animTime = Time.time;
-						lastDirection = movDer;
-					}else {
-						if (currentTime > animDuration) {	
-							myAnim.Play("paradaIzquierda");
-							animTime = Time.time;
-=======
 				//No hay movimiento; STATE_STOP
 				
 				if (currentState == STATE_STOP) {
@@ -489,7 +247,6 @@ public class PlayerController : Actor {
 						else{
 							doAnim("atacarIzq");
 							realizarAtaque();
->>>>>>> origin/devel-A
 						}
 					}
 				
@@ -498,20 +255,8 @@ public class PlayerController : Actor {
 				}	
 			}	
 		}
-		
 	}
 	
-<<<<<<< HEAD
-	public int getHealthPoints() {
-		return health;
-	}
-	
-	public void setHealthPoints(int n) {
-		health = n;
-		fireHealthNotification();
-		if (health <= 0) {
-			fireDeathNotification();
-=======
 	void doAnim(string animName) {
 		float currentTime = Time.time - animTime;
 		bool permitido = animName == "giroDerIzq"||
@@ -530,9 +275,10 @@ public class PlayerController : Actor {
 	void initAnimations() {
 		
 		for (int i = 0; i < 24; ++i) {
-			gre.animation[animNames[i]].speed = animSpeed[i];
-			grk.animation[animNames[i]].speed = animSpeed[i];
-			grp.animation[animNames[i]].speed = animSpeed[i];
+			int speed = this.team == Actor.ROBOT_TEAM? animSpeed[i]:animSpeed[i]*2;
+			gre.animation[animNames[i]].speed = speed;
+			grk.animation[animNames[i]].speed = speed;
+			grp.animation[animNames[i]].speed = speed;
 		}
 
 	}
@@ -543,28 +289,10 @@ public class PlayerController : Actor {
 		for (int i = -2; i < 2 && !ret; ++i) {
 			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
 			
->>>>>>> origin/devel-A
 		}
+		return ret;
 	}
 	
-<<<<<<< HEAD
-	public void heal(int n){
-		setHealthPoints(Mathf.Min(100,health+n));
-	}
-	
-	
-	public string getPrimaryWeapon() {
-		return primaryWeapon.ToString();
-	}
-	
-	public string getSecondaryWeapon() {
-		return secondaryWeapon.ToString();
-	}
-	
-	public Vector3 getCoordinates() {
-		return transform.position;
-	}
-=======
 	
 	
 	void OnCollisionEnter(Collision collision){
@@ -647,22 +375,22 @@ public class PlayerController : Actor {
 		ataque = false;
 	}
 	
-	private GameObject raycastFront(int dir){
+	private GameObject raycastFront(){
 		RaycastHit hit;
 		
-		//float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
-		float mitadAltura = heightHero;
+		
 		float ancho = rigidbody.collider.bounds.extents.x;
-		//Debug.Log("ANCHO"+ancho);
+		
 		Vector3 pos = this.gameObject.transform.position;
 		Vector3 currentPos;
+		
 		bool trobat = false;
 		
 		for (int i=-30; i<30 && !trobat; i+=5){
 			
 			currentPos = pos + Vector3.up*i;
 			
-			if(Physics.Raycast(currentPos, dir==DIR_DERECHA?Vector3.right:Vector3.left, out hit, ancho*2)) {
+			if(Physics.Raycast(currentPos, currentDirection == DIR_DERECHA?Vector3.right:Vector3.left, out hit, ancho*2)) {
 				trobat = true;
 			}
 		}
@@ -678,19 +406,5 @@ public class PlayerController : Actor {
 		return getTeam() != a.getTeam();
 	}
 
->>>>>>> origin/devel-A
 	
-	public void setDamage(int damage) {
-		if ((health - damage) > 0) 
-			setHealthPoints(health - damage);
-		else 
-			setHealthPoints(0);
-	}
-	private void fireHealthNotification() {
-		this.hud.notifyHealthChange(this.health);
-	}
-	private void fireDeathNotification() {
-		this.gameManager.notifyPlayerDeath();
-		
-	}
 }
