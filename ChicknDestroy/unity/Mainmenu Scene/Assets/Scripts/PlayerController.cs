@@ -3,8 +3,8 @@ using System.Collections;
 
 public class PlayerController : Actor {
 	
-	private int[] animSpeed = {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
-	private string[] animNames = new string[24]{
+	private int[] animSpeed = {4,4,4,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
+	private string[] animNames = {
 		"atacarIzq",
 		"atacarDer",
 		"atacarIzqCorriendo",
@@ -74,16 +74,15 @@ public class PlayerController : Actor {
 	
 	
 	private bool esBajable;
+	private bool disparoActivo;
 	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		//Debug.Log("NAME: "+this.gameObject.name);
+		
 		gre = GameObject.Find(gameObject.name+"/gre");
 		grk = GameObject.Find(gameObject.name+"/grk");
 		grp = GameObject.Find(gameObject.name+"/grp");
-		
-		
 		
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
@@ -177,7 +176,7 @@ public class PlayerController : Actor {
 							if(disparo) {
 								//myAnim["atacarDerCorriendo"].speed = 3;
 								myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
-								realizarTiro(DIR_DERECHA);
+								realizarAtaque(DIR_DERECHA);
 							}
 							else myAnim.Play("correrDerecha");
 							animTime = Time.time;
@@ -202,7 +201,7 @@ public class PlayerController : Actor {
 							if(disparo) {
 								//myAnim["atacarIzqCorriendo"].speed = 3;
 								myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
-								realizarTiro(DIR_IZQUIERDA);
+								realizarAtaque(DIR_IZQUIERDA);
 							}
 							else myAnim.Play("correrIzquierda");
 							animTime = Time.time;
@@ -225,7 +224,7 @@ public class PlayerController : Actor {
 						if (disparo && currentTime > animDuration) {
 							//myAnim["atacarDer"].speed = 3;
 							myAnim.Play("atacarDer",PlayMode.StopAll);
-							realizarTiro(DIR_DERECHA);
+							realizarAtaque(DIR_DERECHA);
 							animTime = Time.time;
 						}
 						else if (rigid.velocity.x > 0) {
@@ -250,7 +249,7 @@ public class PlayerController : Actor {
 						if(currentTime > animDuration && disparo) {
 							//myAnim["atacarIzq"].speed = 3;
 							myAnim.Play("atacarIzq",PlayMode.StopAll);
-							realizarTiro(DIR_IZQUIERDA);
+							realizarAtaque(DIR_IZQUIERDA);
 							animTime = Time.time;
 						}
 						else if(rigid.velocity.x < 0) {
@@ -289,8 +288,6 @@ public class PlayerController : Actor {
 	void initAnimations() {
 		
 		for (int i = 0; i < 24; ++i) {
-			Debug.Log(i+"  >> "+animNames[i]);
-			//Debug.Log(i+" "+animSpeed[i]);
 			gre.animation[animNames[i]].speed = animSpeed[i];
 			grk.animation[animNames[i]].speed = animSpeed[i];
 			grp.animation[animNames[i]].speed = animSpeed[i];
@@ -306,6 +303,8 @@ public class PlayerController : Actor {
 		}
 		return ret;
 	}
+	
+	
 	
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.tag == "upVida"){ 
@@ -327,12 +326,11 @@ public class PlayerController : Actor {
 		
 		switch(weapon){
 			case WEAPON_KATANA:
-				
 				myAnim = grk.animation;
 				grk.SetActive(true);
 				gre.SetActive(false);
 				grp.SetActive(false);
-				
+				disparoActivo = false;
 			
 				break;
 			case WEAPON_ESCOPETA:
@@ -340,6 +338,14 @@ public class PlayerController : Actor {
 				gre.SetActive(true);
 				grk.SetActive(false);
 				grp.SetActive(false);
+				disparoActivo = true;
+				break;
+		case WEAPON_PISTOLA:
+				myAnim = gre.animation;
+				gre.SetActive(false);
+				grk.SetActive(false);
+				grp.SetActive(true);
+				disparoActivo = true;
 				break;
 			default:
 				break;
@@ -347,27 +353,68 @@ public class PlayerController : Actor {
 		
 	}
 	
-	void realizarTiro(int direccion) {
-		GameObject nouTir = null;
-		
-		switch(direccion){
-			case DIR_IZQUIERDA:
-				nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-				nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-				break;
-			case DIR_DERECHA:
-				nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-				nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-				break;
-			default:
-				break;
+	void realizarAtaque(int direccion) {
+		if(disparoActivo) {
+			GameObject nouTir = null;
+			
+			switch(direccion){
+				case DIR_IZQUIERDA:
+					nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+					nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+					break;
+				case DIR_DERECHA:
+					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+					nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+					break;
+				default:
+					break;
+			}
+			
+			nouTir.AddComponent("DestruirBala");
+			sonidoDisparo.Play();
+		} else {
+			GameObject detected = raycastFront();
+			if(detected != null){
+				
+				Debug.Log("!!!! Detectado ENEMIGO!!");
+				
+				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
+				if(isEnemy(actor)) actor.dealDamage(100);
+				
+			}
 		}
-		
-		nouTir.AddComponent("DestruirBala");
-		sonidoDisparo.Play();
 		disparo = false;
 	}
 	
+	private GameObject raycastFront(){
+		RaycastHit hit;
+		
+		//float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
+		float mitadAltura = heightHero;
+		float ancho = rigidbody.collider.bounds.extents.x/2.0f;
+		Debug.Log("ANCHO"+ancho);
+		Vector3 pos = transform.position;
+		Vector3 currentPos;
+		bool trobat = false;
+		
+		for (int i=-10; i<10 && !trobat; i+=2){
+			currentPos = pos + Vector3.up*i;
+			if(Physics.Raycast(currentPos, (DIR_DERECHA>0)?Vector3.right:Vector3.left, out hit, (ancho+10f)))
+				trobat = true;
+			
+				
+		}
+
+		if (!trobat)
+			return null;
+		return hit.collider.gameObject;
+	}
+	
+	
+	private bool isEnemy(Actor a){
+		if (a == null) return false;
+		return getTeam() != a.getTeam();
+	}
 
 	
 }
