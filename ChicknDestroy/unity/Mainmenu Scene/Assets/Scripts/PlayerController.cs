@@ -3,6 +3,34 @@ using System.Collections;
 
 public class PlayerController : Actor {
 	
+	private int[] animSpeed = {3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3};
+	private string[] animNames = new string[24]{
+		"atacarIzq",
+		"atacarDer",
+		"atacarIzqCorriendo",
+		"atacarDerCorriendo",
+		"caidaIzquierda",
+		"caidaDerecha",
+		"correrIzquierda",
+		"correrDerecha",
+		"giroDerIzq",
+		"giroIzqDer",
+		"paradaIzquierda",
+		"paradaDerecha",
+		"recogerItemIzq",
+		"recogerItemDer",
+		"saltoVerticalIzq",
+		"saltoVerticalDer",
+		"saltarDerecha",
+		"saltarIzquierda",
+		"atacarSecIzq",
+		"atacarSecDer",
+		"atacarSecIzqCorriendo",
+		"atacarSecDerCorriendo",
+		"muerteDerecha",
+		"muerteIzquierda"
+	};	//24
+	
 	
 	//Atributos de control
 	
@@ -50,10 +78,12 @@ public class PlayerController : Actor {
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
-		Debug.Log("NAME: "+this.gameObject.name);
+		//Debug.Log("NAME: "+this.gameObject.name);
 		gre = GameObject.Find(gameObject.name+"/gre");
 		grk = GameObject.Find(gameObject.name+"/grk");
 		grp = GameObject.Find(gameObject.name+"/grp");
+		
+		
 		
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
@@ -76,13 +106,17 @@ public class PlayerController : Actor {
 		
 		gameManager.setTarget(this.transform);
 		
+		
+		initAnimations();
+		
 		health = 100;
 		currentState = STATE_ALIVE;
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
-		weapon = WEAPON_ESCOPETA;
+		weapon = WEAPON_KATANA;
 		updateModelWeapon();
+		
 		lastDirection = stopDer;
 		
 		esBajable = false;
@@ -90,12 +124,17 @@ public class PlayerController : Actor {
 	}
 	
 	void FixedUpdate(){
+		if(health > 0) currentState = STATE_ALIVE;
+		else currentState = STATE_DEAD;
 		
-		updateModelWeapon();
+		if(currentState == STATE_ALIVE){	
+			
+			updateModelWeapon();
 		
-		float raw = Input.GetAxisRaw("Horizontal");
-		float rawVertical = Input.GetAxisRaw("Vertical");
-	    if(currentState != STATE_DEAD){	
+			float raw = Input.GetAxisRaw("Horizontal");
+			float rawVertical = Input.GetAxisRaw("Vertical");
+	    
+		
 			if (!disparo && Input.GetButtonDown("Fire1")) {
 				disparo = true;		
 			}
@@ -136,7 +175,7 @@ public class PlayerController : Actor {
 					if (rigid.velocity.x > 0) {
 						if(currentTime > animDuration){
 							if(disparo) {
-								myAnim["atacarDerCorriendo"].speed = 3;
+								//myAnim["atacarDerCorriendo"].speed = 3;
 								myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
 								realizarTiro(DIR_DERECHA);
 							}
@@ -147,7 +186,7 @@ public class PlayerController : Actor {
 						//sonidoWalking.Play(1000);
 					}
 					else if(raw < 0) {
-						myAnim["giroDerIzq"].speed = 2;
+						//myAnim["giroDerIzq"].speed = 2;
 						myAnim.Play("giroDerIzq", PlayMode.StopAll);
 						animTime = Time.time;
 						lastDirection = movIzq;
@@ -161,7 +200,7 @@ public class PlayerController : Actor {
 					if (rigid.velocity.x < 0) {
 						if(currentTime > animDuration){
 							if(disparo) {
-								myAnim["atacarIzqCorriendo"].speed = 3;
+								//myAnim["atacarIzqCorriendo"].speed = 3;
 								myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
 								realizarTiro(DIR_IZQUIERDA);
 							}
@@ -172,7 +211,7 @@ public class PlayerController : Actor {
 						//if(currentTime > animDuration)sonidoWalking.Play();
 					}
 					else if(raw > 0) {
-						myAnim["giroIzqDer"].speed = 2;
+						//myAnim["giroIzqDer"].speed = 2;
 						myAnim.Play("giroIzqDer", PlayMode.StopAll);
 						animTime = Time.time;
 						lastDirection = movDer;
@@ -184,7 +223,7 @@ public class PlayerController : Actor {
 				}else {
 					if (lastDirection == stopDer) {
 						if (disparo && currentTime > animDuration) {
-							myAnim["atacarDer"].speed = 3;
+							//myAnim["atacarDer"].speed = 3;
 							myAnim.Play("atacarDer",PlayMode.StopAll);
 							realizarTiro(DIR_DERECHA);
 							animTime = Time.time;
@@ -194,7 +233,7 @@ public class PlayerController : Actor {
 							lastDirection = movDer;
 						}
 						else if(raw < 0) {
-							myAnim["giroDerIzq"].speed = 2;
+							//myAnim["giroDerIzq"].speed = 2;
 							myAnim.Play("giroDerIzq", PlayMode.StopAll);
 							animTime = Time.time;
 							lastDirection = movIzq;
@@ -209,7 +248,7 @@ public class PlayerController : Actor {
 					}
 					else {
 						if(currentTime > animDuration && disparo) {
-							myAnim["atacarIzq"].speed = 3;
+							//myAnim["atacarIzq"].speed = 3;
 							myAnim.Play("atacarIzq",PlayMode.StopAll);
 							realizarTiro(DIR_IZQUIERDA);
 							animTime = Time.time;
@@ -218,7 +257,7 @@ public class PlayerController : Actor {
 							myAnim.Play("correrIzquierda");
 							lastDirection = movIzq;
 						}else if(raw > 0) {
-							myAnim["giroIzqDer"].speed = 2;
+							//myAnim["giroIzqDer"].speed = 2;
 							myAnim.Play("giroIzqDer", PlayMode.StopAll);
 							animTime = Time.time;
 							lastDirection = movDer;
@@ -235,17 +274,30 @@ public class PlayerController : Actor {
 				}
 			}
 		}else{
-			Debug.Log("ENTRO EN MUERTE");
+			//Debug.Log("ENTRO EN MUERTE");
 			currentState = STATE_DEAD;
 			myAnim.Play("muerteDerecha", PlayMode.StopAll);
 		}
 	}
-	
+
 	void Update () {
 		// Va muy rapido, nada aqui :D
 	}
 	
 	/********* CODIGO AUXILIAR **************/
+	
+	void initAnimations() {
+		
+		for (int i = 0; i < 24; ++i) {
+			Debug.Log(i+"  >> "+animNames[i]);
+			//Debug.Log(i+" "+animSpeed[i]);
+			gre.animation[animNames[i]].speed = animSpeed[i];
+			grk.animation[animNames[i]].speed = animSpeed[i];
+			grp.animation[animNames[i]].speed = animSpeed[i];
+		}
+
+	}
+	
 	
 	private bool isGround() {
 		bool ret = false;
