@@ -86,5 +86,6 @@ public class GameManager : MonoBehaviour {
 	
 	public void setTarget(Transform tr){
 		cam.SetTarget(tr.transform);
+		cam.transform.position = new Vector3(tr.transform.position.x, tr.transform.position.y, cam.transform.position.z);
 	}
 }
