@@ -67,7 +67,7 @@ public class HUD : MonoBehaviour{
 	
 	// Use this for initialization
 	void Start () {
-		Debug.Log ("Starting HUD debug message");
+		//Debug.Log ("Starting HUD debug message");
 		this.skin = new GUISkin();
 		
 		initComponents();

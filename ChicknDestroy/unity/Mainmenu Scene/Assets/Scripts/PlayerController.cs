@@ -42,6 +42,7 @@ public class PlayerController : Actor {
 	//sonido
 	private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
 	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra;
+	private GameObject detected;
 	
 	private float animTime;
 	private float animDuration = 0.3f;
@@ -127,6 +128,9 @@ public class PlayerController : Actor {
 		else currentState = STATE_DEAD;
 		
 		if(currentState == STATE_ALIVE){	
+			
+			// deteccion de enemigos, mediante acercamiento.
+			detected = raycastFront();
 			
 			updateModelWeapon();
 		
@@ -300,6 +304,7 @@ public class PlayerController : Actor {
 		bool ret = false;
 		for (int i = -2; i < 2 && !ret; ++i) {
 			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
+			
 		}
 		return ret;
 	}
@@ -373,13 +378,16 @@ public class PlayerController : Actor {
 			nouTir.AddComponent("DestruirBala");
 			sonidoDisparo.Play();
 		} else {
-			GameObject detected = raycastFront();
+			
 			if(detected != null){
 				
-				Debug.Log("!!!! Detectado ENEMIGO!!");
+				Debug.Log("DETECCION DE ACTORES");
 				
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
-				if(isEnemy(actor)) actor.dealDamage(100);
+				if(isEnemy(actor)) {
+					actor.dealDamage(100);
+					Debug.Log("Enemigo atacado");
+				}
 				
 			}
 		}
@@ -391,18 +399,21 @@ public class PlayerController : Actor {
 		
 		//float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
 		float mitadAltura = heightHero;
-		float ancho = rigidbody.collider.bounds.extents.x/2.0f;
+		float ancho = rigidbody.collider.bounds.extents.x;
 		Debug.Log("ANCHO"+ancho);
-		Vector3 pos = transform.position;
+		Vector3 pos = this.gameObject.transform.position;
 		Vector3 currentPos;
 		bool trobat = false;
 		
-		for (int i=-10; i<10 && !trobat; i+=2){
+		for (int i=-30; i<30 && !trobat; i+=5){
+			
 			currentPos = pos + Vector3.up*i;
-			if(Physics.Raycast(currentPos, (DIR_DERECHA>0)?Vector3.right:Vector3.left, out hit, (ancho+10f)))
+			
+			if(Physics.Raycast(currentPos, Vector3.right, out hit, ancho*4)) {
 				trobat = true;
 			
-				
+				Debug.Log("ENEMIGO: "+hit.collider.name);
+			}
 		}
 
 		if (!trobat)

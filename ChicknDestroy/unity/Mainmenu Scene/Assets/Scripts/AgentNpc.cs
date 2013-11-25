@@ -346,7 +346,7 @@ public class AgentNpc : FSM {
 	}
 	
     protected void UpdateJumpState(){
-		Debug.Log("Salte");
+		//Debug.Log("Salte");
 
 		
 			GameObject detected = raycastFront(stopDistance+5);
@@ -455,7 +455,7 @@ public class AgentNpc : FSM {
 
 		updateNextTarget();
 		
-		Debug.Log(curState);
+		//Debug.Log(curState);
 	}
 	
 	public bool jump(){
@@ -479,10 +479,10 @@ public class AgentNpc : FSM {
 	private bool animateIfExist(string der,string izq){
 		string anim = (derecha)?der:izq;
 		if (animations[anim]!=null){
-			print("PLAYING ANIMATION - "+anim);	
+			//print("PLAYING ANIMATION - "+anim);	
 			animations.Play(anim);
 		}else{
-			print("ANIMATION DOESNT EXIST - "+anim);
+			//print("ANIMATION DOESNT EXIST - "+anim);
 			return false;
 		}
 		return true;
@@ -520,7 +520,7 @@ public class AgentNpc : FSM {
 		for (int i=-1;i<2 && !ground;i++){
 			ground = Physics.Raycast(getPosition()+Vector3.right*mitadAmplada*i, Vector3.down, 3);
 		}
-			print ("onGround ->"+ground);
+			//print ("onGround ->"+ground);
 		return ground;
 	}
 	private bool isEnemy(Actor a){
