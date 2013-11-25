@@ -65,6 +65,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 	
 	GameObject setRoboChicken1(){
 		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+		c.transform.position = new Vector3(98f,165f,0.8170023f);
 		c.name = "Robot1";
 		return c;
 	}

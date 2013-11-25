@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerController : Actor {
 	
-	private int[] animSpeed = {4,4,4,4,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
+	private int[] animSpeed = {4,4,4,4,2,2,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
 	private string[] animNames = {
 		"atacarIzq",
 		"atacarDer",
@@ -31,6 +31,7 @@ public class PlayerController : Actor {
 		"muerteIzquierda"
 	};	//24
 	
+
 	
 	//Atributos de control
 	
@@ -41,28 +42,21 @@ public class PlayerController : Actor {
 	
 	//sonido
 	private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
-	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra;
-	private GameObject detected;
+	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
+	//indica el tiempo transcurrido de animacion
 	private float animTime;
-	private float animDuration = 0.3f;
-
-	private int movDer = 1;
-	private int movIzq = 2;
-	private int stopDer = 3;
-	private int stopIzq = 4;
-	private bool disparo= false;
 	
-	private int lastMovement;
-	private int lastDirection;
+	//indica el tiempo de duracion de animacion
+	private float animDuration;
+	
+	
+	private int currentDirection;
 	private int currentState;
 	
-	private const int STATE_ALIVE = 1;
-	private const int STATE_DEAD = 2;
-	
-	private const int MOV_STOP = 1;
-	private const int MOV_RUNNING = 2;
-	private const int MOV_ATACKING = 3;
+	private const int STATE_STOP = 1;
+	private const int STATE_RUNNING = 2;
+	private const int STATE_DEAD = 3;
 	
 	private const int DIR_IZQUIERDA = 1;
 	private const int DIR_DERECHA = 2;
@@ -72,10 +66,7 @@ public class PlayerController : Actor {
 	private Rigidbody rigid;
 	
 	private GameObject gre, grk, grp;
-	
-	
-	private bool esBajable;
-	private bool disparoActivo;
+	private bool esBajable, disparoActivo, ataque, dead;
 	
 	void Start () {
 		
@@ -108,178 +99,74 @@ public class PlayerController : Actor {
 		
 		
 		initAnimations();
+		animDuration = 0.3f;
 		
 		health = 100;
-		currentState = STATE_ALIVE;
+		currentState = STATE_STOP;
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
 		weapon = WEAPON_KATANA;
 		updateModelWeapon();
 		
-		lastDirection = stopDer;
+		currentDirection = DIR_DERECHA;
 		
 		esBajable = false;
-		disparo = false;
+		ataque = false;
+		dead = false;
 	}
 	
+	
+	
 	void FixedUpdate(){
-		if(health > 0) currentState = STATE_ALIVE;
-		else currentState = STATE_DEAD;
 		
-		if(currentState == STATE_ALIVE){	
+		if(health <= 0) currentState = STATE_DEAD;
+		
+		if(currentState != STATE_DEAD){	
 			
 			// deteccion de enemigos, mediante acercamiento.
-			detected = raycastFront();
+			detected = raycastFront(currentDirection);
 			
 			updateModelWeapon();
 		
-			float raw = Input.GetAxisRaw("Horizontal");
-			float rawVertical = Input.GetAxisRaw("Vertical");
+			float rawHori = Input.GetAxisRaw("Horizontal");
+			float rawVert = Input.GetAxisRaw("Vertical");
 	    
 		
-			if (!disparo && Input.GetButtonDown("Fire1")) {
-				disparo = true;		
+			if (!ataque && Input.GetButtonDown("Fire1")) {
+				ataque = true;		
 			}
 				
-			if (!disparo && Input.GetButtonDown("Fire2")) {
-				disparo = true;
+			if (!ataque && Input.GetButtonDown("Fire2")) {
+				ataque = true;
 			}
 			
 			
 			if (isGround()) {
-				if (rawVertical > 0) {
+				if (rawVert > 0) {
 					sonidoSalto.Play();
 					rigid.velocity += Vector3.up * jumpHeight;
 				}
-				else if(rawVertical < 0 && esBajable) {
-					transform.position = new Vector3(transform.position.x, transform.position.y - 50, transform.position.z);
+				else if(rawVert < 0 && esBajable) {
+					transform.position += Vector3.down*50;
 				}
 			}
 			
 			//Actualiza la posicion del personaje
-			rigid.velocity = new Vector3((raw * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
-			//rigid.velocity += (Vector3.up * -gravity * Time.deltaTime);
-		
 			
-			if(rigid.velocity.y > 10) {
-			//Si estamos en el aire de subida
-				if(lastDirection == movDer || lastDirection == stopDer) myAnim.Play("saltoVerticalDer");
-				else myAnim.Play("saltoVerticalIzq");
-			}else if(rigid.velocity.y < -65){
-			//Si estamos en el aire de bajada
-				if(lastDirection == movDer || lastDirection == stopDer) myAnim.Play("caidaDerecha");
-				else myAnim.Play("caidaIzquierda");
-			}else {
-	
-				float currentTime = Time.time - animTime;
-				
-				if (lastDirection == movDer) {
-					if (rigid.velocity.x > 0) {
-						if(currentTime > animDuration){
-							if(disparo) {
-								//myAnim["atacarDerCorriendo"].speed = 3;
-								myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
-								realizarAtaque(DIR_DERECHA);
-							}
-							else myAnim.Play("correrDerecha");
-							animTime = Time.time;
-						}
-						lastDirection = movDer;
-						//sonidoWalking.Play(1000);
-					}
-					else if(raw < 0) {
-						//myAnim["giroDerIzq"].speed = 2;
-						myAnim.Play("giroDerIzq", PlayMode.StopAll);
-						animTime = Time.time;
-						lastDirection = movIzq;
-						//if(currentTime > animDuration)sonidoWalking.Play();
-					}
-					else {
-						lastDirection = stopDer;
-					}
-					
-				}else if (lastDirection == movIzq) {
-					if (rigid.velocity.x < 0) {
-						if(currentTime > animDuration){
-							if(disparo) {
-								//myAnim["atacarIzqCorriendo"].speed = 3;
-								myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
-								realizarAtaque(DIR_IZQUIERDA);
-							}
-							else myAnim.Play("correrIzquierda");
-							animTime = Time.time;
-						}
-						lastDirection = movIzq;
-						//if(currentTime > animDuration)sonidoWalking.Play();
-					}
-					else if(raw > 0) {
-						//myAnim["giroIzqDer"].speed = 2;
-						myAnim.Play("giroIzqDer", PlayMode.StopAll);
-						animTime = Time.time;
-						lastDirection = movDer;
-						//if(currentTime > animDuration)sonidoWalking.Play();
-					}
-					else {
-						lastDirection = stopIzq;
-					}
-				}else {
-					if (lastDirection == stopDer) {
-						if (disparo && currentTime > animDuration) {
-							//myAnim["atacarDer"].speed = 3;
-							myAnim.Play("atacarDer",PlayMode.StopAll);
-							realizarAtaque(DIR_DERECHA);
-							animTime = Time.time;
-						}
-						else if (rigid.velocity.x > 0) {
-							myAnim.Play("correrDerecha");
-							lastDirection = movDer;
-						}
-						else if(raw < 0) {
-							//myAnim["giroDerIzq"].speed = 2;
-							myAnim.Play("giroDerIzq", PlayMode.StopAll);
-							animTime = Time.time;
-							lastDirection = movIzq;
-						}
-						else {
-							if(currentTime > animDuration){
-								myAnim.Play("paradaDerecha");
-								animTime = Time.time;
-							}
-							lastDirection = stopDer;
-						}
-					}
-					else {
-						if(currentTime > animDuration && disparo) {
-							//myAnim["atacarIzq"].speed = 3;
-							myAnim.Play("atacarIzq",PlayMode.StopAll);
-							realizarAtaque(DIR_IZQUIERDA);
-							animTime = Time.time;
-						}
-						else if(rigid.velocity.x < 0) {
-							myAnim.Play("correrIzquierda");
-							lastDirection = movIzq;
-						}else if(raw > 0) {
-							//myAnim["giroIzqDer"].speed = 2;
-							myAnim.Play("giroIzqDer", PlayMode.StopAll);
-							animTime = Time.time;
-							lastDirection = movDer;
-						}else {
-							if (currentTime > animDuration) {	
-								myAnim.Play("paradaIzquierda");
-								animTime = Time.time;
-							}
-							lastDirection = stopIzq;
-						}
-					}
-					 
-					
-				}
-			}
+			rigid.velocity = new Vector3((rawHori * speed * acceleration)*Time.deltaTime, rigid.velocity.y, 0);
+			
+			float velX = rigid.velocity.x;
+			float velY = rigid.velocity.y;
+			
+			controlDeAnimaciones(velX, velY);
+			
 		}else{
-			//Debug.Log("ENTRO EN MUERTE");
 			currentState = STATE_DEAD;
-			myAnim.Play("muerteDerecha", PlayMode.StopAll);
+			if (currentDirection == DIR_DERECHA)
+				doAnim("muerteDerecha");
+			else 
+				doAnim("muerteIzquierda");
 		}
 	}
 
@@ -288,6 +175,102 @@ public class PlayerController : Actor {
 	}
 	
 	/********* CODIGO AUXILIAR **************/
+	
+	void controlDeAnimaciones(float velX, float velY) {
+		if(velY > 65) {
+		//Si estamos en el aire de subida
+			
+			if(currentDirection == DIR_DERECHA) 
+				doAnim("saltoVerticalDer");
+			else 
+				doAnim("saltoVerticalIzq");
+			
+		}else if(velY < -65){
+		//Si estamos en el aire de bajada
+			
+			if(currentDirection == DIR_DERECHA) 
+				doAnim("caidaDerecha");
+			else 
+				doAnim("caidaIzquierda");
+			
+		}else {
+			
+			if (velX != 0) {
+				//Hay movimiento, STATE_RUNNING
+				
+				if(currentState == STATE_RUNNING) {
+					if(currentDirection == DIR_DERECHA && velX > 0) {
+						if (!ataque) 
+							doAnim("correrDerecha");
+						else {
+							doAnim("atacarDerCorriendo");
+							realizarAtaque();
+						}	
+					} else if(currentDirection == DIR_DERECHA && velX == 0) {
+						currentState = STATE_STOP;
+					} else if(currentDirection == DIR_DERECHA && velX < 0) {
+						doAnim("giroDerIzq");
+						currentDirection = DIR_IZQUIERDA;
+					} else if(currentDirection == DIR_IZQUIERDA && velX < 0) {
+						if (!ataque) 
+							doAnim("correrIzquierda");
+						else {
+							doAnim("atacarIzqCorriendo");
+							realizarAtaque();
+						}
+					} else if(currentDirection == DIR_IZQUIERDA && velX == 0) {
+						currentState = STATE_STOP;
+					} else {
+						doAnim("giroIzqDer");
+						currentDirection = DIR_DERECHA;
+					}
+				}else{
+					currentState = STATE_RUNNING;
+				}
+				
+			}else {
+				//No hay movimiento; STATE_STOP
+				
+				if (currentState == STATE_STOP) {
+					
+					if(currentDirection == DIR_DERECHA) {
+						if (!ataque) 
+							doAnim("paradaDerecha");
+						else {
+							doAnim("atacarDer");
+							realizarAtaque();
+						}
+						
+					} else {
+						if(!ataque)
+							doAnim("paradaIzquierda");
+						else{
+							doAnim("atacarIzq");
+							realizarAtaque();
+						}
+					}
+				
+				}else{
+					currentState = STATE_STOP;
+				}	
+			}	
+		}
+	}
+	
+	void doAnim(string animName) {
+		float currentTime = Time.time - animTime;
+		bool permitido = animName == "giroDerIzq"||
+							animName == "giroIzqDer" ||
+							animName == "atacarIzq" ||
+							animName == "atacarDer" ||
+							animName == "atacarIzqCorriendo" ||
+							animName == "atacarDerCorriendo";
+		if ((currentTime > animDuration || permitido) && !dead) {
+			myAnim.Play(animName, PlayMode.StopAll);
+			animTime = Time.time;
+			dead = animName == "muerteDerecha" || animName == "muerteIzquierda";
+		}
+	}
 	
 	void initAnimations() {
 		
@@ -358,11 +341,11 @@ public class PlayerController : Actor {
 		
 	}
 	
-	void realizarAtaque(int direccion) {
+	void realizarAtaque() {
 		if(disparoActivo) {
 			GameObject nouTir = null;
 			
-			switch(direccion){
+			switch(currentDirection){
 				case DIR_IZQUIERDA:
 					nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
 					nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
@@ -381,26 +364,23 @@ public class PlayerController : Actor {
 			
 			if(detected != null){
 				
-				Debug.Log("DETECCION DE ACTORES");
-				
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)) {
 					actor.dealDamage(100);
-					Debug.Log("Enemigo atacado");
 				}
 				
 			}
 		}
-		disparo = false;
+		ataque = false;
 	}
 	
-	private GameObject raycastFront(){
+	private GameObject raycastFront(int dir){
 		RaycastHit hit;
 		
 		//float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
 		float mitadAltura = heightHero;
 		float ancho = rigidbody.collider.bounds.extents.x;
-		Debug.Log("ANCHO"+ancho);
+		//Debug.Log("ANCHO"+ancho);
 		Vector3 pos = this.gameObject.transform.position;
 		Vector3 currentPos;
 		bool trobat = false;
@@ -409,10 +389,8 @@ public class PlayerController : Actor {
 			
 			currentPos = pos + Vector3.up*i;
 			
-			if(Physics.Raycast(currentPos, Vector3.right, out hit, ancho*4)) {
+			if(Physics.Raycast(currentPos, dir==DIR_DERECHA?Vector3.right:Vector3.left, out hit, ancho*2)) {
 				trobat = true;
-			
-				Debug.Log("ENEMIGO: "+hit.collider.name);
 			}
 		}
 
