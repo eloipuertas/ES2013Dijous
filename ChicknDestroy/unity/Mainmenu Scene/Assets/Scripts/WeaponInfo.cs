@@ -50,7 +50,7 @@ public class WeaponInfo : MonoBehaviour {
 			PlayerController c = whoIs.gameObject.GetComponent("PlayerController") as PlayerController;
 			if(isEscopeta){//if is escopeta type
 				//c.playAnimation();//we report the player that must play the pickUp weapon animation
-				c.isKatana = true;//we report to the Player that must change the weapon
+				//c.isKatana = true;//we report to the Player that must change the weapon
 				hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
 			}
 			if(isRevolver){//if is revolver type
@@ -58,7 +58,7 @@ public class WeaponInfo : MonoBehaviour {
 			}
 			if(isKatana){//if is katana type
 				//c.playAnimation();
-				c.isKatana = false;
+				//c.isKatana = false;
 				hud.notifyPrimaryWeapon(1);
 			}
 			if(isRifle){//if is rifle type
