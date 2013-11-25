@@ -36,8 +36,12 @@ public class AgentNpc : FSM {
 	private int puntuacio = 200;
 	private int radioVision = 425;
 	private int stopDistance = 40;
+	private int rangeWeapon = 0;
+	
 	
 	//Npc propierties
+	GameObject nouTir;
+	public GameObject bala;
 	private Vector3 spawnPoint;
 	private Collider col;
 	private Rigidbody mas;
@@ -47,6 +51,7 @@ public class AgentNpc : FSM {
 	private Animation animations;
 	private bool derecha = true;
 	private bool dead = false;
+	private float elapsedTime = 0;
 	
 
 	
@@ -60,15 +65,17 @@ public class AgentNpc : FSM {
 
 	void updateNextTarget(){
 		//Raycast en esfera. Para detectar multiples enemigos
-		Collider[] colls = Physics.OverlapSphere(getPosition(),radioVision);
+		Collider[] colls = Physics.OverlapSphere(transform.position,radioVision);
 
 		GameObject closestEnemy = null;
 		float d,distance = float.PositiveInfinity;
 		// detecta el enemigo mas cercano
 		for (int i=0; i<colls.Length; i++){
+			/* Para cuando este disponible getTeam().
 			Actor a = colls[i].gameObject.GetComponent(typeof(Actor)) as Actor;
-			if(isEnemy(a)){ // Comprobar rivales*/
-				d = distance3D(getPosition(), colls[i].transform.position);
+			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
+			if(colls[i].CompareTag("Player")){ // Comprobar rivales*/
+				d = distance3D(transform.position, colls[i].transform.position);
 				if (d < distance){
 					d = distance;
 					closestEnemy = colls[i].gameObject;
@@ -79,7 +86,7 @@ public class AgentNpc : FSM {
 		if (closestEnemy != null){
 			nextTarget = closestEnemy.transform.position;
 			nextTarget.z = 0;
-			relPos = nextTarget - getPosition();
+			relPos = nextTarget - transform.position;
 			targetEnemy = true;
 			return;
 		}
@@ -87,14 +94,14 @@ public class AgentNpc : FSM {
 		targetEnemy = false;
 		nextTarget = rutaActual[keyPosActual];
 		//Debug.Log("####NPC GO TO -------> "+nextTarget);
-		relPos = nextTarget - getPosition();
+		relPos = nextTarget - transform.position;
 		bool next = false;
 		
 		// Pasar al siguiente target.
 			// Si z=3 espera a que haya algo en (x,y)
 		if (((nextTarget.z == 3) && (anythingOn(nextTarget))) ||			
 			// Si z=2 debera acercarse al punto (x,y) almenos en 30
-			((nextTarget.z == 2) && (distance3D(nextTarget,getPosition()) <= 30)) ||
+			((nextTarget.z == 2) && (distance3D(nextTarget,transform.position) <= 30)) ||
 			// Si z=1 debera estar cerca respecto al eje x almenos en 15, y tendra que estar tocando el suelo
 			((nextTarget.z == 1) && (Mathf.Abs(relPos.x) <= 15) && onGround()) || 
 			// Si z=0 debera estar cerca respecto al eje x almenos en 15
@@ -121,6 +128,9 @@ public class AgentNpc : FSM {
 			weap_mod[i].animation["correrDerecha"].wrapMode = WrapMode.Loop;
 			weap_mod[i].animation["correrIzquierda"].wrapMode = WrapMode.Loop;
 			
+			weap_mod[i].animation["caidaDerecha"].speed = 1.5f;
+			weap_mod[i].animation["caidaIzquierda"].speed = 1.5f;
+			
 			weap_mod[i].animation["atacarDer"].speed = 1.5f;
 			weap_mod[i].animation["atacarIzq"].speed = 1.5f;
 			
@@ -143,9 +153,9 @@ public class AgentNpc : FSM {
 			weap_mod[WEAPON_KATANA-1]   = GameObject.Find(gameObject.name+"/grk");
 			weap_mod[WEAPON_ESCOPETA-1] = GameObject.Find(gameObject.name+"/gre");
 			weap_mod[WEAPON_PISTOLA-1]  = GameObject.Find(gameObject.name+"/grp");
-			setWeapon(WEAPON_KATANA);
-		
-			initAnimationsSettings();
+			setWeapon(WEAPON_PISTOLA);
+//			loadModelWeapon(WEAPON_PISTOLA);
+//			initAnimationsSettings();
 			
 			
 		}catch{
@@ -192,9 +202,7 @@ public class AgentNpc : FSM {
 		
 	}
 	
-	void setWeapon(string tag){
-		GameObject arma  ;
-	}
+	
 	void setInitialCollider(){
 		col = GetComponent<Collider>();
 		mas = gameObject.rigidbody;
@@ -220,7 +228,7 @@ public class AgentNpc : FSM {
 	//#########################################
 	protected void UpdateNoneState(){
 		//Animation idle
-		animateIfExist("paradaDerecha","paradaIzquierda");
+//		animateIfExist("paradaDerecha","paradaIzquierda");
 		updateNextTarget();
 		if (nextTarget.z != 3){
 			curState = FSM.Run;
@@ -228,12 +236,12 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateRunState(){		
 			// Si esta activa la animacion de girar, no me puedo mover
-			if (animations.IsPlaying(((derecha)? "giroIzqDer":"giroDerIzq"))){
-				return;
-			}
+//			if (animations.IsPlaying(((derecha)? "giroIzqDer":"giroDerIzq"))){
+//				return;
+//			}
 		
 			if (nextTarget.z == 3){
-				animateIfExist("paradaDerecha","paradaIzquierda");
+//				animateIfExist("paradaDerecha","paradaIzquierda");
 				updateNextTarget();
 				return;
 			}
@@ -245,7 +253,7 @@ public class AgentNpc : FSM {
 			// Sistema para que no cambie de direccion muy rapido cuando el pollo se encuentre en
 			// las mismas x, pero en diferentes y. 
 			if (!changeDir){
-				float posX = getPosition().x - lastPos.x;
+				float posX = transform.position.x - lastPos.x;
 				if(Mathf.Abs(posX) >= 80) {
 					changeDir = true;	// Permite cambiar de direccion
 				}
@@ -255,12 +263,12 @@ public class AgentNpc : FSM {
 			// Cambio de direccion si changeDir me lo permite, y estoy de espaldas al target
 			if ((!targetEnemy || changeDir) && derecha != (relPos.x > 0)){
 				derecha = !derecha;
-				lastPos = getPosition();
+				lastPos = transform.position;
 				changeDir = false;	// No voy a permitir cambiar de direccion en la siguiente iteracion
-				if(ground){
-					animateIfExist("giroIzqDer","giroDerIzq");
-					return;
-				}
+//				if(ground){
+//					animateIfExist("giroIzqDer","giroDerIzq");
+//					return;
+//				}
 			}
 			
 			if (nextTarget.z == 2 && ground){
@@ -269,13 +277,13 @@ public class AgentNpc : FSM {
 				return;
 			}
 
-		
-			// Si esta tocando suelo:
-			if(ground)
-				animateIfExist("correrDerecha","correrIzquierda");		
-			// Si esta caiendo:
-			else if (rigidbody.velocity.y < -10)
-				animateIfExist("caidaDerecha","caidaIzquierda");
+			
+//			// Si esta tocando suelo:
+//			if(ground)
+//				animateIfExist("correrDerecha","correrIzquierda");		
+//			// Si esta caiendo:
+//			else if (rigidbody.velocity.y < -10)
+//				animateIfExist("caidaDerecha","caidaIzquierda");
 			// else -> estoy haciendo la animacion de salto
 
 		
@@ -285,65 +293,321 @@ public class AgentNpc : FSM {
 
 		
 		
-
+			/*Actor a = colls[i].gameObject.GetComponent(typeof(Actor)) as Actor;
+			if((a != null) && isEnemy(a)){ // Comprobar rivales*/
 		
 			// Ha detectado algo a distancia "stopDistance" delante del player?:
-			GameObject detected = raycastFront(stopDistance);
-			if(detected != null){	
-				switch(detected.tag){
-				 	case "Player":
-					case "NPC":
-					case "Allied":
-						Actor a = detected.GetComponent(typeof(Actor)) as Actor;
-						if(isEnemy(a)){ // Comprobar rivales
-							curState = FSM.Attack;
-							animateIfExist("golpearKatanaDer","golpearKatanaIzq");
-						} else {
-							curState = FSM.Jump;
-						}
+			switch(getWeapon()){
+				case WEAPON_KATANA:
+						rangeWeapon = 0;
 						break;
-
-				
-					default:
-						curState = FSM.Jump;
-						//print("There is something in front of the object!");
-						//Invoke("UpdateJumpState",0.4f);
+				case WEAPON_PISTOLA:
+						rangeWeapon = 300;
 						break;
-				}
-
+				case WEAPON_ESCOPETA:
+						rangeWeapon = 100;
+						break;
+				default:
+						rangeWeapon = 0;
+						break;
 			}
+			if(getWeapon() == WEAPON_KATANA){
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					switch(detected.tag){
+						case "Player":
+							curState = FSM.Attack;
+//							animateIfExist("atacarDer","atacarIzq");
+							
+							break;
+						case "NPC":
+							curState = FSM.Jump;
+	
+							break;
+					
+					
+	
+					/* Para cuando este disponible getTeam().
+					 	case "Player":
+						case "NPC":
+						case "Allied":
+							Actor a = detected.GetComponent(typeof(Actor)) as Actor;
+							if(isEnemy(a)){ // Comprobar rivales
+								curState = FSM.Attack;
+								animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+							} else {
+								curState = FSM.Jump;
+							}
+							break;
+					*/
+					
+						default:
+							curState = FSM.Jump;
+							//print("There is something in front of the object!");
+							//Invoke("UpdateJumpState",0.4f);
+							break;
+					}
+	
+				}
+		}
+		if(getWeapon() == WEAPON_PISTOLA){
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					switch(detected.tag){
+						case "Player":
+							curState = FSM.Attack;
+//							animateIfExist("atacarDer","atacarIzq");
+							
+							break;
+						case "NPC":
+							curState = FSM.Jump;
+	
+							break;
+					
+					
+	
+					/* Para cuando este disponible getTeam().
+					 	case "Player":
+						case "NPC":
+						case "Allied":
+							Actor a = detected.GetComponent(typeof(Actor)) as Actor;
+							if(isEnemy(a)){ // Comprobar rivales
+								curState = FSM.Attack;
+								animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+							} else {
+								curState = FSM.Jump;
+							}
+							break;
+					*/
+					
+						default:
+							curState = FSM.Jump;
+							//print("There is something in front of the object!");
+							//Invoke("UpdateJumpState",0.4f);
+							break;
+					}
+	
+				}
+		}
+		if(getWeapon() == WEAPON_ESCOPETA){
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					switch(detected.tag){
+						case "Player":
+							curState = FSM.Attack;
+//							animateIfExist("atacarDer","atacarIzq");
+							
+							break;
+						case "NPC":
+							curState = FSM.Jump;
+	
+							break;
+					
+					
+	
+					/* Para cuando este disponible getTeam().
+					 	case "Player":
+						case "NPC":
+						case "Allied":
+							Actor a = detected.GetComponent(typeof(Actor)) as Actor;
+							if(isEnemy(a)){ // Comprobar rivales
+								curState = FSM.Attack;
+								animateIfExist("golpearKatanaDer","golpearKatanaIzq");
+							} else {
+								curState = FSM.Jump;
+							}
+							break;
+					*/
+					
+						default:
+							curState = FSM.Jump;
+							//print("There is something in front of the object!");
+							//Invoke("UpdateJumpState",0.4f);
+							break;
+					}
+	
+				}
+		}
 		
 			updateNextTarget();
 
 	}
 	protected void UpdateAttackState(){
 		//Destroy(mas);
-		string anim = (derecha)? "atacarDer":"atacarIzq";
 		
-		if(!animations.IsPlaying(anim) && animations[anim]!=null){
+	
+		
+		Debug.Log("WEAPON"+getWeapon());
+		if(getWeapon() == WEAPON_KATANA){
+			Debug.Log("PORTE KATANA");
+			string anim = (derecha)? "atacarDer":"atacarIzq";
 			
-			GameObject detected = raycastFront(stopDistance+5);
-			if(detected != null){	
-				
-				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
-				if(isEnemy(actor)){
+			if(!animation.IsPlaying(anim) && animation[anim]!=null){
+//				if(elapsedTime > 5 && stopDistance + 60){
+//					
+//				}
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					if (detected.tag == "Player"){
+							Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+							animation.Play(anim);
+							actor.dealDamage(25);
+						
+							print("HIT");
+					} else {
+							curState = FSM.Run;
+					}
 					
-						animations.Play(anim);
-						actor.dealDamage(25);
-					
-						print("HIT");
 				} else {
-						curState = FSM.Run;
+					curState = FSM.Run;
 				}
-				
-			} else {
-				curState = FSM.Run;
 			}
 		}
+		if(getWeapon() == WEAPON_PISTOLA){
+			
+			Debug.Log("PORTE PISTOLA");
+			//Animacion disparar
+			string anim = (derecha)? "atacarDer":"atacarIzq";
+			Debug.Log("ANIM"+anim);
+			
+//			if(!animation.IsPlaying(anim)){
+//				if(elapsedTime > 5 && stopDistance + 60){
+//					elapsedTime = 0;
+//				}
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					if (detected.tag == "Player"){
+							Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+							//animation.Play(anim);
+						if(elapsedTime > 1.0f){
+							nouTir = null;
+							if(!derecha){
+						    	Vector3 spawnBullet = new Vector3(transform.position.x  - 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.back));
+								nouTir.rigidbody.AddForce(new Vector3(-400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}else{
+								
+								Vector3 spawnBullet = new Vector3(transform.position.x + 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.forward));
+								nouTir.rigidbody.AddForce(new Vector3(400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+								
+						}
+						
+							print("HIT");
+					}else if(detected.tag =="NPC"){
+						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+						if(actor.getTeam() == PHILO_TEAM){
+							curState = FSM.Run;
+							
+						}else if(actor.getTeam() == ROBOT_TEAM){
+							 
+							if(elapsedTime > 3.0f){
+							Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 90,transform.position.y+35,transform.position.z);
+							nouTir = (GameObject)Instantiate(bala,spawnBullet,transform.rotation);
+							
+							
+							nouTir.AddComponent("RigidBody").AddForce(new Vector3(-1000, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+							
+						}else{
+							curState = FSM.Run;
+						}
+							
+						
+					}else {
+							curState = FSM.Run;
+					}
+					
+				} else {
+					curState = FSM.Run;
+				}
+			
+		}
+		if(getWeapon() == WEAPON_ESCOPETA){
+//			animation.Stop();
+			Debug.Log("PORTE ESCOPETA");
+			//Animacion disparar
+			string anim = (derecha)? "atacarDer":"atacarIzq";
+			
+			
+//			if(!animation.IsPlaying(anim) && animation[anim]!=null){
+//				if(elapsedTime > 5 && stopDistance + 60){
+//					elapsedTime = 0;
+//				}
+				GameObject detected = raycastFront(stopDistance+rangeWeapon);
+				if(detected != null){	
+					if (detected.tag == "Player"){
+							Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+							//animation.Play(anim);
+						if(elapsedTime > 1.0f){
+							
+							if(!derecha){
+						    	Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.back));
+								nouTir.rigidbody.AddForce(new Vector3(-400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}else{
+								
+								Vector3 spawnBullet = new Vector3(transform.position.x + rigidbody.collider.bounds.extents.x + 30,transform.position.y+60,transform.position.z);
+								nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.forward));
+								nouTir.rigidbody.AddForce(new Vector3(400, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+								
+						}
+						
+							print("HIT");
+					}else if(detected.tag =="NPC"){
+						Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+						
+						if(actor.getTeam() == PHILO_TEAM){
+							curState = FSM.Run;
+							
+						}else if(actor.getTeam() == ROBOT_TEAM){
+							 
+							if(elapsedTime > 3.0f){
+							Vector3 spawnBullet = new Vector3(transform.position.x - rigidbody.collider.bounds.extents.x - 90,transform.position.y+35,transform.position.z);
+							nouTir = (GameObject)Instantiate(bala,spawnBullet,transform.rotation);
+							
+							
+							nouTir.rigidbody.AddForce(new Vector3(-1000, relPos.y, 0), ForceMode.VelocityChange);
+								nouTir.AddComponent("DestruirBala");
+								elapsedTime = 0.0f;
+							}
+							
+						}else{
+							curState = FSM.Run;
+						}
+							
+						
+					}else {
+							curState = FSM.Run;
+					}
+					
+				} else {
+					curState = FSM.Run;
+				}
+			}
+		
 		
 		
 		
 	}
+	
+    
 	
     protected void UpdateJumpState(){
 		Debug.Log("Salte");
@@ -353,16 +617,16 @@ public class AgentNpc : FSM {
 			if(detected != null){
 			
 				switch(detected.tag){
-				 	case "Player":
+					case "Player":
+						curState = FSM.Attack;
+//						animateIfExist("atacarDer","atacarIzq");
+						//print("Player in front me!");
+					 	//Invoke("UpdateAttackState",0.5f);
+						break;
 					case "NPC":
-					case "Allied":
-						Actor a = detected.GetComponent(typeof(Actor)) as Actor;
-						if(isEnemy(a)){ // Comprobar rivales
-							curState = FSM.Attack;
-							animateIfExist("golpearKatanaDer","golpearKatanaIzq");
-						} else {
-							jump();
-						}
+						jump ();
+						//GameObject npc = GameObject.FindGameObjectWithTag("NPC");
+						//Physics.IgnoreCollision(npc.collider,col);
 						break;
 					default:
 						jump ();
@@ -378,13 +642,13 @@ public class AgentNpc : FSM {
 	}
 	protected void UpdateDeadState(){
 		//Animacio morirs
-		if(!animations.IsPlaying((derecha)?"muerteDerecha":"muerteIzquierda")){
+//		if(!animations.IsPlaying((derecha)?"muerteDerecha":"muerteIzquierda")){
 			if (!dead){
-				animateIfExist("muerteDerecha","muerteIzquierda");
+//				animateIfExist("muerteDerecha","muerteIzquierda");
 				dead = true;
 			}else
 				Destroy(gameObject);
-		}
+//		}
 		
 		
 		// Dar puntos a player
@@ -407,13 +671,13 @@ public class AgentNpc : FSM {
 
  		}
 		
- 		//elapsedTime += Time.deltaTime;
+ 		elapsedTime += Time.deltaTime;
 
  		//Go to dead state is no health left
 		//Debug.Log(this.getHealthPoints());
 		if (this.getHealth() <= 0) curState = FSM.Dead;
 		//if (pla.getHealthPoints() <=0) curState = FSM.None;
-	//	Debug.Log("Current STATE: "+curState);
+		Debug.Log("Current STATE: "+curState);
 
 	}
 	
@@ -465,28 +729,36 @@ public class AgentNpc : FSM {
 			
 			rigidbody.velocity = rigidbody.velocity + Vector3.up *jumpForce;	
 
-			animateIfExist ("saltoVerticalDer","saltoVerticalIzq");
+//			animateIfExist ("saltoVerticalDer","saltoVerticalIzq");
 
 			return true;
 			
 		//Si esta caiendo:
-		} else if (rigidbody.velocity.y < -10)
-			animateIfExist("caidaDerecha","caidaIzquierda");
+		}
+//		} else if (rigidbody.velocity.y < -10)
+//			animateIfExist("caidaDerecha","caidaIzquierda");
 		return false;
 	}
 	
 	
+	
+	
 	private bool animateIfExist(string der,string izq){
 		string anim = (derecha)?der:izq;
+
 		if (animations[anim]!=null){
-			print("PLAYING ANIMATION - "+anim);	
+			Debug.Log("PLAYING ANIMATION - "+anim);	
 			animations.Play(anim);
+			return true;
 		}else{
 			print("ANIMATION DOESNT EXIST - "+anim);
 			return false;
 		}
-		return true;
+		
 	}
+	
+	
+	
 	private float distanceX(Vector3 a, Vector3 b){
 		return Mathf.Abs (a.x - b.x);
 	}
@@ -497,7 +769,7 @@ public class AgentNpc : FSM {
 	private GameObject raycastFront(int dist){
 		RaycastHit hit;
 		float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
-		Vector3 pos = getPosition();
+		Vector3 pos = transform.position;
 		bool trobat = false;
 		for (int i=0;i<3 && !trobat;i++){
 			if(Physics.Raycast(pos, (derecha)?Vector3.right:Vector3.left, out hit,dist))
@@ -518,39 +790,43 @@ public class AgentNpc : FSM {
 		float mitadAmplada = rigidbody.collider.bounds.extents.x;
 		bool ground = false;
 		for (int i=-1;i<2 && !ground;i++){
-			ground = Physics.Raycast(getPosition()+Vector3.right*mitadAmplada*i, Vector3.down, 3);
+			ground = Physics.Raycast(transform.position+Vector3.right*mitadAmplada*i, Vector3.down, 3);
 		}
-			print ("onGround ->"+ground);
 		return ground;
 	}
 	private bool isEnemy(Actor a){
-		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
 	
-	protected override void updateModelWeapon() {
-		for (int i=0;i<weap_mod.Length; i++){
-			if ((weapon-1) == i){
-						
-				weap_mod[i].SetActive(true);
-				this.animations = weap_mod[i].animation;
-			}
-			else{
-				weap_mod[i].SetActive(false);
-			}
-		}
+//	protected void loadModelWeapon(int w) {
+//		Debug.Log("LOADING WEAPON");
+//		Debug.Log(weap_mod.Length);
+//		Debug.Log(w);
+//		for (int i=0;i<= weap_mod.Length; i++){
+//			Debug.Log(i);
+//			if ((w-1) == i){
+//				Debug.Log("Entra");
+//				Animation newModel = weap_mod[i].animation;
+//				foreach(AnimationClip name in newModel){
+//					Debug.Log(state.name);
+//					Debug.Log(newModel.GetClipCount());
+//					if(animations[state.name] !=null)
+//						animations.RemoveClip(state.name);
+//					
+//					if (state != null)
+//						Debug.Log(state.name);
+//						animations.AddClip(newModel.GetClip(state.name),state.name);
+//				//animations = weap_mod[i].animation;
+//						
+//				
+//				}
+//				
+//			}
+//			
+//				//weap_mod[i].SetActive(false);
+//			
+//		}
 		
 	}
-	
-	private Vector3 getPosition(){
-		if(getTeam() == PHILO_TEAM){
-			
-			return transform.position;
-		} else {
-			
-			return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-0.1f);
-		}
-		
-	}
-}
+
 
