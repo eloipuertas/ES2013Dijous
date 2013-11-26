@@ -17,9 +17,10 @@ public class AgentNpc : FSM {
 	
 	//Modelos de armas
 	private GameObject[] weap_mod;
+	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra;
 	
 	//Lectors de rutes
-	private int keyPosActual =0; 
+	private int keyPosActual = 0; 
 	public string direrutas = "ruta1";
 	private List <Vector3> rutaActual  = new List<Vector3>();
 	private bool routeJump = false;	
@@ -41,7 +42,6 @@ public class AgentNpc : FSM {
 	
 	//Npc propierties
 	GameObject nouTir;
-	public GameObject bala;
 	private Vector3 spawnPoint;
 
 	//Status
@@ -56,7 +56,6 @@ public class AgentNpc : FSM {
 	
 	private Vector3 lastPos;
 	private bool changeDir = true;
-	
 	
 	
 	
@@ -75,6 +74,8 @@ public class AgentNpc : FSM {
 		curState = FSM.Run;
 			
 		this.setHealth(100);
+		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
+		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 	}
 	
 	void loadRoute(){
@@ -367,22 +368,17 @@ public class AgentNpc : FSM {
 					} else if (!haAtacado && animations[anim].time > 0.5f){
 						haAtacado = true;
 						if(!derecha){
-							/*
-					    	Vector3 spawnBullet = new Vector3(transform.position.x  - 30,transform.position.y+60,transform.position.z);
-							nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.back));
-							nouTir.rigidbody.AddForce(new Vector3(-400, relPos.y, 0), ForceMode.VelocityChange);
-							nouTir.AddComponent("DestruirBala");
-							elapsedTime = 0.0f;
-							*/
+							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 						}else{
-							/*
-							Vector3 spawnBullet = new Vector3(transform.position.x + 30,transform.position.y+60,transform.position.z);
-							nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.forward));
-							nouTir.rigidbody.AddForce(new Vector3(400, relPos.y, 0), ForceMode.VelocityChange);
-							nouTir.AddComponent("DestruirBala");
-							elapsedTime = 0.0f;
-							*/
+							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 						}
+						
+						GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
+						b.setEquip(team);
+						b.setArma(weapon);
+						
 					}
 					
 
@@ -408,24 +404,20 @@ public class AgentNpc : FSM {
 						animations.Play(anim);
 						haAtacado = false;
 					} else if (!haAtacado && animations[anim].time > 0.5f){
+						GameObject nouTir = null;
 						haAtacado = true;
 						if(!derecha){
-							/*
-					    	Vector3 spawnBullet = new Vector3(transform.position.x  - 30,transform.position.y+60,transform.position.z);
-							nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.back));
-							nouTir.rigidbody.AddForce(new Vector3(-400, relPos.y, 0), ForceMode.VelocityChange);
-							nouTir.AddComponent("DestruirBala");
-							elapsedTime = 0.0f;
-							*/
+							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 						}else{
-							/*
-							Vector3 spawnBullet = new Vector3(transform.position.x + 30,transform.position.y+60,transform.position.z);
-							nouTir = (GameObject)Instantiate(bala,spawnBullet,Quaternion.LookRotation(Vector3.forward));
-							nouTir.rigidbody.AddForce(new Vector3(400, relPos.y, 0), ForceMode.VelocityChange);
-							nouTir.AddComponent("DestruirBala");
-							elapsedTime = 0.0f;
-							*/
+							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 						}
+						
+						GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
+						b.setEquip(team);
+						b.setArma(weapon);
+						
 					}
 					
 
@@ -600,6 +592,13 @@ public class AgentNpc : FSM {
 			
 			animations = weap_mod[weapon-1].animation;
 		}
+		
+		if (weapon == WEAPON_ESCOPETA)
+			bala = Resources.Load("ChickenPrefabs/weapons/balaEscopeta") as GameObject;
+		
+		else if (weapon == WEAPON_PISTOLA)
+			bala = Resources.Load("ChickenPrefabs/weapons/balaPistola") as GameObject;
+		
 	}
 	
 	void initAnimationsSettings(){

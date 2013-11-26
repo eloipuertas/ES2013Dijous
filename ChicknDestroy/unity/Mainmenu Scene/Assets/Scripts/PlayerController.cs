@@ -406,7 +406,6 @@ public class PlayerController : Actor {
 					nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 					break;
 				case DIR_DERECHA:
-					bala = Instantiate(Resources.Load("ChickenPrefabs/weapons/balaEscopeta")) as GameObject;
 					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
 					nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 					break;
@@ -414,9 +413,8 @@ public class PlayerController : Actor {
 					break;
 			}
 			
-			nouTir.AddComponent("GestioTir");
 			GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
-			b.setEquip(1); 	//////////////////////// INDICAR EQUIP CORRECTE ////////////////////////////////////
+			b.setEquip(team); 	//////////////////////// INDICAR EQUIP CORRECTE ////////////////////////////////////
 			b.setArma(weapon);
 				
 		} else {

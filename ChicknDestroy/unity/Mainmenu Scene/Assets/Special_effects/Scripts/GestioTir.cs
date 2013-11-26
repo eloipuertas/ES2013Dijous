@@ -16,17 +16,21 @@ public class GestioTir : MonoBehaviour {
 	void Start() {
 		GameObject.Destroy(gameObject, (float)0.6);
 		
-		switch(arma) {
+		//nomes es sent el so dels tirs del player
+		if (equip == 2) {
 			
-			//escopeta
-			case 2: audioEscopeta.Play();
-					break;
-			
-			//pistola
-			case 3: audioPistola.Play();
-					break;
-			
-			default:break;
+			switch(arma) {
+				
+				//escopeta
+				case 2: audioEscopeta.Play();
+						break;
+				
+				//pistola
+				case 3: audioPistola.Play();
+						break;
+				
+				default:break;
+			}
 		}
 				
 	}
@@ -64,7 +68,7 @@ public class GestioTir : MonoBehaviour {
 		GameObject.Destroy(gameObject);
 		
 	}
-	
+
 	public void setEquip(int e) {
 		this.equip = e;
 	}
