@@ -170,27 +170,27 @@ public class DynamicChickenCreation : MonoBehaviour {
 				case 1:
 					c.transform.position = new Vector3(2884.105f,-91.74977f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta3";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				case 2:
 					c.transform.position = new Vector3(6099.58f,118.5825f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta4";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				case 3:
 					c.transform.position = new Vector3(7870.028f,-81.72346f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta5";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				case 4:
 					c.transform.position = new Vector3(10051.11f,118.5825f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta6";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				default: // case 5
 					c.transform.position = new Vector3(14806.89f,414.3137f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "ruta7";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 			}
 		}
