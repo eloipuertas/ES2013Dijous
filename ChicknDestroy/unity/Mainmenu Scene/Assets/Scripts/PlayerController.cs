@@ -383,7 +383,7 @@ public class PlayerController : Actor {
 				disparoActivo = true;
 				break;
 		case WEAPON_PISTOLA:
-				myAnim = gre.animation;
+				myAnim = grp.animation;
 				gre.SetActive(false);
 				grk.SetActive(false);
 				grp.SetActive(true);
