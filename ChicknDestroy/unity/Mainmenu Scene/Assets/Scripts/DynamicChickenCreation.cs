@@ -33,7 +33,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 		*/
 		int enemyTeam = Team ^ 3;
 		for(int i=1; i<6; i++){
-			GameObject ob = CreateChicken(enemyTeam,i);	
+			GameObject ob = CreateChicken(enemyTeam,i);
 			initAsNPC(ob,false,i);	
 			ob.GetComponent<AgentNpc>().setTeam(enemyTeam);
 			ob.tag = "NPC";
@@ -76,13 +76,13 @@ public class DynamicChickenCreation : MonoBehaviour {
 	}
 	
 	GameObject setRoboChicken3(){
-		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
 		c.name = "Robot3";
 		return c;
 	}
 	
 	GameObject setRoboChicken4(){
-		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+		GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
 		c.name = "Robot4";
 		return c;
 	}
@@ -127,6 +127,11 @@ public class DynamicChickenCreation : MonoBehaviour {
 	void initAsPlayer(GameObject c){
 		c.AddComponent<PlayerController>();
 		c.tag = "Player";
+		if(Team == 2)
+			c.transform.position = new Vector3(-538.14F,-78.06F,-12.5F);
+		else
+			c.transform.position = new Vector3(15700.14F,-78.06F,-12.5F);
+		
 		
 		// Y mas cosas
 	}

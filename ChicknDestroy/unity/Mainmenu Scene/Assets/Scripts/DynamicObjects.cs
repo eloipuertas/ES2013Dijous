@@ -80,13 +80,13 @@ public class DynamicObjects : MonoBehaviour {
 		bool respawn = false;
 		for(int i=0;i<2;i++){
 			if(flags[i]){
-				timeLife[i] -= Time.deltaTime;
-				if(timeLife[i] <= 0F)
+				timeFlags[i] -= Time.deltaTime;
+				if(timeFlags[i] <= 0F)
 					respawn = true;
 			}
 		}
 		if(respawn)
-			createLives();
+			createFlags();
 	}
 	
 	void checkShields(){
@@ -140,14 +140,16 @@ public class DynamicObjects : MonoBehaviour {
 			x.transform.eulerAngles = new Vector3(0F,-180F,0F);
 			x.transform.localScale = new Vector3(1F,1F,0.8874608F);
 			timeFlags[0] = 10F;
+			flags[0] = false;
 		}
-		if(flags[0] && timeFlags[1] <= 0){
+		if(flags[1] && timeFlags[1] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/Bandera2")) as GameObject;
 			x.tag = "bandera2";
 			x.transform.position = new Vector3(-693.6163F,802.9051F,-3.1771073F);
 			x.transform.eulerAngles = new Vector3(0F,0F,0F);
 			x.transform.localScale = new Vector3(1F,1F,0.8874608F);
 			timeFlags[1] = 10F;
+			flags[1] = false;
 		}
 	}
 	

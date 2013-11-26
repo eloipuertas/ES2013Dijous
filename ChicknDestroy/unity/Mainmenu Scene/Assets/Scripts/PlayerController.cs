@@ -66,10 +66,10 @@ public class PlayerController : Actor {
 		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
 		
 		
-		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
+		//sortidaBalaDreta.transform.position = new Vector3(55.5F,7F,22F);
 		//sortidaBalaDreta.transform.rotation = Quaternion.identity;
 		
-		sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
+		//sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
 		//sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
@@ -144,7 +144,7 @@ public class PlayerController : Actor {
 							myAnim.Play("atacarDerCorriendo",PlayMode.StopAll);
 							realizarTiro(DIR_DERECHA);
 						}
-						else myAnim.Play("correrDer");
+						else myAnim.Play("correrDerecha");
 						animTime = Time.time;
 					}
 					lastDirection = movDer;
@@ -169,7 +169,7 @@ public class PlayerController : Actor {
 							myAnim.Play("atacarIzqCorriendo",PlayMode.StopAll);
 							realizarTiro(DIR_IZQUIERDA);
 						}
-						else myAnim.Play("correrIzq");
+						else myAnim.Play("correrIzquierda");
 						animTime = Time.time;
 					}
 					lastDirection = movIzq;
@@ -194,7 +194,7 @@ public class PlayerController : Actor {
 						animTime = Time.time;
 					}
 					else if (rigid.velocity.x > 0) {
-						myAnim.Play("correrDer");
+						myAnim.Play("correrDerecha");
 						lastDirection = movDer;
 					}
 					else if(raw < 0) {
@@ -219,7 +219,7 @@ public class PlayerController : Actor {
 						animTime = Time.time;
 					}
 					else if(rigid.velocity.x < 0) {
-						myAnim.Play("correrIzq");
+						myAnim.Play("correrIzquierda");
 						lastDirection = movIzq;
 					}else if(raw > 0) {
 						myAnim["giroIzqDer"].speed = 2;
