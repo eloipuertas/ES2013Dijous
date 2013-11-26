@@ -24,6 +24,9 @@ public class HUD : MonoBehaviour{
 	private Lifebar shield;
 	private Sprite bg_shield;
 	
+	private Sprite flag_robotic;
+	private Sprite flag_philo;
+	
 	private PauseMenu pause_menu;
 	private Points game_points;
 	
@@ -41,10 +44,17 @@ public class HUD : MonoBehaviour{
 		this.robotic = false;
 		this.philo = false;
 		
-		this.current_player_robotic = true;
+		//this.current_player_robotic = true;
+		//this.team = "robot";
+		getPlayer();
 		
-		if (this.current_player_robotic == true) this.team = "robot";
-		else this.team = "philo";
+		if (this.current_player_robotic == true) {
+			this.flag_robotic = new Sprite(new Rect(10,60,60,60),"banderas/roboYourFlag");
+			this.flag_philo = new Sprite(new Rect(70,60,60,60),"banderas/philoEnemyFlag");
+		} else {
+			this.flag_robotic = new Sprite(new Rect(10,60,60,60),"banderas/roboEnemyFlag");
+			this.flag_philo = new Sprite(new Rect(70,60,60,60),"banderas/philoYourFlag");
+		}
 		
 		int isegment = Screen.width/10;
 		
@@ -84,8 +94,8 @@ public class HUD : MonoBehaviour{
 			10);
 		
 		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
-			"pausa/pause",
-			"pausa/pause1",
+			"pausa/pause"+this.team,
+			"pausa/pause"+this.team,
 			new PauseAction(),
 			KeyCode.P);
 		
@@ -95,6 +105,13 @@ public class HUD : MonoBehaviour{
 		this.game = new GameInterface();
 	}
 	
+	private void getPlayer() {
+		int p = PlayerPrefs.GetInt("Team");
+		if (p==1) this.current_player_robotic = true;
+		else this.current_player_robotic = false;
+		if (this.current_player_robotic == true) this.team = "robot";
+		else this.team = "philo";
+	}
 	
 	// Use this for initialization
 	void Start () {
@@ -103,6 +120,10 @@ public class HUD : MonoBehaviour{
 		initComponents();
 		
 		notifyFlag (false,false);
+		notifyFlag (false,true);
+		
+		//notifyFlag (true,false);
+		//notifyFlag (true,true);
 		
 	}
 	
@@ -122,8 +143,15 @@ public class HUD : MonoBehaviour{
 		
 		this.mes.render();
 		
+		flagRender();
+		
 		//if(isPaused())this.pause_menu.render();
 		if(isPaused())pauseMenu();
+	}
+	
+	private void flagRender() {
+		if (this.robotic == true) this.flag_robotic.render ();
+		if (this.philo == true) this.flag_philo.render ();
 	}
 	
 	// Update is called once per frame
