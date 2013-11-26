@@ -112,10 +112,6 @@ public class PlayerController : Actor {
 		weapon = WEAPON_PISTOLA;
 		updateModelWeapon();
 		
-		Parpadeig p = GetComponent("Parpadeig") as Parpadeig;
-		//se tendria que poner el mismo nombre para cada parte del cuerpo en grp, grk i gre
-		//de momento esta de ejemplo con la pistola
-		p.setCos(GameObject.Find(gameObject.name+"/grp/Cylinder"));
 		granada = Resources.Load("ChickenPrefabs/weapons/granada") as GameObject;
 		
 		currentDirection = DIR_DERECHA;
@@ -370,6 +366,8 @@ public class PlayerController : Actor {
 	
 	void updateModelWeapon() {
 		
+		Parpadeig p = GetComponent("Parpadeig") as Parpadeig;;
+		
 		switch(weapon){
 			case WEAPON_KATANA:
 				myAnim = grk.animation;
@@ -377,6 +375,8 @@ public class PlayerController : Actor {
 				gre.SetActive(false);
 				grp.SetActive(false);
 				disparoActivo = false;
+				p.setCos(GameObject.Find(gameObject.name+"/grk/body"));
+				p.setArma(GameObject.Find(gameObject.name+"/grk/weapon"));
 				break;
 			case WEAPON_ESCOPETA:
 				myAnim = gre.animation;
@@ -384,6 +384,8 @@ public class PlayerController : Actor {
 				grk.SetActive(false);
 				grp.SetActive(false);
 				bala = Resources.Load("ChickenPrefabs/weapons/balaEscopeta") as GameObject;
+				p.setCos(GameObject.Find(gameObject.name+"/gre/body"));
+				p.setArma(GameObject.Find(gameObject.name+"/gre/weapon"));
 				disparoActivo = true;
 				break;
 		case WEAPON_PISTOLA:
@@ -392,6 +394,8 @@ public class PlayerController : Actor {
 				grk.SetActive(false);
 				grp.SetActive(true);
 				bala = Resources.Load("ChickenPrefabs/weapons/balaPistola") as GameObject;
+				p.setCos(GameObject.Find(gameObject.name+"/grp/body"));
+				p.setArma(GameObject.Find(gameObject.name+"/grp/weapon"));
 				disparoActivo = true;
 				break;
 			default:
@@ -418,7 +422,7 @@ public class PlayerController : Actor {
 			}
 			
 			GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
-			b.setEquip(team); 	//////////////////////// INDICAR EQUIP CORRECTE ////////////////////////////////////
+			b.setEquip(team);
 			b.setArma(weapon);
 				
 		} else {

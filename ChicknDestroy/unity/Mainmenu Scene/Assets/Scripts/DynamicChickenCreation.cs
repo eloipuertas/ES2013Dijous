@@ -10,8 +10,8 @@ public class DynamicChickenCreation : MonoBehaviour {
 		Chicken = PlayerPrefs.GetInt("Chicken");//we get the values from the startGame scene through PlayerPrefs
 		Team = PlayerPrefs.GetInt("Team");
 		
-		//Chicken = 1;
-		//Team = Actor.ROBOT_TEAM;
+		Chicken = 5;
+		Team = Actor.ROBOT_TEAM;
 		
 		setPlayer();
 		setAllyTeam();
