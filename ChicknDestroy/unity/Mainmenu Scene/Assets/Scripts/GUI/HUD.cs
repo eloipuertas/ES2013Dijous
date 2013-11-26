@@ -36,17 +36,22 @@ public class HUD : MonoBehaviour{
 	
 	private MessagePool mes;
 	
+	private TimeSprite[] power_ups;
+	private Sprite[] bg_pu;
+	
 	// Flag Control
 	private bool robotic;
 	private bool philo;
 
 	void initComponents() {
+		int jsegment = Screen.height/10;
+		int isegment = Screen.width/10;
+		
 		this.robotic = false;
 		this.philo = false;
 		
-		//this.current_player_robotic = true;
-		//this.team = "robot";
-		getPlayer();
+		//stub_getTeam();
+		getTeam();
 		
 		if (this.current_player_robotic == true) {
 			this.flag_robotic = new Sprite(new Rect(10,60,60,60),"banderas/roboYourFlag");
@@ -56,7 +61,7 @@ public class HUD : MonoBehaviour{
 			this.flag_philo = new Sprite(new Rect(70,60,60,60),"banderas/philoYourFlag");
 		}
 		
-		int isegment = Screen.width/10;
+		
 		
 		this.weapons = new SpriteWeaponControl(new Rect(10,10,100,40));
 		
@@ -101,16 +106,37 @@ public class HUD : MonoBehaviour{
 		
 		this.mes = new MessagePool(MESSAGE_POOL);
 		
+		
+		this.power_ups = new TimeSprite[3];
+		this.bg_pu = new Sprite[3];
+		this.bg_pu[0] = new Sprite(new Rect(10,jsegment*2,80,80),"extras/hudExtra");
+		this.power_ups[0] = new TimeSprite(new Rect(15,5+jsegment*2,this.bg_pu[0].getSize().x-10,this.bg_pu[0].getSize().y-10), "extras/correr");
+		this.bg_pu[1] = new Sprite(new Rect(10,jsegment*3,this.bg_pu[0].getSize().x,this.bg_pu[0].getSize().y),"extras/hudExtra");
+		this.power_ups[1] = new TimeSprite(new Rect(15,5+jsegment*3,this.bg_pu[1].getSize().x-10,this.bg_pu[1].getSize().y-10), "extras/salto");
+		this.bg_pu[2] = new Sprite(new Rect(10,jsegment*4,this.bg_pu[0].getSize().x,this.bg_pu[0].getSize().y),"extras/hudExtra");
+		this.power_ups[2] = new TimeSprite(new Rect(15,5+jsegment*4,this.bg_pu[2].getSize().x-10,this.bg_pu[2].getSize().y-10), "extras/velocidadDisparos");
+		
 		this.player = new PlayerInterface();
 		this.game = new GameInterface();
+		
+		//stub_printPowerUps();
 	}
 	
-	private void getPlayer() {
+	private void getTeam() {
 		int p = PlayerPrefs.GetInt("Team");
 		if (p==1) this.current_player_robotic = true;
 		else this.current_player_robotic = false;
 		if (this.current_player_robotic == true) this.team = "robot";
 		else this.team = "philo";
+	}
+	
+	private void stub_getTeam() {
+		this.current_player_robotic = true;
+		this.team = "robot";
+	}
+	
+	private void stub_printPowerUps() {
+		notifyPowerUp (true,0);
 	}
 	
 	// Use this for initialization
@@ -142,6 +168,13 @@ public class HUD : MonoBehaviour{
 		this.pause_button.render();
 		
 		this.mes.render();
+		
+		for (int i = 0; i<this.bg_pu.Length;i++) {
+			this.bg_pu[i].render ();
+		}
+		for (int i = 0; i<this.power_ups.Length;i++) {
+			this.power_ups[i].render ();
+		}
 		
 		flagRender();
 		
@@ -231,5 +264,26 @@ public class HUD : MonoBehaviour{
 	public void notifyFlag(bool flag, bool robotic) {
 		if (robotic)this.robotic = flag;
 		else this.philo = flag;
+	}
+	public void notifyPowerUp(bool activated, int power_up) {
+		if (power_up == 0) {
+			for (int i = 0; i<this.power_ups.Length;i++) {
+				this.power_ups[i].start(activated);
+			}
+		}
+		else if (power_up<=3 && power_up>0) {
+			this.power_ups[power_up-1].start (activated);
+		}
+	}
+	
+	public void notifyPowerUp(long millis, int power_up) {
+		if (power_up == 0) {
+			for (int i = 0; i<this.power_ups.Length;i++) {
+				this.power_ups[i].start(millis);
+			}
+		}
+		else if (power_up<=3 && power_up>0) {
+			this.power_ups[power_up-1].start (millis);
+		}
 	}
 }
