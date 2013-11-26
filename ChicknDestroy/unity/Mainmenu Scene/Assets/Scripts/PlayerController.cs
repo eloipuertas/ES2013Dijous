@@ -41,15 +41,16 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
+	//private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
 	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
+	private float damageTime;
 	
 	//indica el tiempo de duracion de animacion
 	private float animDuration;
-	
+	private float damageDuration;
 	
 	private int currentDirection;
 	private int currentState;
@@ -75,15 +76,16 @@ public class PlayerController : Actor {
 		gre = GameObject.Find(gameObject.name+"/gre");
 		grk = GameObject.Find(gameObject.name+"/grk");
 		grp = GameObject.Find(gameObject.name+"/grp");
+		myAnim = gre.animation;
 		
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
-		bala = GameObject.FindGameObjectWithTag("bala");
+		bala = GameObject.FindGameObjectWithTag("balaEscopeta");
 		
-		sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
-		sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
-		sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
+		//sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
+		//sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
+		//sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
 		
 		
 		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
@@ -101,6 +103,7 @@ public class PlayerController : Actor {
 		initAnimations();
 		animDuration = 0.3f;
 		
+		
 		health = 100;
 		currentState = STATE_STOP;
 		
@@ -114,6 +117,9 @@ public class PlayerController : Actor {
 		esBajable = false;
 		ataque = false;
 		dead = false;
+		
+		damageDuration = 1.0f;
+		damageTime = Time.time;
 	}
 	
 	
@@ -144,7 +150,7 @@ public class PlayerController : Actor {
 			
 			if (isGround()) {
 				if (rawVert > 0) {
-					sonidoSalto.Play();
+					//sonidoSalto.Play();
 					rigid.velocity += Vector3.up * jumpHeight;
 				}
 				else if(rawVert < 0 && esBajable) {
@@ -276,6 +282,7 @@ public class PlayerController : Actor {
 		
 		for (int i = 0; i < 24; ++i) {
 			int speed = this.team == Actor.ROBOT_TEAM? animSpeed[i]:animSpeed[i]*2;
+			
 			gre.animation[animNames[i]].speed = speed;
 			grk.animation[animNames[i]].speed = speed;
 			grp.animation[animNames[i]].speed = speed;
@@ -294,16 +301,34 @@ public class PlayerController : Actor {
 	}
 	
 	
-	
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.tag == "upVida"){ 
-				sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
+				//sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
  				heal(50);
 		}
-		
-		if(collision.gameObject.tag == "escopeta_off") {
-				sonidoPowerUp.Play();
+		if(collision.gameObject.tag == "escopeta_off"){
+			weapon = WEAPON_ESCOPETA;
 		}
+		
+		if(collision.gameObject.tag == "katana"){
+			weapon = WEAPON_KATANA;
+		}
+		
+		if(collision.gameObject.tag == "pistola") {
+			weapon = WEAPON_PISTOLA;
+		}
+		
+		if (collision.gameObject.tag == "punxes‏"){
+			
+			Debug.Log("Estamos sobre punxa");
+			float currentTimeDamage = Time.time - damageTime;
+			if (currentTimeDamage > damageDuration) {
+				Debug.Log("daño de punxa");
+				dealDamage(50);
+				damageTime = Time.time;
+			}
+		}
+		
 		if (collision.gameObject.layer == 8) {
 			esBajable = true;
 		}else {
@@ -327,6 +352,7 @@ public class PlayerController : Actor {
 				gre.SetActive(true);
 				grk.SetActive(false);
 				grp.SetActive(false);
+				bala = GameObject.FindGameObjectWithTag("balaEscopeta");
 				disparoActivo = true;
 				break;
 		case WEAPON_PISTOLA:
@@ -334,6 +360,7 @@ public class PlayerController : Actor {
 				gre.SetActive(false);
 				grk.SetActive(false);
 				grp.SetActive(true);
+				bala = GameObject.FindGameObjectWithTag("balaPistola");
 				disparoActivo = true;
 				break;
 			default:
@@ -360,7 +387,7 @@ public class PlayerController : Actor {
 			}
 			
 			nouTir.AddComponent("DestruirBala");
-			sonidoDisparo.Play();
+			//sonidoDisparo.Play();
 		} else {
 			
 			if(detected != null){
@@ -405,6 +432,4 @@ public class PlayerController : Actor {
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
-
-	
 }
