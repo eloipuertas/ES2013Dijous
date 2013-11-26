@@ -41,8 +41,8 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	//private AudioSource sonidoSalto, sonidoDisparo, sonidoPowerUp;
-	private GameObject bala, sortidaBalaDreta, sortidaBalaEsquerra, detected;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo;
+	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
@@ -81,12 +81,11 @@ public class PlayerController : Actor {
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
-		bala = GameObject.FindGameObjectWithTag("balaEscopeta");
+		AudioSource[] audios = GetComponents<AudioSource>();
 		
-		//sonidoSalto = GameObject.Find("Sounds/Jump").GetComponent<AudioSource>();
-		//sonidoDisparo = GameObject.Find("Sounds/Shot").GetComponent<AudioSource>();
-		//sonidoPowerUp = GameObject.Find("Sounds/Power_up").GetComponent<AudioSource>();
-		
+		sonidoSalto = audios[0];
+		sonidoPowerUp = audios[1];
+		sonidoEscudo = audios[2];
 		
 		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
 		//sortidaBalaDreta.transform.rotation = Quaternion.identity;
@@ -109,8 +108,11 @@ public class PlayerController : Actor {
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
-		weapon = WEAPON_KATANA;
+		//weapon = WEAPON_KATANA;
+		weapon = WEAPON_PISTOLA;
 		updateModelWeapon();
+		
+		granada = Resources.Load("ChickenPrefabs/weapons/granada") as GameObject;
 		
 		currentDirection = DIR_DERECHA;
 		
@@ -144,13 +146,17 @@ public class PlayerController : Actor {
 			}
 				
 			if (!ataque && Input.GetButtonDown("Fire2")) {
-				ataque = true;
+				GameObject novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+				GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
+				b.setEquip(1);
+				novaGranada.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+				//ataque = true;
 			}
 			
 			
 			if (isGround()) {
 				if (rawVert > 0) {
-					//sonidoSalto.Play();
+					sonidoSalto.Play();
 					rigid.velocity += Vector3.up * jumpHeight;
 				}
 				else if(rawVert < 0 && esBajable) {
@@ -302,8 +308,14 @@ public class PlayerController : Actor {
 	
 	
 	void OnCollisionEnter(Collision collision){
+		
+		if(collision.gameObject.tag == "escut") {
+				sonidoEscudo.Play();
+				//notificar
+		}
+		
 		if(collision.gameObject.tag == "upVida"){ 
-				//sonidoPowerUp.Play(); //el motivo por el cual suena en el script del player el sonido del power up es porque al autodestruirse rapidamente el power up no se oye en su script
+				sonidoPowerUp.Play();
  				heal(50);
 		}
 		if(collision.gameObject.tag == "escopeta_off"){
@@ -336,6 +348,18 @@ public class PlayerController : Actor {
 		}
 	}
 	
+	/* Para que se mueva conjuntamente con las plataformas horizontales */
+	/*
+	void OnCollisionStay (Collision hit) { 
+		
+	    if (hit.gameObject.tag == "plataforma_moviment")
+	        transform.parent = hit.transform ; 
+	    else
+	        transform.parent = null;
+		
+	}
+	*/
+	
 	void updateModelWeapon() {
 		
 		switch(weapon){
@@ -345,14 +369,13 @@ public class PlayerController : Actor {
 				gre.SetActive(false);
 				grp.SetActive(false);
 				disparoActivo = false;
-			
 				break;
 			case WEAPON_ESCOPETA:
 				myAnim = gre.animation;
 				gre.SetActive(true);
 				grk.SetActive(false);
 				grp.SetActive(false);
-				bala = GameObject.FindGameObjectWithTag("balaEscopeta");
+				bala = Resources.Load("ChickenPrefabs/weapons/balaEscopeta") as GameObject;
 				disparoActivo = true;
 				break;
 		case WEAPON_PISTOLA:
@@ -360,7 +383,7 @@ public class PlayerController : Actor {
 				gre.SetActive(false);
 				grk.SetActive(false);
 				grp.SetActive(true);
-				bala = GameObject.FindGameObjectWithTag("balaPistola");
+				bala = Resources.Load("ChickenPrefabs/weapons/balaPistola") as GameObject;
 				disparoActivo = true;
 				break;
 			default:
@@ -375,10 +398,11 @@ public class PlayerController : Actor {
 			
 			switch(currentDirection){
 				case DIR_IZQUIERDA:
-					nouTir = (GameObject) Instantiate (bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+					nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
 					nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 					break;
 				case DIR_DERECHA:
+					bala = Instantiate(Resources.Load("ChickenPrefabs/weapons/balaEscopeta")) as GameObject;
 					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
 					nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 					break;
@@ -386,8 +410,11 @@ public class PlayerController : Actor {
 					break;
 			}
 			
-			nouTir.AddComponent("DestruirBala");
-			//sonidoDisparo.Play();
+			nouTir.AddComponent("GestioTir");
+			GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
+			b.setEquip(1); 	//////////////////////// INDICAR EQUIP CORRECTE ////////////////////////////////////
+			b.setArma(weapon);
+				
 		} else {
 			
 			if(detected != null){
