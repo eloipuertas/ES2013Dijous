@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 791d247f5437fd84b861f3ae7becb9c5
+guid: 7f64869b30cedc840befe8d050b8ed38
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -76,8 +76,8 @@ ModelImporter:
     7400016: atacarSecIzqCorriendo
     7400018: caidaDerecha
     7400020: caidaIzquierda
-    7400022: correrDer
-    7400024: correrIzq
+    7400022: correrDerecha
+    7400024: correrIzquierda
     7400026: giroDerIzq
     7400028: giroIzqDer
     7400030: muerteDerecha
