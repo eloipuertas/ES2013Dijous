@@ -29,10 +29,10 @@ function Update () {
 			
 				case "0": //afegir so error. potser colocar final fora if timer > 0 ??
 						startTimer = 0;
+						countdown_activada = 0;
 						text1.active = false;
 						text2.active = false;
 						foc1.active = true;
-						countdown_activada = 0;
 						obstacle.active = false;
 						break;
 						
@@ -79,16 +79,24 @@ function Update () {
 
 function OnCollisionEnter(collision:Collision){
 	if(collision.gameObject.tag =="Player" || collision.gameObject.tag =="NPC"){
+	
 		if (countdown_activada == 0) {
+		
 			boto.animation.Play();
-			startTimer = 1;
 			audioCountdown.Play();
-			text1.active = true;
-			text2.active = true;
-			foc1.active = false;
+			
+			startTimer = 1;
 			countdown_activada = 1;
 			timer = 15;
+						
+			text1.active = true;
+			text2.active = true;
 			obstacle.active = false;
+			foc1.active = false;
+			
+			text1.renderer.material.color = Color.blue;
+			text2.renderer.material.color = Color.blue;
+			
 		}
 	}
 }
