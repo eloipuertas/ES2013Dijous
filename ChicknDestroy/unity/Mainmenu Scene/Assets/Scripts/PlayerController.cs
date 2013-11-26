@@ -322,18 +322,22 @@ public class PlayerController : Actor {
 				sonidoPowerUp.Play();
  				heal(50);
 		}
-		if(collision.gameObject.tag == "escopeta_off"){
-			weapon = WEAPON_ESCOPETA;
+		if (Input.GetKeyDown(KeyCode.E)) {
+			if(collision.gameObject.tag == "escopeta_off"){
+				weapon = WEAPON_ESCOPETA;
+				hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
+			}
+			
+			if(collision.gameObject.tag == "katana"){
+				weapon = WEAPON_KATANA;
+				hud.notifyPrimaryWeapon(1);
+			}
+			
+			if(collision.gameObject.tag == "pistola") {
+				weapon = WEAPON_PISTOLA;
+				hud.notifyPrimaryWeapon(3);
+			}
 		}
-		
-		if(collision.gameObject.tag == "katana"){
-			weapon = WEAPON_KATANA;
-		}
-		
-		if(collision.gameObject.tag == "pistola") {
-			weapon = WEAPON_PISTOLA;
-		}
-		
 		if (collision.gameObject.tag == "punxes‏"){
 			
 			Debug.Log("Estamos sobre punxa");

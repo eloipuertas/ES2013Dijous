@@ -19,6 +19,8 @@ public class GameManager : MonoBehaviour {
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
 		Physics.gravity = new Vector3(0, -gravity, 0);
+		if(PlayerPrefs.GetInt("Team") == 1)
+			cam.transform.position = new Vector3(15700F,26.20233F,-643.3362F);
 		/*
 		GameObject go;
 		
@@ -49,10 +51,19 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	void OnGUI(){//Show the banner only when win condition or lose condition is true
-		if(looseCondition())
-			GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("lose") as  Texture);
-		else if(winCondition())
-			GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("win") as  Texture);
+		if(looseCondition()){
+			if(PlayerPrefs.GetInt("Team") == 2)
+				GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("RoboLose") as  Texture);
+			else
+				GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("PhiloLose") as  Texture);
+		}
+		else if(winCondition()){
+			if(PlayerPrefs.GetInt("Team") == 2)
+				GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("RoboWin") as  Texture);
+			else
+				GUI.DrawTexture(new Rect(Screen.width/4,Screen.height/8,500,500),Resources.Load ("PhiloWin") as  Texture);
+			
+		}
 	}
 	
 	private void fireWinNotification() {
