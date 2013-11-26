@@ -127,6 +127,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 	
 	void initAsPlayer(GameObject c){
 		c.AddComponent<PlayerController>();
+		c.AddComponent<Parpadeig>();
 		c.tag = "Player";
 		
 		// Y mas cosas

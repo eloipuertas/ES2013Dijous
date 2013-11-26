@@ -112,6 +112,10 @@ public class PlayerController : Actor {
 		weapon = WEAPON_PISTOLA;
 		updateModelWeapon();
 		
+		Parpadeig p = GetComponent("Parpadeig") as Parpadeig;
+		//se tendria que poner el mismo nombre para cada parte del cuerpo en grp, grk i gre
+		//de momento esta de ejemplo con la pistola
+		p.setCos(GameObject.Find(gameObject.name+"/grp/Cylinder"));
 		granada = Resources.Load("ChickenPrefabs/weapons/granada") as GameObject;
 		
 		currentDirection = DIR_DERECHA;
@@ -349,7 +353,7 @@ public class PlayerController : Actor {
 	}
 	
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
-	/*
+	
 	void OnCollisionStay (Collision hit) { 
 		
 	    if (hit.gameObject.tag == "plataforma_moviment")
@@ -358,7 +362,7 @@ public class PlayerController : Actor {
 	        transform.parent = null;
 		
 	}
-	*/
+	
 	
 	void updateModelWeapon() {
 		
