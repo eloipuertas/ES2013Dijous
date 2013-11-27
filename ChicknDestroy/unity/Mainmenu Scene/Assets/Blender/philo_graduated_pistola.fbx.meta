@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7f64869b30cedc840befe8d050b8ed38
+guid: 7e890afba7bcd4145b0246e6e7316611
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -86,8 +86,10 @@ ModelImporter:
     7400036: paradaIzquierda
     7400038: recogerItemDer
     7400040: recogerItemIzq
-    7400042: saltoVerticalDer
-    7400044: saltoVerticalIzq
+    7400042: saltarDerecha
+    7400044: saltarIzquierda
+    7400046: saltoVerticalDer
+    7400048: saltoVerticalIzq
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cylinder
