@@ -41,7 +41,7 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
 	//indica el tiempo transcurrido de animacion
@@ -86,12 +86,8 @@ public class PlayerController : Actor {
 		sonidoSalto = audios[0];
 		sonidoPowerUp = audios[1];
 		sonidoEscudo = audios[2];
-		
-		sortidaBalaDreta.transform.position = new Vector3(55.5f,7f,22f);
-		//sortidaBalaDreta.transform.rotation = Quaternion.identity;
-		
-		sortidaBalaEsquerra.transform.position = new Vector3(-47.5f,5.2f,22f);
-		//sortidaBalaEsquerra.transform.rotation = Quaternion.identity;
+		sonidoDisparoPistola = audios[3];
+		sonidoDisparoEscopeta = audios[4];
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
@@ -107,9 +103,8 @@ public class PlayerController : Actor {
 		currentState = STATE_STOP;
 		
 		heightHero = rigid.collider.bounds.extents.y;
-		
-		//weapon = WEAPON_KATANA;
-		weapon = WEAPON_PISTOLA;
+		;
+		weapon = WEAPON_ESCOPETA;
 		updateModelWeapon();
 		
 		granada = Resources.Load("ChickenPrefabs/weapons/granada") as GameObject;
@@ -146,10 +141,18 @@ public class PlayerController : Actor {
 			}
 				
 			if (!ataque && Input.GetButtonDown("Fire2")) {
-				GameObject novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+				
+				GameObject novaGranada = null;
+				if (currentDirection == DIR_DERECHA) {
+					novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+					novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
+				} else {
+					novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+					novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
+				}
 				GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
 				b.setEquip(1);
-				novaGranada.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+				
 				//ataque = true;
 			}
 			
@@ -366,7 +369,7 @@ public class PlayerController : Actor {
 	
 	void updateModelWeapon() {
 		
-		Parpadeig p = GetComponent("Parpadeig") as Parpadeig;;
+		Parpadeig p = GetComponent("Parpadeig") as Parpadeig;
 		
 		switch(weapon){
 			case WEAPON_KATANA:
@@ -424,6 +427,11 @@ public class PlayerController : Actor {
 			GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
 			b.setEquip(team);
 			b.setArma(weapon);
+			
+			if (weapon == WEAPON_ESCOPETA)
+				sonidoDisparoEscopeta.Play();
+			else
+				sonidoDisparoPistola.Play();
 				
 		} else {
 			

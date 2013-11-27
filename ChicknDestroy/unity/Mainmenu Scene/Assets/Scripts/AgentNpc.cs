@@ -15,10 +15,14 @@ public class AgentNpc : FSM {
 		Dead,
 	}
 	
+	//sonidos
+	private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
+	
 	//Modelos de armas
 	private GameObject[] weap_mod;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra;
-	
+	private Parpadeig p;
+
 	//Lectors de rutes
 	private int keyPosActual = 0; 
 	public string direrutas = "ruta1";
@@ -76,6 +80,14 @@ public class AgentNpc : FSM {
 		this.setHealth(100);
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
+		
+		AudioSource[] audios = GetComponents<AudioSource>();
+		sonidoDisparoPistola = audios[3];
+		sonidoDisparoEscopeta = audios[4];
+		
+		GameObject player = GameObject.FindGameObjectWithTag("Player") as GameObject;
+		p = player.GetComponent("Parpadeig") as Parpadeig;
+	
 	}
 	
 	void loadRoute(){
@@ -334,7 +346,7 @@ public class AgentNpc : FSM {
 					} else if (!haAtacado && animations[anim].time > (animations[anim].length*2f/3f)){
 						haAtacado = true;
 						actor.dealDamage(25);
-
+						p.mostrarDany();
 					}
 
 				} else {
@@ -380,6 +392,8 @@ public class AgentNpc : FSM {
 						b.setEquip(team);
 						b.setArma(weapon);
 						
+						sonidoDisparoPistola.Play();
+						
 					}
 					
 
@@ -418,6 +432,8 @@ public class AgentNpc : FSM {
 						GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
 						b.setEquip(team);
 						b.setArma(weapon);
+						
+						sonidoDisparoEscopeta.Play();
 						
 					}
 					

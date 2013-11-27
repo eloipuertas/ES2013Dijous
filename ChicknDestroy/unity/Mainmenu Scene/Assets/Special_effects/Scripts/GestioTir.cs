@@ -7,43 +7,23 @@ public class GestioTir : MonoBehaviour {
 	private int arma;
 	
 	public AudioSource audioDany;
-	public AudioSource audioEscopeta;
-	public AudioSource audioPistola;
 	public GameObject sangPistola;
 	public GameObject sangEscopeta;
 	public GameObject explosioGranada;
 	
 	void Start() {
-		GameObject.Destroy(gameObject, (float)0.6);
-		
-		//nomes es sent el so dels tirs del player
-		if (equip == 2) {
-			
-			switch(arma) {
-				
-				//escopeta
-				case 2: audioEscopeta.Play();
-						break;
-				
-				//pistola
-				case 3: audioPistola.Play();
-						break;
-				
-				default:break;
-			}
-		}
-				
+		//			
 	}
 	
 	void OnCollisionEnter(Collision collision){
 		
 		GameObject expl = null;
 		
-		//l'explosio s'ha de veure sempre, toqui amb el NPC o no
 		if (gameObject.tag == "granada") {
-				//gestionar aqui el dany si toca un de l'equip rival, comprovar que sigui de l'altre equip...
+				GameObject.Destroy(gameObject, 2);
 				expl = GameObject.Instantiate(explosioGranada, transform.position, Quaternion.identity) as GameObject;
 		} else {
+			GameObject.Destroy(gameObject, (float)0.6);
 			Actor actor = collision.gameObject.GetComponent(typeof(Actor)) as Actor;
 			if (isEnemy (actor)){
 				

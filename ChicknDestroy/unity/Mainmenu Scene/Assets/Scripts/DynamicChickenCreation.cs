@@ -10,8 +10,8 @@ public class DynamicChickenCreation : MonoBehaviour {
 		Chicken = PlayerPrefs.GetInt("Chicken");//we get the values from the startGame scene through PlayerPrefs
 		Team = PlayerPrefs.GetInt("Team");
 		
-		//Chicken = 1;
-		//Team = Actor.ROBOT_TEAM;
+		Chicken = 3;
+		Team = Actor.ROBOT_TEAM;
 		
 		setPlayer();
 		setAllyTeam();
@@ -170,27 +170,27 @@ public class DynamicChickenCreation : MonoBehaviour {
 				case 1:
 					c.transform.position = new Vector3(3825.614f,-80.28318f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival1";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 					break;
 				case 2:
 					c.transform.position = new Vector3(6184.183f,-80.28318f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival2";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 					break;
 				case 3:
 					c.transform.position = new Vector3(7870.028f,-81.72346f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival3";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 					break;
 				case 4:
 					c.transform.position = new Vector3(15394.46f,831.0337f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival4";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 					break;
 				default: // case 5
 					c.transform.position = new Vector3(15000.89f,-65.3283f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival5_Agresiva";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 					break;
 			}
 		}
