@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
 	
-	public AudioSource audio;
+	public AudioSource audioPartidaPerduda, audioAmbient;
 	
 	void Start () {
 		cam = GetComponent<GameCamera>();
@@ -74,7 +74,10 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void notifyPlayerDeath() {
-		//audio.Play();
+		if (!audioPartidaPerduda.isPlaying) {
+			audioAmbient.Stop();
+			audioPartidaPerduda.Play();
+		}
 		this.looseConditionLastUpdate = true;
 	}
 	
