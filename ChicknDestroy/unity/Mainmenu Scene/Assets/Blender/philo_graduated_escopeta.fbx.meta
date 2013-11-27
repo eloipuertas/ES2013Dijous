@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1b46848212e3c2c4fa49a95adf24b80b
+guid: 2f737dfe9af2247439dbf915520ed18f
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -86,8 +86,10 @@ ModelImporter:
     7400036: paradaIzquierda
     7400038: recogerItemDer
     7400040: recogerItemIzq
-    7400042: saltoVerticalDer
-    7400044: saltoVerticalIzq
+    7400042: saltarDerecha
+    7400044: saltarIzquierda
+    7400046: saltoVerticalDer
+    7400048: saltoVerticalIzq
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cube_002
