@@ -12,7 +12,7 @@ public class GestioTir : MonoBehaviour {
 	public GameObject explosioGranada;
 	
 	void Start() {
-		//			
+		GameObject.Destroy(gameObject, (float)0.8);		
 	}
 	
 	void OnCollisionEnter(Collision collision){
@@ -20,10 +20,8 @@ public class GestioTir : MonoBehaviour {
 		GameObject expl = null;
 		
 		if (gameObject.tag == "granada") {
-				GameObject.Destroy(gameObject, 2);
 				expl = GameObject.Instantiate(explosioGranada, transform.position, Quaternion.identity) as GameObject;
 		} else {
-			GameObject.Destroy(gameObject, (float)0.6);
 			Actor actor = collision.gameObject.GetComponent(typeof(Actor)) as Actor;
 			if (isEnemy (actor)){
 				
