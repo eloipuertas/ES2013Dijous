@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 	
-	private static int SCORE_TO_WIN = 50;
+	private static int SCORE_TO_WIN = 120;
 	//public GameObject player;
 	private GameCamera cam;
 	public bool GameSelRobot = true;
@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour {
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
 	
-	public AudioSource audioPartidaPerduda, audioAmbient;
+	public AudioSource audioLoose, audioAmbient, audioWin;
 	
 	void Start () {
 		cam = GetComponent<GameCamera>();
@@ -36,10 +36,18 @@ public class GameManager : MonoBehaviour {
 	void Update () {
 		bool endRequested = false;
 		if (winCondition()) {
+			if (!audioWin.isPlaying) {
+				audioAmbient.Stop();
+				audioWin.Play();
+			}
 			endRequested = true;
 			fireWinNotification();
 		}
 		if (looseCondition()){
+			if (!audioLoose.isPlaying) {
+				audioAmbient.Stop();
+				audioLoose.Play();
+			}
 			endRequested = true;
 			fireLooseNotification();
 		}
@@ -74,15 +82,11 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void notifyPlayerDeath() {
-		if (!audioPartidaPerduda.isPlaying) {
-			audioAmbient.Stop();
-			audioPartidaPerduda.Play();
-		}
 		this.looseConditionLastUpdate = true;
 	}
 	
 	public void notifyScoreChange(int score) {
-		this.winConditionLastUpdate = score >= SCORE_TO_WIN;
+		this.winConditionLastUpdate = score >= SCORE_TO_WIN;			
 	}
 	
 	public bool winCondition () {

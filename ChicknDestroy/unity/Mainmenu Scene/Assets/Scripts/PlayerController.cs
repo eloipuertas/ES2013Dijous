@@ -481,7 +481,7 @@ public class PlayerController : Actor {
 	
 	public void notifyDeadNPC() {
 		this.hud.notifyPoints(100);
-		gameManager.notifyScoreChange(100);
+		gameManager.notifyScoreChange(this.hud.getPoints());
 	}
 	
 }

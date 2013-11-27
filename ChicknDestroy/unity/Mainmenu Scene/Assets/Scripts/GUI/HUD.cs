@@ -292,4 +292,8 @@ public class HUD : MonoBehaviour{
 			this.power_ups[power_up-1].start (millis);
 		}
 	}
+	
+	public int getPoints() {
+		return this.player_points;
+	}
 }
