@@ -3,7 +3,7 @@ using System.Collections;
 
 public class PlayerController : Actor {
 	
-	private int[] animSpeed = {4,4,4,4,2,2,3,3,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2};
+	private int[] animSpeed = {4,4,4,4,2,2,3,3,2,2,2,2,2,2,2,2,2,2,4,4,4,4,2,2};
 	private string[] animNames = {
 		"atacarIzq",
 		"atacarDer",
@@ -68,7 +68,7 @@ public class PlayerController : Actor {
 	private Rigidbody rigid;
 	
 	private GameObject gre, grk, grp;
-	private bool esBajable, disparoActivo, ataque, dead;
+	private bool esBajable, disparoActivo, ataque, dead, ataqueSecundario;
 	
 	void Start () {
 		
@@ -115,6 +115,7 @@ public class PlayerController : Actor {
 		esBajable = false;
 		ataque = false;
 		dead = false;
+		ataqueSecundario = false;
 		
 		damageDuration = 1.0f;
 		damageTime = Time.time;
@@ -141,7 +142,8 @@ public class PlayerController : Actor {
 				ataque = true;		
 			}
 				
-			if (!ataque && Input.GetButtonDown("Fire2")) {
+			if (!ataqueSecundario && Input.GetButtonDown("Fire2")) {
+				ataqueSecundario = true;
 				
 				GameObject novaGranada = null;
 				if (currentDirection == DIR_DERECHA) {
@@ -154,7 +156,7 @@ public class PlayerController : Actor {
 				GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
 				b.setEquip(1);
 				
-				//ataque = true;
+				
 			}
 			
 			
@@ -216,9 +218,19 @@ public class PlayerController : Actor {
 				
 				if(currentState == STATE_RUNNING) {
 					if(currentDirection == DIR_DERECHA && velX > 0) {
-						if (!ataque) 
+						
+						if (!ataque && !ataqueSecundario) {
 							doAnim("correrDerecha");
-						else {
+						} else if (ataqueSecundario){
+							/*
+							 * 		"atacarSecIzq",
+									"atacarSecDer",
+									"atacarSecIzqCorriendo",
+									"atacarSecDerCorriendo",
+							 * */
+							doAnim("atacarSecDerCorriendo");
+							ataqueSecundario = false;
+						}else {
 							doAnim("atacarDerCorriendo");
 							realizarAtaque();
 						}	
@@ -228,9 +240,12 @@ public class PlayerController : Actor {
 						doAnim("giroDerIzq");
 						currentDirection = DIR_IZQUIERDA;
 					} else if(currentDirection == DIR_IZQUIERDA && velX < 0) {
-						if (!ataque) 
+						if (!ataque && !ataqueSecundario) {
 							doAnim("correrIzquierda");
-						else {
+						} else if(ataqueSecundario) {
+							doAnim("atacarSecIzqCorriendo");
+							ataqueSecundario = false;
+						} else {
 							doAnim("atacarIzqCorriendo");
 							realizarAtaque();
 						}
@@ -250,16 +265,24 @@ public class PlayerController : Actor {
 				if (currentState == STATE_STOP) {
 					
 					if(currentDirection == DIR_DERECHA) {
-						if (!ataque) 
+						if (!ataque && !ataqueSecundario) 
 							doAnim("paradaDerecha");
+						else if (ataqueSecundario) {
+							doAnim("atacarSecDer");
+							ataqueSecundario = false;
+						}
 						else {
 							doAnim("atacarDer");
 							realizarAtaque();
 						}
 						
 					} else {
-						if(!ataque)
+						if(!ataque && !ataqueSecundario){
 							doAnim("paradaIzquierda");
+						}else if (ataqueSecundario) {
+							doAnim("atacarSecIzq");
+							ataqueSecundario = false;
+						}
 						else{
 							doAnim("atacarIzq");
 							realizarAtaque();
@@ -275,12 +298,25 @@ public class PlayerController : Actor {
 	
 	void doAnim(string animName) {
 		float currentTime = Time.time - animTime;
-		bool permitido = animName == "giroDerIzq"||
-							animName == "giroIzqDer" ||
-							animName == "atacarIzq" ||
-							animName == "atacarDer" ||
-							animName == "atacarIzqCorriendo" ||
-							animName == "atacarDerCorriendo";
+		bool permitido = 
+			animName == "giroDerIzq"||
+			animName == "giroIzqDer" ||
+			animName == "atacarIzq" ||
+			animName == "atacarDer" ||
+			animName == "atacarIzqCorriendo" ||
+			animName == "atacarDerCorriendo" ||
+			animName == "atacarSecIzq" ||
+			animName == "atacarSecDer" ||
+			animName == "atacarSecDerCorriendo" ||
+			animName == "atacarSecIzqCorriendo";
+		
+			/*
+							 * 		"atacarSecIzq",
+									"atacarSecDer",
+									"atacarSecIzqCorriendo",
+									"atacarSecDerCorriendo",
+							 * */
+		
 		if ((currentTime > animDuration || permitido) && !dead) {
 			myAnim.Play(animName, PlayMode.StopAll);
 			animTime = Time.time;
@@ -291,8 +327,8 @@ public class PlayerController : Actor {
 	void initAnimations() {
 		
 		for (int i = 0; i < 24; ++i) {
-			int speed = this.team == Actor.ROBOT_TEAM? animSpeed[i]:animSpeed[i]*2;
-			
+			//int speed = this.team == Actor.ROBOT_TEAM? animSpeed[i]:animSpeed[i]*2;
+			int speed = animSpeed[i];
 			gre.animation[animNames[i]].speed = speed;
 			grk.animation[animNames[i]].speed = speed;
 			grp.animation[animNames[i]].speed = speed;
