@@ -145,17 +145,17 @@ public class DynamicChickenCreation : MonoBehaviour {
 				case 1:
 					c.transform.position = new Vector3(-267.383f,-106.6362f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaAliada1";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_ESCOPETA);
 					break;
 				case 2:
 					c.transform.position = new Vector3(286.8067f,-90.03653f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaAliada2";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				case 3:
 					c.transform.position = new Vector3(547.2833f,220.7484f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaAliada3";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				default: // case 4
 					c.transform.position = new Vector3(1981.676f,-88.74768f,0.8170023f);
@@ -175,17 +175,17 @@ public class DynamicChickenCreation : MonoBehaviour {
 				case 2:
 					c.transform.position = new Vector3(6184.183f,-80.28318f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival2";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_ESCOPETA);
 					break;
 				case 3:
 					c.transform.position = new Vector3(7870.028f,-81.72346f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival3";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 					break;
 				case 4:
 					c.transform.position = new Vector3(15394.46f,831.0337f,0.8170023f);
 					c.AddComponent<AgentNpc>().direrutas = "rutaRival4";
-					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
+					c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_ESCOPETA);
 					break;
 				default: // case 5
 					c.transform.position = new Vector3(15000.89f,-65.3283f,0.8170023f);
