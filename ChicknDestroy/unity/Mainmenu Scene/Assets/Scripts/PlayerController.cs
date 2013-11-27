@@ -101,6 +101,7 @@ public class PlayerController : Actor {
 		
 		
 		health = 100;
+		shield = 0;
 		currentState = STATE_STOP;
 		
 		heightHero = rigid.collider.bounds.extents.y;
@@ -362,7 +363,7 @@ public class PlayerController : Actor {
 		
 		if(collision.gameObject.tag == "escut") {
 				sonidoEscudo.Play();
-				//notificar
+				addShield(100);
 		}
 		
 		if(collision.gameObject.tag == "upVida"){ 
