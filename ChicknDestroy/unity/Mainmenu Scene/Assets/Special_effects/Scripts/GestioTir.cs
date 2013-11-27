@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GestioTir : MonoBehaviour {
 
-	private int equip;  //equip 1 -> player, equip 2 -> NPC
+	private int equip;
 	private int arma;
 	
 	public AudioSource audioDany;
@@ -12,7 +12,9 @@ public class GestioTir : MonoBehaviour {
 	public GameObject explosioGranada;
 	
 	void Start() {
-		GameObject.Destroy(gameObject, (float)0.8);		
+		if (arma == 2 || arma == 3) GameObject.Destroy(gameObject, (float)0.6); //bala de pistola i escopeta 
+		else GameObject.Destroy(gameObject, 2); //granada
+			
 	}
 	
 	void OnCollisionEnter(Collision collision){
@@ -24,7 +26,6 @@ public class GestioTir : MonoBehaviour {
 		} else {
 			Actor actor = collision.gameObject.GetComponent(typeof(Actor)) as Actor;
 			if (isEnemy (actor)){
-				
 				
 				audioDany.Play();
 				
@@ -42,7 +43,6 @@ public class GestioTir : MonoBehaviour {
 						break;
 					default: break;
 				}
-
 				
 				Destroy(expl, (float)0.2);
 				
@@ -51,9 +51,6 @@ public class GestioTir : MonoBehaviour {
 			
 		}
 		
-
-		
-
 		GameObject.Destroy(gameObject);
 		
 	}

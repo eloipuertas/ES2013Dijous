@@ -42,6 +42,7 @@ public class PlayerController : Actor {
 	
 	//sonido
 	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta;
+	
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
 	//indica el tiempo transcurrido de animacion
@@ -477,4 +478,10 @@ public class PlayerController : Actor {
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
+	
+	public void notifyDeadNPC() {
+		this.hud.notifyPoints(100);
+		gameManager.notifyScoreChange(100);
+	}
+	
 }

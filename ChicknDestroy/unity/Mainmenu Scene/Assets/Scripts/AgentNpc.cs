@@ -18,6 +18,8 @@ public class AgentNpc : FSM {
 	//sonidos
 	private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
 	
+	private PlayerController playerController;
+	
 	//Modelos de armas
 	private GameObject[] weap_mod;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra;
@@ -85,8 +87,8 @@ public class AgentNpc : FSM {
 		sonidoDisparoPistola = audios[3];
 		sonidoDisparoEscopeta = audios[4];
 		
-		GameObject player = GameObject.FindGameObjectWithTag("Player") as GameObject;
-		p = player.GetComponent("Parpadeig") as Parpadeig;
+		p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
+		playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
 	
 	}
 	
@@ -486,6 +488,8 @@ public class AgentNpc : FSM {
 			if (!dead){
 				animateIfExist("muerteDerecha","muerteIzquierda");
 				dead = true;
+				if (playerController.getTeam() != team)
+					notifyDeadtoPlayer();
 			}else
 				Destroy(gameObject);
 		}
@@ -498,6 +502,10 @@ public class AgentNpc : FSM {
 		transform.position = spawnPoint;
 		*/
 		
+	}
+	
+	private void notifyDeadtoPlayer() {
+		playerController.notifyDeadNPC();
 	}
 
 	
