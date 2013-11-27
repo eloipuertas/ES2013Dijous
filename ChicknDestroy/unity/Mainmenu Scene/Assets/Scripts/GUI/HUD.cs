@@ -82,7 +82,7 @@ public class HUD : MonoBehaviour{
 			new Vector2(0,0),
 			10, // n-Images of the Shield
 			100, // Barrier max points
-			100); // barrier current points.
+			0); // barrier current points.
 		this.bg_shield = new Sprite(new Rect(this.shield.getXY ().x-5,this.shield.getXY ().y-5,
 			this.shield.getSize ().x+10,this.shield.getSize ().y+10),"escudo/hudEscudo");
 		
