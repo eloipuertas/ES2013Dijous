@@ -38,10 +38,7 @@ public class Parpadeig : MonoBehaviour {
 	}
 	
 	void OnCollisionEnter(Collision collision){
-		if( collision.gameObject.tag =="foc" || 
-			collision.gameObject.tag =="punxes" || 
-			collision.gameObject.tag =="guillotina" ||
-			collision.gameObject.tag =="balaEscopeta" ||
+		if(	collision.gameObject.tag =="balaEscopeta" ||
 			collision.gameObject.tag =="balaPistola"){
 			if (fetDany == 0) {
 				actualitza();

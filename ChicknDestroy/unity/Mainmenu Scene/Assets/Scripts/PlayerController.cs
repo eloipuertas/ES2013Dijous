@@ -42,7 +42,7 @@ public class PlayerController : Actor {
 	
 	//sonido
 	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta;
-	
+	Parpadeig p;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
 	//indica el tiempo transcurrido de animacion
@@ -313,6 +313,17 @@ public class PlayerController : Actor {
 	
 	void OnCollisionEnter(Collision collision){
 		
+		float currentTimeDamage = Time.time - damageTime;
+		
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" || collision.gameObject.tag =="punxes") {
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+			
+		
 		if(collision.gameObject.tag == "escut") {
 				sonidoEscudo.Play();
 				//notificar
@@ -338,17 +349,7 @@ public class PlayerController : Actor {
 				hud.notifyPrimaryWeapon(3);
 			}
 		}
-		if (collision.gameObject.tag == "punxes‏"){
-			
-			Debug.Log("Estamos sobre punxa");
-			float currentTimeDamage = Time.time - damageTime;
-			if (currentTimeDamage > damageDuration) {
-				Debug.Log("daño de punxa");
-				dealDamage(50);
-				damageTime = Time.time;
-			}
-		}
-		
+
 		if (collision.gameObject.layer == 8) {
 			esBajable = true;
 		}else {
@@ -370,7 +371,7 @@ public class PlayerController : Actor {
 	
 	void updateModelWeapon() {
 		
-		Parpadeig p = GetComponent("Parpadeig") as Parpadeig;
+		p = GetComponent("Parpadeig") as Parpadeig;
 		
 		switch(weapon){
 			case WEAPON_KATANA:
