@@ -367,12 +367,13 @@ public class AgentNpc : FSM {
 						haAtacado = false;
 					} else if (!haAtacado && animations[anim].time > 0.5f){
 						haAtacado = true;
-						if(!derecha){
-							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+						
+						if(derecha){
+							nouTir = (GameObject) Instantiate(bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 						}else{
 							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 						}
 						
 						GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
@@ -406,12 +407,12 @@ public class AgentNpc : FSM {
 					} else if (!haAtacado && animations[anim].time > 0.5f){
 						GameObject nouTir = null;
 						haAtacado = true;
-						if(!derecha){
-							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+						if(derecha){
+							nouTir = (GameObject) Instantiate(bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
 						}else{
 							nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-							nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+							nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
 						}
 						
 						GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
@@ -489,13 +490,7 @@ public class AgentNpc : FSM {
 	
 //	void OnCollisionExit(Collision collision){}
 //	void OnCollisionStay(Collision collision){}
-	void OnCollisionEnter(Collision collision){
-		if(collision.gameObject.tag =="bala"){
-		    dealDamage(60);
-		}
-		
-				
-	}
+//	void OnCollisionEnter(Collision collision){}
 	
 	/*################################################################
 	######################## UTILITY FUNCTIONS ######################*/

@@ -43,26 +43,37 @@ public class GestioTir : MonoBehaviour {
 		if (gameObject.tag == "granada") {
 				//gestionar aqui el dany si toca un de l'equip rival, comprovar que sigui de l'altre equip...
 				expl = GameObject.Instantiate(explosioGranada, transform.position, Quaternion.identity) as GameObject;
+		} else {
+			Actor actor = collision.gameObject.GetComponent(typeof(Actor)) as Actor;
+			if (isEnemy (actor)){
+				
+				
+				audioDany.Play();
+				
+				ContactPoint contact = collision.contacts[0]; //punt de contacte de la bala amb el NPC
+				
+				
+				switch(arma){
+					case Actor.WEAPON_PISTOLA:
+						expl = Instantiate(sangPistola, contact.point, Quaternion.identity) as GameObject;
+						actor.dealDamage(15);
+						break;
+					case Actor.WEAPON_ESCOPETA:
+						expl = Instantiate(sangEscopeta, contact.point, Quaternion.identity) as GameObject;
+						actor.dealDamage(40);
+						break;
+					default: break;
+				}
+
+				
+				Destroy(expl, (float)0.2);
+				
+			}
+			
+			
 		}
 		
-		else if (collision.gameObject.tag == "NPC" && equip == 1){ //tir del player i impacte amb el NPC
-			
-			audioDany.Play();
-			
-			ContactPoint contact = collision.contacts[0]; //punt de contacte de la bala amb el NPC
-			
-			if (gameObject.tag == "balaPistola") {
-				expl = Instantiate(sangPistola, contact.point, Quaternion.identity) as GameObject;
-				//fer dany al NPC (menys que l'escopeta)
-			}
-			else if (gameObject.tag == "balaEscopeta") {
-				expl = Instantiate(sangEscopeta, contact.point, Quaternion.identity) as GameObject;
-				//fer dany al NPC
-			}
-			
-			Destroy(expl, (float)0.2);
-			
-		}
+
 		
 
 		GameObject.Destroy(gameObject);
@@ -83,6 +94,11 @@ public class GestioTir : MonoBehaviour {
 	
 	public int getArma() {
 		return this.arma;
+	}
+	
+	private bool isEnemy(Actor a){
+		if (a == null) return false;
+		return equip != a.getTeam();
 	}
 	
 }

@@ -10,8 +10,8 @@ public class DynamicChickenCreation : MonoBehaviour {
 		Chicken = PlayerPrefs.GetInt("Chicken");//we get the values from the startGame scene through PlayerPrefs
 		Team = PlayerPrefs.GetInt("Team");
 		
-		Chicken = 5;
-		Team = Actor.ROBOT_TEAM;
+		//Chicken = 1;
+		//Team = Actor.ROBOT_TEAM;
 		
 		setPlayer();
 		setAllyTeam();
@@ -129,10 +129,10 @@ public class DynamicChickenCreation : MonoBehaviour {
 		c.AddComponent<PlayerController>();
 		c.AddComponent<Parpadeig>();
 		c.tag = "Player";
-		if(Team == 2)
-			c.transform.position = new Vector3(-538.14F,-78.06F,-12.5F);
-		else
-			c.transform.position = new Vector3(15700.14F,-78.06F,-12.5F);
+		//if(Team == 2)
+			c.transform.position = new Vector3(-538.14F,-78.06F,0.8170023f);
+		//else
+		//	c.transform.position = new Vector3(15700.14F,-78.06F,0.8170023f);
 		
 		
 		// Y mas cosas
