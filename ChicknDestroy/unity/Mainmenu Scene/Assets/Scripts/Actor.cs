@@ -45,8 +45,8 @@ public class Actor : MonoBehaviour {
 	}
 	
 	protected void fireShieldNotification(){
-		//if(hud)
-		//	this.hud.notifyShieldChange(this.shield);
+		if(hud)
+			this.hud.notifyShieldChange(this.shield);
 	}
 	
 	public string getPrimaryWeapon(){ return primaryWeapon.ToString(); }
