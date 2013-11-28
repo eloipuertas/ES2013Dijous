@@ -144,7 +144,7 @@ public class DynamicObjects : MonoBehaviour {
 		}
 		if(flags[1] && timeFlags[1] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/Bandera1")) as GameObject;
-			x.name = "Bandera1";
+			x.name = "Bandera";
 			x.transform.position = new Vector3(-693.6163F,802.9051F,-3.1771073F);
 			x.transform.eulerAngles = new Vector3(0F,0F,0F);
 			x.transform.localScale = new Vector3(1F,1F,0.8874608F);
