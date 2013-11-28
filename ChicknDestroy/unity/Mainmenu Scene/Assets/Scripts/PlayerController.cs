@@ -352,6 +352,10 @@ public class PlayerController : Actor {
 		
 		float currentTimeDamage = Time.time - damageTime;
 		
+		if (collision.gameObject.tag == "bandera") {
+			hud.notifyFlag(true, true);
+		}
+		
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" || collision.gameObject.tag =="punxes") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
