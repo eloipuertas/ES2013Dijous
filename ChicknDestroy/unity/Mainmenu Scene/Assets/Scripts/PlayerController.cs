@@ -362,6 +362,7 @@ public class PlayerController : Actor {
 		
 		if (collision.gameObject.tag == "bandera") {
 			hud.notifyFlag(true, true);
+			notifyHudPoints(300);
 		}
 		
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
@@ -382,6 +383,10 @@ public class PlayerController : Actor {
 		if(collision.gameObject.tag == "upVida"){ 
 				sonidoPowerUp.Play();
  				heal(50);
+		}
+		
+		if (collision.gameObject.tag == "escopeta_off") {
+			sonidoPowerUp.Play();
 		}
 
 		if (collision.gameObject.layer == 8) {
@@ -538,8 +543,8 @@ public class PlayerController : Actor {
 		return getTeam() != a.getTeam();
 	}
 	
-	public void notifyDeadNPC() {
-		this.hud.notifyPoints(100);
+	public void notifyHudPoints(int p) {
+		this.hud.notifyPoints(p);
 		gameManager.notifyScoreChange(this.hud.getPoints());
 	}
 	

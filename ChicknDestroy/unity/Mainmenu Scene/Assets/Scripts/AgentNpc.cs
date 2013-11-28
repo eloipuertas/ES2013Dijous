@@ -504,7 +504,7 @@ public class AgentNpc : FSM {
 	}
 	
 	private void notifyDeadtoPlayer() {
-		playerController.notifyDeadNPC();
+		playerController.notifyHudPoints(100);
 	}
 
 	
