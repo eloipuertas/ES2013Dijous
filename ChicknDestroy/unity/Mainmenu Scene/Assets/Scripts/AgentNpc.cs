@@ -27,7 +27,7 @@ public class AgentNpc : FSM {
 
 	//Lectors de rutes
 	private int keyPosActual = 0; 
-	public string direrutas = "ruta1";
+	public string direrutas = "rutaRival1";
 	private List <Vector3> rutaActual  = new List<Vector3>();
 	private bool routeJump = false;	
 	
@@ -71,7 +71,7 @@ public class AgentNpc : FSM {
 	protected override void Ini(){
 		loadRoute();
 		setInitialsAttributes();
-
+		updateModelWeapon();
 		updateNextTarget();
 	}
 	
@@ -100,7 +100,6 @@ public class AgentNpc : FSM {
 		
 		TextAsset bindata= (TextAsset) Resources.Load("routes/"+direrutas, typeof(TextAsset));
 		string content = bindata.text;
-		
 		string []lines = content.Split('|');
 		foreach(string s in lines){
 			string []pos = s.Split(',');
@@ -593,6 +592,7 @@ public class AgentNpc : FSM {
 	}
 	
 	protected override void updateModelWeapon(){
+		print ("hola k ase");
 		if (weap_mod == null){
 			weap_mod = new GameObject[3];
 			weap_mod[WEAPON_KATANA-1]   = GameObject.Find(gameObject.name+"/grk");
@@ -609,8 +609,10 @@ public class AgentNpc : FSM {
 				//Destroy(weap_mod[i]);			
 				weap_mod[i].SetActive(false);
 			
-			animations = weap_mod[weapon-1].animation;
+			
 		}
+		
+		animations = weap_mod[weapon-1].animation;
 		
 		if (weapon == WEAPON_ESCOPETA)
 			bala = Resources.Load("ChickenPrefabs/weapons/balaEscopeta") as GameObject;

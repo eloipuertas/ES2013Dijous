@@ -146,22 +146,26 @@ public class DynamicChickenCreation : MonoBehaviour {
         private int alliedNum = 1;
         void initAsNPC(GameObject c,int Team, int chicken){
                 if (Team == 2){
-                        switch(alliedNum){
+                        switch(chicken){
                                 case 1:
-                                        c.transform.position = new Vector3(100f,-91.74977f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta1";
+                                        c.transform.position = new Vector3(-44.11278f,-80.28318f,0.8170023f);
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaAliada1";
+										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 case 2:
-                                        c.transform.position = new Vector3(100f,-91.74977f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta2";
+                                        c.transform.position = new Vector3(494.1796f,-80.28318f,0.8170023f);
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaAliada2";
+										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 case 3:
-                                        c.transform.position = new Vector3(150f,-91.74977f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta1";
+                                        c.transform.position = new Vector3(327.8087f,-80.28318f,0.8170023f);
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaAliada3";
+										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 default: // case 4
-                                        c.transform.position = new Vector3(150f,-91.74977f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta2";
+                                        c.transform.position = new Vector3(135.0389f,77.73074f,0.8170023f);
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaAliada4";
+										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                         }
                         alliedNum++;
@@ -170,27 +174,27 @@ public class DynamicChickenCreation : MonoBehaviour {
                         switch(chicken){
                                 case 1:
                                         c.transform.position = new Vector3(12000.105f,-91.74977f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta3";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival1";
                                         c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 case 2:
                                         c.transform.position = new Vector3(13000.58f,118.5825f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta4";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival2";
                                         c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 case 3:
                                         c.transform.position = new Vector3(15700.028f,-81.72346f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta5";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival3";
                                         c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 case 4:
                                         c.transform.position = new Vector3(13051.11f,118.5825f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta6";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival4";
                                         c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                                 default: // case 5
                                         c.transform.position = new Vector3(14806.89f,414.3137f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "ruta7";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival5_Agresiva";
                                         c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
                                         break;
                         }

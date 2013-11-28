@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(Parpadeig))]
 public class PlayerController : Actor {
 	
 	private int[] animSpeed = {4,4,4,4,2,2,3,3,2,2,2,2,2,2,2,2,2,2,4,4,4,4,2,2};
@@ -105,8 +106,8 @@ public class PlayerController : Actor {
 		currentState = STATE_STOP;
 		
 		heightHero = rigid.collider.bounds.extents.y;
-		;
-		weapon = WEAPON_ESCOPETA;
+		
+		//weapon = WEAPON_ESCOPETA;
 		updateModelWeapon();
 		
 		granada = Resources.Load("ChickenPrefabs/weapons/granada") as GameObject;
