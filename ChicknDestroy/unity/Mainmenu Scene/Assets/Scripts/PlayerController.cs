@@ -85,7 +85,7 @@ public class PlayerController : Actor {
 		disparo = false;
 		heightHero = rigid.collider.bounds.extents.y;
 		
-		weapon = WEAPON_ESCOPETA;
+		weapon = WEAPON_KATANA;
 		updateModelWeapon();
 		lastDirection = stopDer;
 		
