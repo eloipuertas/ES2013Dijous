@@ -122,7 +122,19 @@ public class PlayerController : Actor {
 		damageTime = Time.time;
 	}
 	
-	
+	void walkDamage() {
+		float currentTimeDamage = Time.time - damageTime;
+		string tagHit = raycastVertical();
+		
+		if (tagHit.Equals("punxes")){
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+		
+	}
 	
 	void FixedUpdate(){
 		
@@ -132,6 +144,8 @@ public class PlayerController : Actor {
 			
 			// deteccion de enemigos, mediante acercamiento.
 			detected = raycastFront();
+			
+			walkDamage();
 			
 			updateModelWeapon();
 		
@@ -338,14 +352,7 @@ public class PlayerController : Actor {
 	}
 	
 	
-	private bool isGround() {
-		bool ret = false;
-		for (int i = -2; i < 2 && !ret; ++i) {
-			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
-			
-		}
-		return ret;
-	}
+
 	
 	
 	void OnCollisionEnter(Collision collision){
@@ -401,20 +408,12 @@ public class PlayerController : Actor {
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
 	
 	void OnCollisionStay (Collision hit) { 
-		float currentTimeDamage = Time.time - damageTime;
+		
 		
 	    if (hit.gameObject.tag == "plataforma_moviment")
 	        transform.parent = hit.transform ; 
 		else
 	        transform.parent = null;
-			
-		if (hit.gameObject.tag =="punxes"){
-			if (currentTimeDamage > damageDuration) {
-				dealDamage(5);
-				p.mostrarDany();
-				damageTime = Time.time;
-			}
-		}
 		
 	}
 	
@@ -522,6 +521,29 @@ public class PlayerController : Actor {
 		if (!trobat)
 			return null;
 		return hit.collider.gameObject;
+	}
+	
+	private bool isGround() {
+		bool ret = false;
+		for (int i = -2; i < 2 && !ret; ++i) {
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
+			
+		}
+		return ret;
+	}
+	
+	private string raycastVertical() {
+		RaycastHit hit;
+		bool ret = false;
+		
+		for (int i = -2; i < 2 && !ret; ++i) {
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, out hit, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
+			
+		}
+		
+		if (!ret)
+			return "";
+		return hit.collider.tag;
 	}
 	
 	
