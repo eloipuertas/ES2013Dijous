@@ -375,28 +375,13 @@ public class PlayerController : Actor {
 		
 		if(collision.gameObject.tag == "escut") {
 				sonidoEscudo.Play();
+				hud.notifyShieldChange(100);
 				addShield(100);
 		}
 		
 		if(collision.gameObject.tag == "upVida"){ 
 				sonidoPowerUp.Play();
  				heal(50);
-		}
-		if (Input.GetKeyDown(KeyCode.E)) {
-			if(collision.gameObject.tag == "escopeta_off"){
-				weapon = WEAPON_ESCOPETA;
-				hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
-			}
-			
-			if(collision.gameObject.tag == "katana"){
-				weapon = WEAPON_KATANA;
-				hud.notifyPrimaryWeapon(1);
-			}
-			
-			if(collision.gameObject.tag == "pistola") {
-				weapon = WEAPON_PISTOLA;
-				hud.notifyPrimaryWeapon(3);
-			}
 		}
 
 		if (collision.gameObject.layer == 8) {
