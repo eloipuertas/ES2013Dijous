@@ -224,7 +224,9 @@ public class HUD : MonoBehaviour{
 	public void notifyHealthChange(int hp) {
 		this.life.setLife(hp);
 	}
-	
+	public void notifyShieldChange(int hp) {
+		this.shield.setLife(hp);	
+	}
 	public void notifyPoints(int points) {
 		this.player_points+=points;
 	}
@@ -291,5 +293,9 @@ public class HUD : MonoBehaviour{
 		else if (power_up<=3 && power_up>0) {
 			this.power_ups[power_up-1].start (millis);
 		}
+	}
+	
+	public int getPoints() {
+		return this.player_points;
 	}
 }

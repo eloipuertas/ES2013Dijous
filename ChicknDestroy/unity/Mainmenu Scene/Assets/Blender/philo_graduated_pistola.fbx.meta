@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 32a15a2aff8aa9545ac03cc09099cbb8
+guid: 7e890afba7bcd4145b0246e6e7316611
 ModelImporter:
   serializedVersion: 15
   fileIDToRecycleName:
@@ -31,7 +31,8 @@ ModelImporter:
     100050: Bone_024
     100052: Bone_025
     100054: Cylinder
-    100056: //RootNode
+    100056: Cylinder_001
+    100058: //RootNode
     400000: Armature
     400002: Bone
     400004: Bone_001
@@ -60,8 +61,10 @@ ModelImporter:
     400050: Bone_024
     400052: Bone_025
     400054: Cylinder
-    400056: //RootNode
-    4300000: Cylinder
+    400056: Cylinder_001
+    400058: //RootNode
+    4300000: Cylinder_001
+    4300002: Cylinder
     7400000: Default Take
     7400002: atacarDer
     7400004: atacarDerCorriendo
@@ -73,8 +76,8 @@ ModelImporter:
     7400016: atacarSecIzqCorriendo
     7400018: caidaDerecha
     7400020: caidaIzquierda
-    7400022: correrDer
-    7400024: correrIzq
+    7400022: correrDerecha
+    7400024: correrIzquierda
     7400026: giroDerIzq
     7400028: giroIzqDer
     7400030: muerteDerecha
@@ -83,13 +86,14 @@ ModelImporter:
     7400036: paradaIzquierda
     7400038: recogerItemDer
     7400040: recogerItemIzq
-    7400042: saltoVerticalDer
-    7400044: saltoVerticalIzq
-    7400046: correrDerecha
-    7400048: correrIzquierda
+    7400042: saltarDerecha
+    7400044: saltarIzquierda
+    7400046: saltoVerticalDer
+    7400048: saltoVerticalIzq
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cylinder
+    13700002: Cylinder_001
   materials:
     importMaterials: 1
     materialName: 0
