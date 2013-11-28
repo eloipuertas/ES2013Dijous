@@ -356,7 +356,7 @@ public class PlayerController : Actor {
 			hud.notifyFlag(true, true);
 		}
 		
-		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" || collision.gameObject.tag =="punxes") {
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
 				p.mostrarDany();
@@ -401,11 +401,20 @@ public class PlayerController : Actor {
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
 	
 	void OnCollisionStay (Collision hit) { 
+		float currentTimeDamage = Time.time - damageTime;
 		
 	    if (hit.gameObject.tag == "plataforma_moviment")
 	        transform.parent = hit.transform ; 
-	    else
+		else
 	        transform.parent = null;
+			
+		if (hit.gameObject.tag =="punxes"){
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
 		
 	}
 	
