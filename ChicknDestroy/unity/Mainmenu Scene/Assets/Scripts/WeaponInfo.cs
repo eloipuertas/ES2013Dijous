@@ -45,7 +45,39 @@ public class WeaponInfo : MonoBehaviour {
 	}
 	
 	void OnTriggerStay(Collider whoIs){
-		
+		if(isPlayer && Input.GetKey(KeyCode.E)){//if player is over the weapon object
+			PlayerController c = whoIs.gameObject.GetComponent("PlayerController") as PlayerController;
+			if(isEscopeta){//if is escopeta type
+                //c.//we report the player that must play the pickUp weapon animation
+                c.setWeapon(2);//we report to the Player that must change the weapon
+                hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
+            }
+            if(isRevolver){//if is revolver type
+				c.setWeapon(3);
+                hud.notifyPrimaryWeapon(3);
+            }
+            if(isKatana){//if is katana type
+                //c.playAnimation();
+                c.setWeapon(1);
+                hud.notifyPrimaryWeapon(1);
+            }
+            if(isRifle){//if is rifle type
+                    
+            }
+            if(isMina){//if is mina type
+                    
+            }
+            if(isGranada){//if is granada type
+                //c.playAnimation();
+                //c.weapon = 7;
+                hud.notifySecondaryWeapon(1);
+            }
+            if(isMetralleta){//if is metralleta type
+            }
+            Destroy(this.gameObject);//once the weapon is picked up the object is destroyed
+			
+			
+		}
 		
 	}
 	
