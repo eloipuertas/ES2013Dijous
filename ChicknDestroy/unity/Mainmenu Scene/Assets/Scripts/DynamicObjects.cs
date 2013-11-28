@@ -38,7 +38,7 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void checkShotguns(){
 		bool respawn = false;
-		for(int i=0;i<4;i++){
+		for(int i=0;i<2;i++){
 			if(GameObject.Find("escopeta"+(i+1)) == null){
 				timeShotguns[i] -= Time.deltaTime;
 				if(timeShotguns[i] <= 0F)
