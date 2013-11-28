@@ -148,7 +148,6 @@ public class PlayerController : Actor {
 			
 			walkDamage();
 			
-			updateModelWeapon();
 		
 			float rawHori = Input.GetAxisRaw("Horizontal");
 			float rawVert = Input.GetAxisRaw("Vertical");
@@ -409,7 +408,7 @@ public class PlayerController : Actor {
 	}
 	
 	
-	void updateModelWeapon() {
+	public void updateModelWeapon() {
 		
 		p = GetComponent("Parpadeig") as Parpadeig;
 		

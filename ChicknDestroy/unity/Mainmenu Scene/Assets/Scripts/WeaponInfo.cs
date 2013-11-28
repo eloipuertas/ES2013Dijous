@@ -50,15 +50,18 @@ public class WeaponInfo : MonoBehaviour {
 			if(isEscopeta){//if is escopeta type
                 //c.//we report the player that must play the pickUp weapon animation
                 c.setWeapon(2);//we report to the Player that must change the weapon
+				c.updateModelWeapon();
                 hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
             }
             if(isRevolver){//if is revolver type
 				c.setWeapon(3);
+				c.updateModelWeapon();
                 hud.notifyPrimaryWeapon(3);
             }
             if(isKatana){//if is katana type
                 //c.playAnimation();
                 c.setWeapon(1);
+				c.updateModelWeapon();
                 hud.notifyPrimaryWeapon(1);
             }
             if(isRifle){//if is rifle type
