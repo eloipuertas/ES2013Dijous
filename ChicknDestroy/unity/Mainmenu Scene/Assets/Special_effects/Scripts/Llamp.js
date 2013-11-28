@@ -34,7 +34,7 @@ function Update () {
 	
 	if ((Time.time - tempsEntrat > 2.8) && entrar == 1){
 		tempsLlampAleatori = Random.Range(30,120);
-		Debug.Log(tempsLlampAleatori);
+		//Debug.Log(tempsLlampAleatori);
 		lT = Time.time;
 		light.color = colorActual;
 		entrar = 0;

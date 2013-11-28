@@ -1,0 +1,129 @@
+fileFormatVersion: 2
+guid: 88bb2640b2052c5449d4a38f08f32e60
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Armature
+    100002: B_Derecho
+    100004: B_Izquierdo
+    100006: C_Derecha
+    100008: C_Izquierda
+    100010: Cabeza
+    100012: Cadera
+    100014: Catana
+    100016: Clav_Derecha
+    100018: Clav_Izquierda
+    100020: Cola
+    100022: Coleta
+    100024: Cuerpo
+    100026: Espada
+    100028: P_Derecha
+    100030: P_Izquierda
+    100032: //RootNode
+    100034: Pie_Derecho
+    100036: Pie_Izquierdo
+    100038: Tronco
+    400000: Armature
+    400002: B_Derecho
+    400004: B_Izquierdo
+    400006: C_Derecha
+    400008: C_Izquierda
+    400010: Cabeza
+    400012: Cadera
+    400014: Catana
+    400016: Clav_Derecha
+    400018: Clav_Izquierda
+    400020: Cola
+    400022: Coleta
+    400024: Cuerpo
+    400026: Espada
+    400028: P_Derecha
+    400030: P_Izquierda
+    400032: //RootNode
+    400034: Pie_Derecho
+    400036: Pie_Izquierdo
+    400038: Tronco
+    4300000: Catana
+    4300002: Cuerpo
+    7400000: Default Take
+    7400002: atacarDer
+    7400004: atacarDerCorriendo
+    7400006: atacarIzq
+    7400008: atacarIzqCorriendo
+    7400010: atacarSecDer
+    7400012: atacarSecDerCorriendo
+    7400014: atacarSecIzq
+    7400016: atacarSecIzqCorriendo
+    7400018: caidaDerecha
+    7400020: caidaIzquierda
+    7400022: correrDerecha
+    7400024: correrIzquierda
+    7400026: giroDerIzq
+    7400028: giroIzqDer
+    7400030: giroIzquierdaDerecha
+    7400032: muerteDerecha
+    7400034: muerteIzquierda
+    7400036: paradaDerecha
+    7400038: paradaIzquierda
+    7400040: recogerItemDer
+    7400042: recogerItemIzq
+    7400044: saltarDerecha
+    7400046: saltarIzquierda
+    7400048: saltoVerticalDer
+    7400050: saltoVerticalIzq
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Catana
+    13700002: Cuerpo
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 
