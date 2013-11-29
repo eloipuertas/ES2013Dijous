@@ -120,18 +120,21 @@ public class PlayerController : Actor {
 		ataqueSecundario = false;
 		
 		damageDuration = 1.0f;
-		damageTime = Time.time;
+		damageTime = Time.time; // Useless (used for active waiting)
 	}
 	
 	void walkDamage() {
+		/*
+		Function with active waiting loop. Change it for TimerPool.start() method.
+		*/
 		float currentTimeDamage = Time.time - damageTime;
 		string tagHit = raycastVertical();
-		
+		// Move to method listener
 		if (tagHit.Equals("punxes")){
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
 				p.mostrarDany();
-				damageTime = Time.time;
+				damageTime = Time.time; // Remove from method listener (once it's copy)
 			}
 		}
 		
@@ -312,7 +315,7 @@ public class PlayerController : Actor {
 	}
 	
 	void doAnim(string animName) {
-		float currentTime = Time.time - animTime;
+		float currentTime = Time.time - animTime; // Active waiting
 		bool permitido = 
 			animName == "giroDerIzq"||
 			animName == "giroIzqDer" ||
@@ -331,7 +334,7 @@ public class PlayerController : Actor {
 									"atacarSecIzqCorriendo",
 									"atacarSecDerCorriendo",
 							 * */
-		
+		// ?? 
 		if ((currentTime > animDuration || permitido) && !dead) {
 			myAnim.Play(animName, PlayMode.StopAll);
 			animTime = Time.time;
@@ -358,7 +361,7 @@ public class PlayerController : Actor {
 	void OnCollisionEnter(Collision collision){
 		
 		float currentTimeDamage = Time.time - damageTime;
-		
+		// Fix it, there only must add the points when we take (collide) with the enemy flag!
 		if (collision.gameObject.tag == "bandera") {
 			hud.notifyFlag(true, true);
 			notifyHudPoints(300);
@@ -393,6 +396,14 @@ public class PlayerController : Actor {
 		}else {
 			esBajable = false;
 		}
+		/*
+		Add an special collider for the chickens when one is above from the other. We can make that the chicken
+		that are above just jump and deal damage to the other chiken.
+		For implement this, we can just add two new collider boxes, one on the top with ID = 1 and the other
+		one on the bottom with ID = 2. (Or simply make a two specifications of object collider to diferenciate it).
+		When there two collides, the chicken with collide ID = 2 will deal damage to the other and will jump (as a normal jump).
+		Also can be added an special effect (like the chicken that have given the damage will turn a superdeformed chicken for a while).
+		*/
 	}
 	
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
