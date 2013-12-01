@@ -13,9 +13,6 @@ public class TimeSprite : Sprite
 		this.texture = new Texture2D((int)xy_size.width,(int)xy_size.height);
 		this.xy_size = xy_size;
 		this.texture = (Texture2D)Resources.Load(image);
-		
-		this.timer = new Timer();
-		this.timer.Elapsed += new ElapsedEventHandler(onTimedEvent);
 	}
 	
 	public void start(bool activated) {
@@ -24,6 +21,8 @@ public class TimeSprite : Sprite
 	
 	public void start(long millis) {
 		this.working = true;
+		this.timer = new Timer();
+		this.timer.Elapsed += new ElapsedEventHandler(onTimedEvent);
 		this.timer.Interval = millis;
 		this.setVisible (true);
 		this.timer.Start();

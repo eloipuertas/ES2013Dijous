@@ -43,6 +43,9 @@ public class HUD : MonoBehaviour{
 	// Flag Control
 	private bool robotic;
 	private bool philo;
+	
+	private SpriteGroup primary_ammo;
+	private SpriteGroup secondary_ammo;
 
 	void initComponents() {
 		int jsegment = Screen.height/10;
@@ -118,6 +121,12 @@ public class HUD : MonoBehaviour{
 		this.bg_pu[2] = new Sprite(new Rect(10,jsegment*4,this.bg_pu[0].getSize().x,this.bg_pu[0].getSize().y),"extras/hudExtra");
 		this.power_ups[2] = new TimeSprite(new Rect(15,5+jsegment*4,this.bg_pu[2].getSize().x-10,this.bg_pu[2].getSize().y-10), "extras/velocidadDisparos");
 		
+		
+		this.primary_ammo = new SpriteGroup(new Vector2(10,Screen.height-40), new Vector2(40,40),new Vector2(20,0),
+			20,"primarios/bala");
+		this.secondary_ammo = new SpriteGroup(new Vector2(Screen.width-200,Screen.height-40), new Vector2(40,40),
+			new Vector2(20,0), 3, "secundarios/granada");
+		
 		this.player = new PlayerInterface();
 		this.game = new GameInterface();
 		
@@ -166,6 +175,9 @@ public class HUD : MonoBehaviour{
 		this.life.render();
 		this.shield.render ();
 		this.game_points.render(this.player_points);
+		
+		this.primary_ammo.render ();
+		this.secondary_ammo.render();
 		
 		this.pause_button.render();
 		
@@ -292,6 +304,17 @@ public class HUD : MonoBehaviour{
 		}
 		else if (power_up<=3 && power_up>0) {
 			this.power_ups[power_up-1].start (millis);
+		}
+	}
+	
+	public void notifyAmmo(int weapon, int quantity) {
+		switch(weapon) {
+		case 1:
+			this.primary_ammo.changePrinting(quantity);
+			break;
+		case 2:
+			this.secondary_ammo.changePrinting(quantity);
+			break;
 		}
 	}
 	
