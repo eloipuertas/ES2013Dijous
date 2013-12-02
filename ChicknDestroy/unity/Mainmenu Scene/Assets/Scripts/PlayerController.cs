@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Timers;
 
 [RequireComponent(typeof(Parpadeig))]
 public class PlayerController : Actor {
@@ -71,6 +72,12 @@ public class PlayerController : Actor {
 	private GameObject gre, grk, grp;
 	private bool esBajable, disparoActivo, ataque, dead, ataqueSecundario;
 	
+	// NEW CODE ----  @LynosSorien
+	private TimerPool timers;
+	
+	private Weapon primary;
+	private Weapon secondary;
+	
 	void Start () {
 		
 		rigid =	GetComponent<Rigidbody>();
@@ -121,12 +128,23 @@ public class PlayerController : Actor {
 		
 		damageDuration = 1.0f;
 		damageTime = Time.time; // Useless (used for active waiting)
+		
+		initTimers();
+	}
+	/* NEW CODE --- @LynosSorien
+	 * Function to init the TimerPool.
+	 */ 
+	private void initTimers() {
+		this.timers = new TimerPool(5);
+		
+		this.timers.start (100,spikeDamageLapse,true); // Config the SpikeDamage (and start it).
 	}
 	
 	void walkDamage() {
 		/*
 		Function with active waiting loop. Change it for TimerPool.start() method.
 		*/
+		/* OLD CODE
 		float currentTimeDamage = Time.time - damageTime;
 		string tagHit = raycastVertical();
 		// Move to method listener
@@ -137,6 +155,8 @@ public class PlayerController : Actor {
 				damageTime = Time.time; // Remove from method listener (once it's copy)
 			}
 		}
+		*/
+		// NEW CODE
 		
 	}
 	
@@ -149,7 +169,7 @@ public class PlayerController : Actor {
 			// deteccion de enemigos, mediante acercamiento.
 			detected = raycastFront();
 			
-			walkDamage();
+			walkDamage(); // Usless function
 			
 		
 			float rawHori = Input.GetAxisRaw("Horizontal");
@@ -558,4 +578,14 @@ public class PlayerController : Actor {
 		gameManager.notifyScoreChange(this.hud.getPoints());
 	}
 	
+	
+	// --------------- NEW CODE --- @LynosSorien
+	// LISTENER METHODS!
+	public void spikeDamageLapse(object sender, ElapsedEventArgs e) {
+		string tagHit = raycastVertical();
+		if (tagHit.Equals("punxes")){
+				dealDamage(5);
+				p.mostrarDany();
+		}
+	}
 }
