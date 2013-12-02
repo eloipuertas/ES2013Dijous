@@ -71,61 +71,61 @@ public class DynamicChickenCreation : MonoBehaviour {
         
         
         GameObject setRoboChicken1(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;//cambiar
                 c.name = "Robot1";
                 return c;
         }
         
         GameObject setRoboChicken2(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;//cambiar
                 c.name = "Robot2";
                 return c;
         }
         
         GameObject setRoboChicken3(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;//cambiar
                 c.name = "Robot3";
                 return c;
         }
         
         GameObject setRoboChicken4(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;//ok
                 c.name = "Robot4";
                 return c;
         }
         
         GameObject setRoboChicken5(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;//ok
                 c.name = "Robot5";
                 return c;
         }
         
         GameObject setPhiloChicken1(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;//cambiar
                 c.name = "Philo1";
                 return c;
         }
         
         GameObject setPhiloChicken2(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_crazy")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/philo_graduated")) as GameObject;//ok
                 c.name = "Philo2";
                 return c;
         }
         
         GameObject setPhiloChicken3(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_graduated")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_4eyes")) as GameObject;//ok
                 c.name = "Philo3";
                 return c;
         }
         
         GameObject setPhiloChicken4(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_4eyes")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_crazy")) as GameObject;//ok
                 c.name = "Philo4";
                 return c;
         }
         
         GameObject setPhiloChicken5(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;//ok
                 c.name = "Philo5";
                 return c;
         }
