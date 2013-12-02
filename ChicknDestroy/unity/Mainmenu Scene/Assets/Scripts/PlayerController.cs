@@ -163,10 +163,12 @@ public class PlayerController : Actor {
 				GameObject novaGranada = null;
 				if (currentDirection == DIR_DERECHA) {
 					novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-					novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(Vector3.up * 250, ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(new Vector3(400, 0, 0), ForceMode.VelocityChange);
 				} else {
 					novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-					novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(Vector3.up * 250, ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(new Vector3(-400, 0, 0), ForceMode.VelocityChange);
 				}
 				GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
 				b.setEquip(1);
