@@ -42,7 +42,7 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera;
 	Parpadeig p;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
@@ -361,9 +361,23 @@ public class PlayerController : Actor {
 		
 		float currentTimeDamage = Time.time - damageTime;
 		
-		if (collision.gameObject.tag == "bandera") {
-			hud.notifyFlag(true, true);
-			notifyHudPoints(300);
+		if (collision.gameObject.tag == "Bandera") {
+			
+			switch (team) {
+				
+				case 1: flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: flag = collision.gameObject.transform.position.x > 0; break;
+				
+				default: break;
+				
+			}
+			
+			if (flag) {
+				sonidoPowerUp.Play();
+				Destroy (collision.gameObject);
+				hud.notifyFlag(true, true);
+				notifyHudPoints(300);
+			}
 		}
 		
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
