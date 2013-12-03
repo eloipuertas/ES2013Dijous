@@ -400,8 +400,7 @@ public class PlayerController : Actor {
 			if (flag) {
 				sonidoBandera.Play();
 				Destroy (collision.gameObject);
-				hud.notifyFlag(true, true);
-				notifyHudPoints(300);
+				hud.notifyFlag(true, team==2);
 			}
 		}
 		
@@ -419,6 +418,20 @@ public class PlayerController : Actor {
 				dealDamage(5);
 				p.mostrarDany();
 				damageTime = Time.time;
+			}
+		}
+		
+		if (collision.gameObject.name =="base") {
+			if (flag) {
+				
+				switch (team) {
+				
+					case 1: if (collision.gameObject.transform.position.x > 0) flagPlaced(); break;
+					case 2: if (collision.gameObject.transform.position.x < 0) flagPlaced(); break;
+						
+					default:break;
+				}
+		
 			}
 		}
 			
@@ -603,6 +616,18 @@ public class PlayerController : Actor {
 	public void notifyHudPoints(int p) {
 		this.hud.notifyPoints(p);
 		gameManager.notifyScoreChange(this.hud.getPoints());
+	}
+	
+	private void flagDistroyed() {
+		hud.notifyFlag(false, team==2);
+		DynamicObjects d = (GameObject.Find("GameStartUp").GetComponent("DynamicObjects")) as DynamicObjects;
+		d.notifyFlagDistroyed(team);
+	}
+		
+	private void flagPlaced() {
+		notifyHudPoints(300);
+		flag = false;
+		flagDistroyed();
 	}
 	
 }

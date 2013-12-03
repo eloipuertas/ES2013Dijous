@@ -323,7 +323,7 @@ public class DynamicObjects : MonoBehaviour {
 		}
 	}
 	
-	void notifyFlagDistroyed(int team){
+	public void notifyFlagDistroyed(int team){
 		flags[team-1] = true;
 	}
 }
