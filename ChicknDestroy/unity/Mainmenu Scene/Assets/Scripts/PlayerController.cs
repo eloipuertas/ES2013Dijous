@@ -44,7 +44,7 @@ public class PlayerController : Actor {
 	//sonido
 	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera, audioKatana, audioGrenade, audioMachineGun;
 	Parpadeig p;
-	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
+	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
@@ -82,6 +82,8 @@ public class PlayerController : Actor {
 		
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
+		
+		sang = Resources.Load("effects_prefabs/sangPistola") as GameObject;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
@@ -122,6 +124,7 @@ public class PlayerController : Actor {
 		
 		if (tagHit.Equals("punxes")){
 			if (currentTimeDamage > damageDuration) {
+				showBlood(gameObject.transform.position);
 				dealDamage(5);
 				p.mostrarDany();
 				damageTime = Time.time;
@@ -378,13 +381,9 @@ public class PlayerController : Actor {
 		}
 
 	}
-	
-	
-
-	
-	
-	void OnCollisionEnter(Collision collision){
 		
+	void OnCollisionEnter(Collision collision){
+				
 		float currentTimeDamage = Time.time - damageTime;
 		
 		if (collision.gameObject.tag == "Bandera") {
@@ -406,8 +405,17 @@ public class PlayerController : Actor {
 			}
 		}
 		
-		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
+		if (collision.gameObject.tag =="foc") {
 			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+			
+		if (collision.gameObject.tag =="guillotina") {
+			if (currentTimeDamage > damageDuration) {
+				showBlood(collision.contacts[0].point);
 				dealDamage(5);
 				p.mostrarDany();
 				damageTime = Time.time;
@@ -447,6 +455,11 @@ public class PlayerController : Actor {
 		else
 	        transform.parent = null;
 		
+	}
+	
+	void showBlood(Vector3 p) {;
+		GameObject bloodExpl = Instantiate(sang, p, Quaternion.identity) as GameObject;
+		Destroy(bloodExpl, (float)0.4);
 	}
 	
 	
