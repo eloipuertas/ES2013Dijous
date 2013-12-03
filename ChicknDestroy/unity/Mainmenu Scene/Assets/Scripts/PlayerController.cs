@@ -42,7 +42,7 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera, audioKatana, audioGrenade, audioMachineGun;
 	Parpadeig p;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
 	
@@ -83,14 +83,6 @@ public class PlayerController : Actor {
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
-		AudioSource[] audios = GetComponents<AudioSource>();
-		
-		sonidoSalto = audios[0];
-		sonidoPowerUp = audios[1];
-		sonidoEscudo = audios[2];
-		sonidoDisparoPistola = audios[3];
-		sonidoDisparoEscopeta = audios[4];
-		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
@@ -100,6 +92,7 @@ public class PlayerController : Actor {
 		initAnimations();
 		animDuration = 0.3f;
 		
+		initSounds();
 		
 		health = 100;
 		shield = 0;
@@ -134,6 +127,39 @@ public class PlayerController : Actor {
 				damageTime = Time.time;
 			}
 		}
+		
+	}
+	
+	void initSounds() {
+		sonidoSalto = gameObject.AddComponent<AudioSource>();
+		sonidoSalto.clip = Resources.Load("sounds/saltar") as AudioClip;
+		
+		sonidoPowerUp = gameObject.AddComponent<AudioSource>();
+		sonidoPowerUp.clip = Resources.Load("sounds/power_up_curt") as AudioClip;
+		
+		sonidoEscudo = gameObject.AddComponent<AudioSource>();
+		sonidoEscudo.clip = Resources.Load("sounds/so_escut") as AudioClip;
+		
+		sonidoDisparoPistola = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoPistola.clip = Resources.Load("sounds/tir_pistola_015") as AudioClip;
+		
+		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
+		
+		sonidoBandera = gameObject.AddComponent<AudioSource>();
+		sonidoBandera.clip = Resources.Load("sounds/flag") as AudioClip;
+		
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioKatana = gameObject.AddComponent<AudioSource>();
+		audioKatana.clip = Resources.Load("sounds/katana") as AudioClip;
+
+		audioGrenade = gameObject.AddComponent<AudioSource>();
+		audioGrenade.clip = Resources.Load("sounds/granada_voice") as AudioClip;
 		
 	}
 	
@@ -373,7 +399,7 @@ public class PlayerController : Actor {
 			}
 			
 			if (flag) {
-				sonidoPowerUp.Play();
+				sonidoBandera.Play();
 				Destroy (collision.gameObject);
 				hud.notifyFlag(true, true);
 				notifyHudPoints(300);
@@ -437,6 +463,7 @@ public class PlayerController : Actor {
 				disparoActivo = false;
 				p.setCos(GameObject.Find(gameObject.name+"/grk/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/grk/weapon"));
+				audioKatana.Play();
 				break;
 			case WEAPON_ESCOPETA:
 				myAnim = gre.animation;
@@ -447,6 +474,7 @@ public class PlayerController : Actor {
 				p.setCos(GameObject.Find(gameObject.name+"/gre/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/gre/weapon"));
 				disparoActivo = true;
+				audioMachineGun.Play();
 				break;
 		case WEAPON_PISTOLA:
 				myAnim = grp.animation;
@@ -457,6 +485,7 @@ public class PlayerController : Actor {
 				p.setCos(GameObject.Find(gameObject.name+"/grp/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/grp/weapon"));
 				disparoActivo = true;
+				audioMachineGun.Play();
 				break;
 			default:
 				break;
