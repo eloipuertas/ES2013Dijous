@@ -648,7 +648,7 @@ public class AgentNpc : FSM {
 		if(getTeam() == PHILO_TEAM){
 			return transform.position;
 		} else {
-			return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-0.1f);
+			return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-1.5f);
 		}
 	}
 }
