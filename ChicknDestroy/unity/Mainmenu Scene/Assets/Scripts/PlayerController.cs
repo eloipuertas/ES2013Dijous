@@ -377,7 +377,9 @@ public class PlayerController : Actor {
 	
 
 	
-	
+	/*
+	* On es tracten les colisions amb els objectes de l'escenari.
+	*/
 	void OnCollisionEnter(Collision collision){
 		
 		float currentTimeDamage = Time.time - damageTime;
@@ -387,6 +389,7 @@ public class PlayerController : Actor {
 			notifyHudPoints(300);
 		}
 		
+		//dany per foc o guillotina
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
@@ -395,13 +398,14 @@ public class PlayerController : Actor {
 			}
 		}
 			
-		
+		//quan agafa un escut, crida al mètode addShield de Actor.cs
 		if(collision.gameObject.tag == "escut") {
 				sonidoEscudo.Play();
 				hud.notifyShieldChange(100);
 				addShield(100);
 		}
 		
+		//quan agafa una cura, crida al mètode heal de Actor.cs
 		if(collision.gameObject.tag == "upVida"){ 
 				sonidoPowerUp.Play();
  				heal(50);
@@ -411,6 +415,7 @@ public class PlayerController : Actor {
 			sonidoPowerUp.Play();
 		}
 
+		//colisió amb plataformes que es poden baixar
 		if (collision.gameObject.layer == 8) {
 			esBajable = true;
 		}else {
@@ -438,7 +443,10 @@ public class PlayerController : Actor {
 		
 	}
 	
-	
+	/*
+	* mètode que carrega un model o un altre en funció de l'arma utilitzada.
+	* a més, cambia alguns flags, com per exemple boolean disparoActivo.
+	*/
 	public void updateModelWeapon() {
 		
 		p = GetComponent("Parpadeig") as Parpadeig;
