@@ -66,10 +66,10 @@ public class WeaponFactory
 	 * =========================================================================================
 	 */ 
 	private ThrowableWeapon createGranade() {
-		return new DistanceWeapon("Granade",60,2000,8*VALUE_PER_UNITY,3);
+		return new ThrowableWeapon("Granade",60,2000,8*VALUE_PER_UNITY,3);
 	}
 	private ThrowableWeapon createMine() {
-		return new DistanceWeapon("Mine",60,2000,0,3);
+		return new ThrowableWeapon("Mine",60,2000,0,3);
 	}
 	/* =========================================================================================
 	 * SPECIAL-TYPE WEAPONS
