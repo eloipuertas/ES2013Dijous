@@ -21,16 +21,13 @@ public class GameManager : MonoBehaviour {
 		Physics.gravity = new Vector3(0, -gravity, 0);
 		if(PlayerPrefs.GetInt("Team") == 1)
 			cam.transform.position = new Vector3(15700F,26.20233F,-643.3362F);
-		/*
+		
+//CAMARA PARA NPCs		
 		GameObject go;
-		
-		if (GameSelRobot)
-			go = GameObject.FindGameObjectWithTag("Player");
-		else 
-			go = GameObject.FindGameObjectWithTag("NPC");
-		
-		
-		cam.SetTarget(go.transform);*/
+		//go = GameObject.Find("Robot2");
+		go = GameObject.Find("Philo1");
+		setTarget(go.transform);
+//FI CAMARA NPCs
 	}
 	// Update is called once per frame
 	void Update () {

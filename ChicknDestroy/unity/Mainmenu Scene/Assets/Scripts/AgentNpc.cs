@@ -73,6 +73,7 @@ public class AgentNpc : FSM {
 		setInitialsAttributes();
 		updateModelWeapon();
 		updateNextTarget();
+
 	}
 	
 	void setInitialsAttributes(){
@@ -558,31 +559,44 @@ public class AgentNpc : FSM {
 		float distX = a.x - b.x, distY = a.y - b.y;
 		return Mathf.Sqrt (distX*distX + distY*distY);
 	}
+	
+	
 	private GameObject raycastFront(int dist){
 		RaycastHit hit;
-		float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
+		float mitadAltura = rigidbody.collider.bounds.extents.y;
 		Vector3 pos = getPosition();
+		//Vector3 pos = transform.position;
+		Vector3 posAux = pos;
 		bool trobat = false;
-		for (int i=0;i<3 && !trobat;i++){
-			if(Physics.Raycast(pos, (derecha)?Vector3.right:Vector3.left, out hit,dist))
+		for (int i=-30;i<30 && !trobat;i+=5){
+			posAux = pos + Vector3.up * i;
+//////		
+			Vector3 endpos = (derecha)?Vector3.right:Vector3.left;
+			endpos = posAux + endpos * dist;
+			Debug.DrawLine(posAux, endpos, Color.blue, 0.1f);
+			if(Physics.Raycast(posAux, (derecha)?Vector3.right:Vector3.left, out hit,dist))
 				trobat = true;
-			else
-				pos+=Vector3.up*mitadAltura;
+			
 		}
 		if (!trobat)
 			return null;
 		return hit.collider.gameObject;
 	}
+	
+	
 	private bool anythingOn(Vector3 pos){
 		Vector3 vec = new Vector3(pos.x,pos.y,-200);
 		Vector3 vec2 = vec; vec2.z = 200;
 		return Physics.Linecast(vec,vec2);
 	}
 	private bool onGround(){
-		float mitadAmplada = rigidbody.collider.bounds.extents.x;
+		//float mitadAmplada = rigidbody.collider.bounds.extents.x;
+		float alto = rigidbody.collider.bounds.extents.y;
 		bool ground = false;
-		for (int i=-1;i<2 && !ground;i++){
-			ground = Physics.Raycast(getPosition()+Vector3.right*mitadAmplada*i, Vector3.down, 3);
+		for (int i=-6;i<6 && !ground; i+=2){
+			Vector3 pos = getPosition()+Vector3.right*i;
+			ground = Physics.Raycast(pos, Vector3.down, alto);
+			Debug.DrawLine(pos, pos + Vector3.down*(alto), Color.red, 0.05f);
 		}
 		return ground;
 	}
@@ -592,7 +606,7 @@ public class AgentNpc : FSM {
 	}
 	
 	protected override void updateModelWeapon(){
-		print ("hola k ase");
+		//print ("hola k ase");
 		if (weap_mod == null){
 			weap_mod = new GameObject[3];
 			weap_mod[WEAPON_KATANA-1]   = GameObject.Find(gameObject.name+"/grk");
@@ -645,11 +659,11 @@ public class AgentNpc : FSM {
 	}
 	
 	private Vector3 getPosition(){
-		if(getTeam() == PHILO_TEAM){
+		//if(getTeam() == PHILO_TEAM){
 			return transform.position;
-		} else {
-			return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-1.5f);
-		}
+		//} else {
+		//	return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-1.5f);
+		//}
 	}
 }
 
