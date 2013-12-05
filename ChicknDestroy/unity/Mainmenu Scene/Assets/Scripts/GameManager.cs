@@ -24,8 +24,8 @@ public class GameManager : MonoBehaviour {
 		
 //CAMARA PARA NPCs		
 		GameObject go;
-		//go = GameObject.Find("Robot2");
-		go = GameObject.Find("Philo1");
+		go = GameObject.Find("Robot4");
+		//go = GameObject.Find("Philo5");
 		setTarget(go.transform);
 //FI CAMARA NPCs
 	}

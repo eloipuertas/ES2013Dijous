@@ -568,7 +568,7 @@ public class AgentNpc : FSM {
 		//Vector3 pos = transform.position;
 		Vector3 posAux = pos;
 		bool trobat = false;
-		for (int i=-30;i<30 && !trobat;i+=5){
+		for (int i=-15;i<15 && !trobat;i+=5){
 			posAux = pos + Vector3.up * i;
 //////		
 			Vector3 endpos = (derecha)?Vector3.right:Vector3.left;
