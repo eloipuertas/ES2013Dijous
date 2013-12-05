@@ -586,8 +586,8 @@ public class PlayerController : Actor {
 	}
 	
 	protected void fireHealthNotification(){ this.hud.notifyHealthChange(this.health);}
-	protected void fireDeathNotification(){ this.gameManager.notifyPlayerDeath();	}
-	protected void fireShieldNotification({ this.hud.notifyShieldChange(this.shield);}
+	protected void fireDeathNotification(){ this.gameManager.notifyPlayerDeath();}
+	protected void fireShieldNotification(){ this.hud.notifyShieldChange(this.shield);}
 	
 	
 	// --------------- NEW CODE --- @LynosSorien

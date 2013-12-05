@@ -42,7 +42,7 @@ public class Actor : MonoBehaviour {
 	
 	protected virtual void fireHealthNotification(){}
 	protected virtual void fireDeathNotification(){}
-	protected virtual void fireShieldNotification({}
+	protected virtual void fireShieldNotification(){}
 	
 	protected void fireFlagnotification(bool taken, bool robot){ this.hud.notifyFlag(taken,robot); }
 	
