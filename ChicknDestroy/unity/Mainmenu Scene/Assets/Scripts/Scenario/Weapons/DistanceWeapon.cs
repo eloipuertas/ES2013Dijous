@@ -10,6 +10,7 @@ public class DistanceWeapon : Weapon
 		init (name,damage,delay,range,ammo);
 	}
 	
+	public DistanceWeapon(){}
 	
 	protected void init(string name, int damage, long delay, int range, int ammo) {
 		this.name = name;
