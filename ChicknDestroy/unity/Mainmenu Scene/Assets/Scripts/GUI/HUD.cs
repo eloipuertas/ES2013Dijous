@@ -140,7 +140,7 @@ public class HUD : MonoBehaviour{
 	
 	private void getTeam() {
 		player_team = PlayerPrefs.GetInt("Team");
-		if (p==2) this.current_player_robotic = true;
+		if (player_team == 2) this.current_player_robotic = true;
 		else this.current_player_robotic = false;
 		if (this.current_player_robotic == true) this.team = "robot";
 		else this.team = "philo";
