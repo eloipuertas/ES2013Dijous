@@ -563,17 +563,22 @@ public class AgentNpc : FSM {
 	
 	private GameObject raycastFront(int dist){
 		RaycastHit hit;
-		float mitadAltura = rigidbody.collider.bounds.extents.y;
 		Vector3 pos = getPosition();
-		//Vector3 pos = transform.position;
 		Vector3 posAux = pos;
+		Vector3 endpos;
 		bool trobat = false;
-		for (int i=-15;i<15 && !trobat;i+=5){
-			posAux = pos + Vector3.up * i;
-//////		
-			Vector3 endpos = (derecha)?Vector3.right:Vector3.left;
-			endpos = posAux + endpos * dist;
-			Debug.DrawLine(posAux, endpos, Color.blue, 0.1f);
+		float altura = rigidbody.collider.bounds.extents.y * 2;
+		int ndiv = 3;
+		float deltaAltura = (altura-5.0f)/(float)ndiv;
+		
+		pos = pos + Vector3.down*(altura/2.0f);
+		
+		for (int i=1;i <= ndiv && !trobat; i+=1){
+			
+			posAux = pos + Vector3.up*i*deltaAltura;
+			
+			endpos = posAux + ((derecha)?Vector3.right:Vector3.left) * dist;
+			Debug.DrawLine(posAux, endpos, Color.blue, 0.01f);
 			if(Physics.Raycast(posAux, (derecha)?Vector3.right:Vector3.left, out hit,dist))
 				trobat = true;
 			
@@ -590,13 +595,19 @@ public class AgentNpc : FSM {
 		return Physics.Linecast(vec,vec2);
 	}
 	private bool onGround(){
-		//float mitadAmplada = rigidbody.collider.bounds.extents.x;
+		float ancho = rigidbody.collider.bounds.extents.x * 2;
 		float alto = rigidbody.collider.bounds.extents.y;
+		Vector3 pos = getPosition() + Vector3.left*(ancho/2.0f);
+		Vector3 posAux;
+		
+		int ndiv = 3;
+		float deltaAncho = ancho/(float)ndiv;
+		
 		bool ground = false;
-		for (int i=-6;i<6 && !ground; i+=2){
-			Vector3 pos = getPosition()+Vector3.right*i;
-			ground = Physics.Raycast(pos, Vector3.down, alto);
-			Debug.DrawLine(pos, pos + Vector3.down*(alto), Color.red, 0.05f);
+		for (int i=0;i<ndiv && !ground; i+=1){
+			posAux = pos + Vector3.right*i*deltaAncho;
+			ground = Physics.Raycast(posAux, Vector3.down, alto);
+			Debug.DrawLine(posAux, posAux + Vector3.down*(alto), Color.red, 0.01f);
 		}
 		return ground;
 	}
