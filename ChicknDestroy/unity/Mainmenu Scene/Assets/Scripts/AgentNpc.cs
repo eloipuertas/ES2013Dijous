@@ -466,7 +466,7 @@ public class AgentNpc : FSM {
 						if(isEnemy(a)){ // Comprobar rivales
 							curState = FSM.Attack;
 							//animateIfExist("atacarDer","atacarIzq");
-						} else {
+						} else if (derecha){
 							jump();
 						}
 						break;
