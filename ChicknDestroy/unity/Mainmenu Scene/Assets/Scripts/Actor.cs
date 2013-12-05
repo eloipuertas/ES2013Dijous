@@ -20,6 +20,11 @@ public class Actor : MonoBehaviour {
 	public const int PHILO_TEAM = 1;
 	public const int ROBOT_TEAM = 2;
 	
+	private Weapon primary;
+	private ThrowableWeapon secondary;
+	
+	private bool flag;
+	
 	protected int team;
 
 	protected void setHealth(int n) {
