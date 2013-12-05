@@ -75,7 +75,22 @@ public class Actor : MonoBehaviour {
 	public void addShield(int s){ setShield(Mathf.Min(100,shield+s)); }
 	
 	protected virtual void updateModelWeapon(){}
-	public void setWeapon(int weapon){ this.weapon = weapon; updateModelWeapon();}
+	public void setWeapon(int weapon){
+		// @LynosSorien -- Add the creation of the primary Weapon.
+		this.weapon = weapon;
+		switch(weapon) {
+			case WEAPON_KATANA:
+			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.KATANA);
+			break;
+			case WEAPON_ESCOPETA:
+			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.SHOTGUN);
+			break;
+			case WEAPON_PISTOLA:
+			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.GUN);
+			break;
+		}
+		updateModelWeapon();
+	}
 	public int getWeapon(){ return weapon; }
 
 	public void setTeam(int team){ this.team=team; }
