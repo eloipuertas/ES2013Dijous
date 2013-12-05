@@ -19,6 +19,7 @@ public class AgentNpc : FSM {
 	private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera;
 	
 	private PlayerController playerController;
+	private FlagManagement flagManagement;
 	
 	//Modelos de armas
 	private GameObject[] weap_mod;
@@ -99,6 +100,9 @@ public class AgentNpc : FSM {
 		
 		p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
 		playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
+		
+		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
+		flagManagement.flagBase(team, false);
 	
 	}
 	
@@ -544,7 +548,6 @@ public class AgentNpc : FSM {
 			if (flag) {
 				sonidoBandera.Play();
 				Destroy (collision.gameObject);
-				//hud.notifyFlag(true, true);
 				//notifyHudPoints(300);
 			}
 		}

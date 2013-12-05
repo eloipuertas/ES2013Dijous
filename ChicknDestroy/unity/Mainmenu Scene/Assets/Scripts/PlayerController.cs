@@ -42,8 +42,9 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera, audioKatana, audioGrenade, audioMachineGun;
-	Parpadeig p;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
+	private Parpadeig p;
+	private FlagManagement flagManagement;
 	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
 	//indica el tiempo transcurrido de animacion
@@ -94,7 +95,8 @@ public class PlayerController : Actor {
 		animDuration = 0.3f;
 		
 		initSounds();
-		flagBase(false);
+		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
+		flagManagement.flagBase(team, false);
 		
 		health = 100;
 		shield = 0;
@@ -148,9 +150,6 @@ public class PlayerController : Actor {
 		
 		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
 		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
-		
-		sonidoBandera = gameObject.AddComponent<AudioSource>();
-		sonidoBandera.clip = Resources.Load("sounds/flag") as AudioClip;
 		
 		audioMachineGun = gameObject.AddComponent<AudioSource>();
 		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
@@ -387,22 +386,20 @@ public class PlayerController : Actor {
 		float currentTimeDamage = Time.time - damageTime;
 		
 		if (collision.gameObject.tag == "Bandera") {
-			
+		
 			switch (team) {
-				
-				case 1: //flag = collision.gameObject.transform.position.x < 0; break;
-				case 2: //flag = collision.gameObject.transform.position.x > 0; break;
-						flag = true; break;
+					
+				case 1: flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: flag = collision.gameObject.transform.position.x > 0; break;
 				
 				default: break;
 				
 			}
 			
 			if (flag) {
-				sonidoBandera.Play();
-				Destroy (collision.gameObject);
+				flagManagement.setflagObtained(team);
 				hud.notifyFlag(true, team==2);
-				flagBase(false);
+				Destroy (collision.gameObject);
 			}
 		}
 		
@@ -428,11 +425,15 @@ public class PlayerController : Actor {
 			if (flag) {
 				switch (team) {
 				
-					case 1: if (collision.gameObject.transform.position.x > 0) flagPlaced(); break;
-					case 2: if (collision.gameObject.transform.position.x < 0) flagPlaced(); break;
+					case 1: if (collision.gameObject.transform.position.x > 0) flagManagement.setflagPlaced(team); break;
+					case 2: if (collision.gameObject.transform.position.x < 0) flagManagement.setflagPlaced(team); break;
 						
 					default:break;
 				}
+				
+				flag = false;
+				notifyHudPoints(300); //team
+				hud.notifyFlag(false, team==2);
 		
 			}
 		}
@@ -614,43 +615,11 @@ public class PlayerController : Actor {
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
-	
+
 	public void notifyHudPoints(int p) {
 		this.hud.notifyPoints(p);
 		gameManager.notifyScoreChange(this.hud.getPoints());
 	}
-	
-	private void flagDistroyed() {
-		hud.notifyFlag(false, team==2);
-		DynamicObjects d = (GameObject.Find("GameStartUp").GetComponent("DynamicObjects")) as DynamicObjects;
-		d.notifyFlagDistroyed(team);
-	}
-		
-	private void flagPlaced() {
-		flagBase(true);
-		notifyHudPoints(300);
-		flag = false;
-		flagDistroyed();
-	}
-	
-	private void flagBase(bool b) {
-		
-		GameObject mastil = null, tela = null;
-		
-		switch(team) {
-			case 1: mastil = GameObject.Find("flagPhilo"+"/mastil");
-					tela = GameObject.Find("flagPhilo"+"/tela");
-					break;
-			case 2: mastil = GameObject.Find("flagRobot"+"/mastil");
-					tela = GameObject.Find("flagRobot"+"/tela");
-					break;
-			
-			default: break;
-		}
-		
-		mastil.renderer.enabled = b;
-		tela.renderer.enabled = b;
 
-	}
 	
 }
