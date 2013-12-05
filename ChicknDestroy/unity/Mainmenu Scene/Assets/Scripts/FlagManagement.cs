@@ -4,10 +4,13 @@ using System.Collections;
 public class FlagManagement : MonoBehaviour {
 	
 	private AudioSource audioFlagObtained;
+	private AudioSource audioFlagPlaced;
 
 	void Start () {
 		audioFlagObtained = gameObject.AddComponent<AudioSource>();
+		audioFlagPlaced = gameObject.AddComponent<AudioSource>();
 		audioFlagObtained.clip = Resources.Load("sounds/flag") as AudioClip;
+		audioFlagPlaced.clip = Resources.Load("sounds/flagPlaced") as AudioClip;
 	}
 	
 	public void flagBase(int team, bool b) {
@@ -31,6 +34,7 @@ public class FlagManagement : MonoBehaviour {
 	}
 		
 	public void setflagPlaced(int team) {
+		audioFlagPlaced.Play();
 		flagBase(team, true);
 		flagDistroyed(team);
 	}
