@@ -6,7 +6,10 @@ public class HUD : MonoBehaviour{
 	
 	private bool current_player_robotic;
 	private string team;
+	private int player_team;
+	
 	private int player_points;
+	private int npc_points;
 	
 	private PlayerInterface player;
 	private GameInterface game;
@@ -102,6 +105,8 @@ public class HUD : MonoBehaviour{
 			new Vector2(20,0),
 			10);
 		this.player_points = 0;
+		// Make the player poits to view it?
+		this.npc_points = 0;
 		
 		this.pause_button = new SpriteButton(new Rect((Screen.width)-100,20,100,20),
 			"pausa/pause"+this.team,
@@ -134,7 +139,7 @@ public class HUD : MonoBehaviour{
 	}
 	
 	private void getTeam() {
-		int p = PlayerPrefs.GetInt("Team");
+		player_team = PlayerPrefs.GetInt("Team");
 		if (p==2) this.current_player_robotic = true;
 		else this.current_player_robotic = false;
 		if (this.current_player_robotic == true) this.team = "robot";
@@ -241,6 +246,10 @@ public class HUD : MonoBehaviour{
 	}
 	public void notifyPoints(int points) {
 		this.player_points+=points;
+	}
+	public void notifyPoints(int team, int points) {
+		if(team == this.player_team) this.player_points+=points;
+		else this.npc_points+= points;
 	}
 	
 	public void notifyPrimaryWeapon(int weapon) {
