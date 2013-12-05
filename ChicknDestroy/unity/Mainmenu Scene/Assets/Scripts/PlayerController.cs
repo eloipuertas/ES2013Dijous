@@ -97,8 +97,7 @@ public class PlayerController : Actor {
 		sonidoEscudo = audios[2];
 		sonidoDisparoPistola = audios[3];
 		sonidoDisparoEscopeta = audios[4];
-		
-		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
 		gameManager.setTarget(this.transform);
@@ -585,6 +584,10 @@ public class PlayerController : Actor {
 		this.hud.notifyPoints(p);
 		gameManager.notifyScoreChange(this.hud.getPoints());
 	}
+	
+	protected void fireHealthNotification(){ this.hud.notifyHealthChange(this.health);}
+	protected void fireDeathNotification(){ this.gameManager.notifyPlayerDeath();	}
+	protected void fireShieldNotification({ this.hud.notifyShieldChange(this.shield);}
 	
 	
 	// --------------- NEW CODE --- @LynosSorien

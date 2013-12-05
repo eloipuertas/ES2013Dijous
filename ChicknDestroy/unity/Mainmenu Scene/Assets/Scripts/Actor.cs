@@ -9,7 +9,7 @@ public class Actor : MonoBehaviour {
 	protected GameObject primaryWeapon;
 	protected GameObject secondaryWeapon;
 	
-	protected HUD hud =  null;
+	protected HUD hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 	protected GameManager gameManager = null;
 
 	public int weapon;
@@ -39,20 +39,12 @@ public class Actor : MonoBehaviour {
 		shield = n;
 		fireShieldNotification();
 	}
-		
-	protected void fireHealthNotification() {
-		if(hud)
-			this.hud.notifyHealthChange(this.health);
-	}
-	protected void fireDeathNotification() {
-		if(hud)
-			this.gameManager.notifyPlayerDeath();	
-	}
 	
-	protected void fireShieldNotification(){
-		if(hud)
-			this.hud.notifyShieldChange(this.shield);
-	}
+	protected virtual void fireHealthNotification(){}
+	protected virtual void fireDeathNotification(){}
+	protected virtual void fireShieldNotification({}
+	
+	protected void fireFlagnotification(bool taken, bool robot){ this.hud.notifyFlag(taken,robot); }
 	
 	public string getPrimaryWeapon(){ return primaryWeapon.ToString(); }
 	public string getSecondaryWeapon(){ return secondaryWeapon.ToString(); }
