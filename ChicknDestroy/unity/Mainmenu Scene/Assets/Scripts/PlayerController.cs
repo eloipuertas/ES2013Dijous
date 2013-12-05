@@ -90,11 +90,11 @@ public class PlayerController : Actor {
 		
 		gameManager.setTarget(this.transform);
 		
-		
 		initAnimations();
 		animDuration = 0.3f;
 		
 		initSounds();
+		flagBase(false);
 		
 		health = 100;
 		shield = 0;
@@ -390,8 +390,9 @@ public class PlayerController : Actor {
 			
 			switch (team) {
 				
-				case 1: flag = collision.gameObject.transform.position.x < 0; break;
-				case 2: flag = collision.gameObject.transform.position.x > 0; break;
+				case 1: //flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: //flag = collision.gameObject.transform.position.x > 0; break;
+						flag = true; break;
 				
 				default: break;
 				
@@ -401,6 +402,7 @@ public class PlayerController : Actor {
 				sonidoBandera.Play();
 				Destroy (collision.gameObject);
 				hud.notifyFlag(true, team==2);
+				flagBase(false);
 			}
 		}
 		
@@ -422,8 +424,8 @@ public class PlayerController : Actor {
 		}
 		
 		if (collision.gameObject.name =="base") {
+			
 			if (flag) {
-				
 				switch (team) {
 				
 					case 1: if (collision.gameObject.transform.position.x > 0) flagPlaced(); break;
@@ -625,9 +627,30 @@ public class PlayerController : Actor {
 	}
 		
 	private void flagPlaced() {
+		flagBase(true);
 		notifyHudPoints(300);
 		flag = false;
 		flagDistroyed();
+	}
+	
+	private void flagBase(bool b) {
+		
+		GameObject mastil = null, tela = null;
+		
+		switch(team) {
+			case 1: mastil = GameObject.Find("flagPhilo"+"/mastil");
+					tela = GameObject.Find("flagPhilo"+"/tela");
+					break;
+			case 2: mastil = GameObject.Find("flagRobot"+"/mastil");
+					tela = GameObject.Find("flagRobot"+"/tela");
+					break;
+			
+			default: break;
+		}
+		
+		mastil.renderer.enabled = b;
+		tela.renderer.enabled = b;
+
 	}
 	
 }

@@ -133,23 +133,23 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void createFlags(){
 		GameObject x;
-		if(flags[0] && timeFlags[0] <= 0){
+		if(flags[1] && timeFlags[1] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/Bandera2")) as GameObject;
 			x.name = "Bandera";
 			x.transform.position = new Vector3(16233.11F,802.9051F,-3.177107F);
 			x.transform.eulerAngles = new Vector3(0F,-180F,0F);
 			x.transform.localScale = new Vector3(1F,1F,0.8874608F);
-			timeFlags[0] = 10F;
-			flags[0] = false;
+			timeFlags[1] = 10F;
+			flags[1] = false;
 		}
-		if(flags[1] && timeFlags[1] <= 0){
+		if(flags[0] && timeFlags[0] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/Bandera1")) as GameObject;
 			x.name = "Bandera";
 			x.transform.position = new Vector3(-693.6163F,802.9051F,-3.1771073F);
 			x.transform.eulerAngles = new Vector3(0F,0F,0F);
 			x.transform.localScale = new Vector3(1F,1F,0.8874608F);
-			timeFlags[1] = 10F;
-			flags[1] = false;
+			timeFlags[0] = 10F;
+			flags[0] = false;
 		}
 	}
 	
@@ -253,7 +253,7 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.Find("lifeUp6") == null && timeLife[5] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/upVida")) as GameObject;
 			x.name = "lifeUp6";
-			x.transform.position = new Vector3(5468.185F,516.3036F,-3.585088F);
+			x.transform.position = new Vector3(5355.549F,483.8425F,-3.585088F);
 			x.transform.eulerAngles = new Vector3(0F,20.76423F,0F);
 			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
 			x.animation.playAutomatically = true;
