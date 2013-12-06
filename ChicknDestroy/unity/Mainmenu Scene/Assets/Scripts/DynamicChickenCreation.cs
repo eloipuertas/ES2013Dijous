@@ -77,19 +77,19 @@ public class DynamicChickenCreation : MonoBehaviour {
         }
         
         GameObject setRoboChicken2(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;//cambiar
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_matrix")) as GameObject;//ok
                 c.name = "Robot2";
                 return c;
         }
         
         GameObject setRoboChicken3(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_matrix")) as GameObject;//cambiar
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_water")) as GameObject;//ok
                 c.name = "Robot3";
                 return c;
         }
         
         GameObject setRoboChicken4(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_water")) as GameObject;//ok
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;//ok
                 c.name = "Robot4";
                 return c;
         }
