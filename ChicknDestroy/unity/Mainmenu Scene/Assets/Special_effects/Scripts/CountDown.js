@@ -3,7 +3,8 @@ var text2:GameObject;
 var foc1:GameObject;
 var boto:GameObject;
 var audioCountdown:AudioSource;
-var obstacle:GameObject;
+var obstacle1:GameObject;
+var obstacle2:GameObject;
 
 private var timer:float;
 private var startTimer;
@@ -11,7 +12,8 @@ private var countdown_activada;
 
 
 function Start () {
-	obstacle.active = false;
+	obstacle1.active = false;
+	obstacle2.active = false;
 	text1.active = false;
 	text2.active = false;
 	countdown_activada = 0;
@@ -33,7 +35,8 @@ function Update () {
 						text1.active = false;
 						text2.active = false;
 						foc1.active = true;
-						obstacle.active = false;
+						obstacle1.active = false;
+						obstacle2.active = false;
 						break;
 						
 				case "9":  //canviar colors per cada numero, funcio o assignant directament el color?
@@ -59,7 +62,8 @@ function Update () {
 						   text2.GetComponent(TextMesh).text = numero;
 						   break;
 						   
-				case "13": obstacle.active = true;
+				case "13": obstacle1.active = true;
+						   obstacle2.active = true;
 				case "15":
 				case "12":
 				case "11":
@@ -91,7 +95,8 @@ function OnCollisionEnter(collision:Collision){
 						
 			text1.active = true;
 			text2.active = true;
-			obstacle.active = false;
+			obstacle1.active = false;
+			obstacle2.active = false;
 			foc1.active = false;
 			
 			text1.renderer.material.color = Color.blue;

@@ -13,6 +13,7 @@ public class Actor : MonoBehaviour {
 	protected GameManager gameManager = null;
 
 	public int weapon;
+	public bool flag;
 	
 	public const int WEAPON_KATANA = 1;
 	public const int WEAPON_ESCOPETA = 2;
