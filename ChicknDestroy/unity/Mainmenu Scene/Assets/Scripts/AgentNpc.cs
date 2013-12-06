@@ -75,7 +75,6 @@ public class AgentNpc : FSM {
 		setInitialsAttributes();
 		updateModelWeapon();
 		updateNextTarget();
-
 	}
 	
 	void setInitialsAttributes(){
@@ -677,6 +676,26 @@ public class AgentNpc : FSM {
 		//} else {
 		//	return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-1.5f);
 		//}
+	}
+	
+	private int getXGrid(){
+		int x;
+		x = (int)gameObject.transform.position.x;
+		x = x-(-1221);
+		
+		x = x/200;
+		
+		return x;
+	}
+	
+	private int getYGrid(){
+		int y;
+		y = (int)gameObject.transform.position.y;
+		y = y-(-110);
+		
+		y = y/200;
+		
+		return y;
 	}
 }
 
