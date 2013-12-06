@@ -38,6 +38,10 @@ public class AgentNpc : FSM {
 	//Especifications
 	private int jumpForce = 500;
 	private float velocity = 175f;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
+	private Parpadeig p;
+	private FlagManagement flagManagement;
+	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
 	//Npc atributes
 	//private int puntuacio = 200; -- Useless
@@ -86,10 +90,6 @@ public class AgentNpc : FSM {
 		this.setShield (0); // @LynosSorien - Added, shield to 0.
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
-		
-		AudioSource[] audios = GetComponents<AudioSource>();
-		sonidoDisparoPistola = audios[3];
-		sonidoDisparoEscopeta = audios[4];
 		
 		p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
 		//playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController; // NOT USED
@@ -193,6 +193,38 @@ public class AgentNpc : FSM {
 		}
 	}
 	
+	void initSounds() {
+		sonidoSalto = gameObject.AddComponent<AudioSource>();
+		sonidoSalto.clip = Resources.Load("sounds/saltar") as AudioClip;
+
+		sonidoPowerUp = gameObject.AddComponent<AudioSource>();
+		sonidoPowerUp.clip = Resources.Load("sounds/power_up_curt") as AudioClip;
+		
+
+		sonidoEscudo = gameObject.AddComponent<AudioSource>();
+		sonidoEscudo.clip = Resources.Load("sounds/so_escut") as AudioClip;
+		
+
+		sonidoDisparoPistola = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoPistola.clip = Resources.Load("sounds/tir_pistola_015") as AudioClip;
+		
+		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
+
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioKatana = gameObject.AddComponent<AudioSource>();
+		audioKatana.clip = Resources.Load("sounds/katana") as AudioClip;
+
+		audioGrenade = gameObject.AddComponent<AudioSource>();
+		audioGrenade.clip = Resources.Load("sounds/granada_voice") as AudioClip;
+		
+	}
+	
 	/*################################################################
 	############################# STATUS ############################*/
 	
@@ -202,6 +234,7 @@ public class AgentNpc : FSM {
 		updateNextTarget();
 		if (nextTarget.z != 3){
 			curState = FSM.Run;
+	
 		}
 	}
 	protected void UpdateRunState(){		

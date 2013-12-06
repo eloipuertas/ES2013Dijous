@@ -26,7 +26,7 @@ public class Actor : MonoBehaviour {
 	protected Weapon primary;
 	protected ThrowableWeapon secondary;
 	
-	private bool flag;
+	protected bool flag;
 	
 	protected int team;
 	
