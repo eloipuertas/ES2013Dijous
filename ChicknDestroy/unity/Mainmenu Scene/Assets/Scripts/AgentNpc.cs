@@ -16,15 +16,14 @@ public class AgentNpc : FSM {
 	}
 	
 	//sonidos
-	private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera;
+	//private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta; // Up to Actor.
 	
-	private PlayerController playerController;
-	private FlagManagement flagManagement;
+	private PlayerController playerController; // -- Used to view if there are from the same team.
 	
 	//Modelos de armas
 	private GameObject[] weap_mod;
-	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra;
-	private Parpadeig p;
+	//private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra; -- To Actor!
+	//private Parpadeig p; -- To Actor!
 
 	//Lectors de rutes
 	private int keyPosActual = 0; 
@@ -41,7 +40,7 @@ public class AgentNpc : FSM {
 	private float velocity = 175f;
 	
 	//Npc atributes
-	private int puntuacio = 200;
+	//private int puntuacio = 200; -- Useless
 	private int radioVision = 425;
 	private int stopDistance = 40;
 	private int rangeWeapon = 0;
@@ -55,7 +54,7 @@ public class AgentNpc : FSM {
 	private FSM curState;
 	private Animation animations;
 	private bool derecha = true;
-	private bool dead = false;
+	//private bool dead = false; -- to Actor!!
 	private float elapsedTime = 0;
 	private bool haAtacado = true;
 	
@@ -70,39 +69,30 @@ public class AgentNpc : FSM {
 	###################### INITIALIZATION OF NPC #####################*/
 	 
 	protected override void Ini(){
+		// initTimers();
 		loadRoute();
 		setInitialsAttributes();
 		updateModelWeapon();
 		updateNextTarget();
-		initSounds();
-	}
-	
-	void initSounds() {
-		
-		sonidoDisparoPistola = gameObject.AddComponent<AudioSource>();
-		sonidoDisparoPistola.clip = Resources.Load("sounds/tir_pistola_015") as AudioClip;
-		
-		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
-		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
-		
-		sonidoBandera = gameObject.AddComponent<AudioSource>();
-		sonidoBandera.clip = Resources.Load("sounds/flag") as AudioClip;
-		
 	}
 	
 	void setInitialsAttributes(){
+		this.currentDirection = DIR_DERECHA;
+		
 		nextTarget = rutaActual[keyPosActual];
 		curState = FSM.Run;
 			
 		this.setHealth(100);
+		this.setShield (0); // Added, shield to 0.
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
+		AudioSource[] audios = GetComponents<AudioSource>();
+		sonidoDisparoPistola = audios[3];
+		sonidoDisparoEscopeta = audios[4];
+		
 		p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
 		playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
-		
-		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
-		flagManagement.flagBase(team, false);
 	
 	}
 	
@@ -131,13 +121,6 @@ public class AgentNpc : FSM {
 		
 		fileindex +=1;
 	}	
-	
-	
-	
-
-
-	
-
 
 
 	/*################################################################
@@ -250,6 +233,8 @@ public class AgentNpc : FSM {
 			// Cambio de direccion si changeDir me lo permite, y estoy de espaldas al target
 			if ((!targetEnemy || changeDir) && derecha != (relPos.x > 0)){
 				derecha = !derecha;
+				if (derecha) this.currentDirection = DIR_DERECHA; // Necessary to refactor the attack methods.
+				else this.currentDirection = DIR_IZQUIERDA;
 				lastPos = getPosition();
 				changeDir = false;	// No voy a permitir cambiar de direccion en la siguiente iteracion
 				if(ground){
@@ -342,16 +327,16 @@ public class AgentNpc : FSM {
 			updateNextTarget();
 
 	}
+	// Attack for IA (Agent) -- Primary Weapon only.
 	protected void UpdateAttackState(){
 		//Debug.Log("WEAPON: "+getWeapon());
 		string anim = (derecha)? "atacarDer":"atacarIzq";
 		
-		if(getWeapon() == WEAPON_KATANA){
-
-			
+		//if(getWeapon() == WEAPON_KATANA){
+		if (this.primary.GetType () == typeof(MeleeWeapon)) { // Better.
 			GameObject detected = raycastFront(stopDistance+rangeWeapon);
 
-			if(detected != null){
+			if(detected != null){ // Detect an enemy target?
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)){
 
@@ -359,9 +344,11 @@ public class AgentNpc : FSM {
 						animations.Play(anim);
 						haAtacado = false;
 					} else if (!haAtacado && animations[anim].time > (animations[anim].length*2f/3f)){
-						haAtacado = true;
-						actor.dealDamage(25);
-						p.mostrarDany();
+						haAtacado = true; // haAtacado = doPrimaryAttack();
+						if (primary.attack()) { // When doPrimaryAttack will be refactoriced, then it will be removed.
+							actor.dealDamage(this.primary.getDamage());
+							p.mostrarDany();
+						} // Guess..
 					}
 
 				} else {
@@ -375,13 +362,54 @@ public class AgentNpc : FSM {
 			}
 
 
+		} // @LynosSorien -- Refactor Method
+		else if (this.primary.GetType () == typeof(DistanceWeapon)){
+			//Animacion disparar
+			GameObject detected = raycastFront(stopDistance+rangeWeapon);
+			if(detected != null){
+				Actor actor = (Actor) detected.GetComponent(typeof(Actor));
+				if (isEnemy(actor)){
+					if (!animations.IsPlaying (anim)){
+						animations.Play(anim);
+						haAtacado = false;
+					} else if (!haAtacado && animations[anim].time > 0.5f){
+						haAtacado = true;
+						// This part must be refactoriced to Actor.cs
+						if (this.primary.attack()) { // If the attack is done...
+							if(derecha){
+								nouTir = (GameObject) Instantiate(bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+								nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
+							}else{
+								nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+								nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
+							}
+							
+							GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
+							b.setEquip(team);
+							b.setArma(weapon);
+							b.setDamage (primary.getDamage());
+							
+							if (weapon == WEAPON_PISTOLA)sonidoDisparoPistola.Play();
+							else if(weapon == WEAPON_ESCOPETA) sonidoDisparoEscopeta.Play();
+						}
+						
+					}
+					
+
+				} else {
+						curState = FSM.Run;
+				}
+			} else {
+				curState = FSM.Run;
+			}
+			
 		}
 		
-		if(getWeapon() == WEAPON_PISTOLA){
+		/*if(getWeapon() == WEAPON_PISTOLA){
 			
 			//Animacion disparar
 
-			
+			// SAME FOR DISTANCE WEAPON
 
 			GameObject detected = raycastFront(stopDistance+rangeWeapon);
 			if(detected != null){
@@ -419,8 +447,8 @@ public class AgentNpc : FSM {
 				curState = FSM.Run;
 			}
 			
-		}
-		
+		}*/
+		/*
 		if(getWeapon() == WEAPON_ESCOPETA){
 			//Animacion disparar
 			
@@ -459,15 +487,11 @@ public class AgentNpc : FSM {
 			} else {
 				curState = FSM.Run;
 			}
-					
-
-		}
+		}*/
 		
 	}
 	
     protected void UpdateJumpState(){
-
-		
 			GameObject detected = raycastFront(stopDistance+5);
 			if(detected != null){
 			
@@ -502,7 +526,7 @@ public class AgentNpc : FSM {
 				animateIfExist("muerteDerecha","muerteIzquierda");
 				dead = true;
 				if (playerController.getTeam() != team)
-					notifyDeadtoPlayer();
+					notifyDeadtoPlayer(); // HUD notification??
 			}else
 				Destroy(gameObject);
 		}
@@ -531,28 +555,6 @@ public class AgentNpc : FSM {
 	
 	/*################################################################
 	######################## UTILITY FUNCTIONS ######################*/
-	
-	void OnCollisionEnter(Collision collision){
-		
-		if (collision.gameObject.tag == "Bandera") {
-			
-			switch (team) {
-				
-				case 1: flag = collision.gameObject.transform.position.x < 0; break;
-				case 2: flag = collision.gameObject.transform.position.x > 0; break;
-				
-				default: break;
-				
-			}
-			
-			if (flag) {
-				sonidoBandera.Play();
-				Destroy (collision.gameObject);
-				//notifyHudPoints(300);
-			}
-		}
-		
-	}
 	
 	public bool jump(){
 		
@@ -622,11 +624,13 @@ public class AgentNpc : FSM {
 		}
 		return ground;
 	}
+	/* Refactor to Actor.cs
 	private bool isEnemy(Actor a){
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
-	
+	*/
+	// Override from Actor.cs
 	protected override void updateModelWeapon(){
 		print ("hola k ase");
 		if (weap_mod == null){

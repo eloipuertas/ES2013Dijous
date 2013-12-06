@@ -330,4 +330,8 @@ public class HUD : MonoBehaviour{
 	public int getPoints() {
 		return this.player_points;
 	}
+	
+	public int getNPCPoints() {
+		return this.npc_points;
+	}
 }

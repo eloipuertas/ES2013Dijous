@@ -5,20 +5,22 @@ public class DistanceWeapon : Weapon
 {
 	protected int ammo;
 	protected int current_ammo;
-	public DistanceWeapon (string name, int damage,long delay,int range, int ammo)
+	protected int velocity;
+	public DistanceWeapon (string name, int damage,long delay,int range, int ammo, int velocity)
 	{
-		init (name,damage,delay,range,ammo);
+		init (name,damage,delay,range,ammo, velocity);
 	}
 	
 	public DistanceWeapon(){}
 	
-	protected void init(string name, int damage, long delay, int range, int ammo) {
+	protected void init(string name, int damage, long delay, int range, int ammo, int velocity) {
 		this.name = name;
 		this.damage = damage;
 		this.delay = delay;
 		this.range = range;
 		this.ammo = ammo;
 		this.current_ammo = ammo;
+		this.velocity = velocity;
 		initTimer ();
 	}
 	
@@ -34,11 +36,20 @@ public class DistanceWeapon : Weapon
 		if (this.current_ammo >this.ammo) this.current_ammo = this.ammo;
 	}
 	
+	public void setCAmmo(int ammo) {
+		this.current_ammo = ammo;
+		if(this.current_ammo > this.ammo) this.current_ammo = this.ammo;
+	}
+	
 	public int getCAmmo() {
 		return current_ammo;
 	}
 	public int getAmmo() {
 		return ammo;
+	}
+	
+	public int getVelocity() {
+		return velocity;
 	}
 }
 

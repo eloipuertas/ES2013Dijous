@@ -13,7 +13,6 @@ public class Actor : MonoBehaviour {
 	protected GameManager gameManager = null;
 
 	public int weapon;
-	public bool flag;
 	
 	public const int WEAPON_KATANA = 1;
 	public const int WEAPON_ESCOPETA = 2;
@@ -21,12 +20,27 @@ public class Actor : MonoBehaviour {
 	public const int PHILO_TEAM = 1;
 	public const int ROBOT_TEAM = 2;
 	
-	private Weapon primary;
-	private ThrowableWeapon secondary;
+	protected bool dead = false; // From AgentNpc.
+	
+	protected TimerPool timers;
+	protected Weapon primary;
+	protected ThrowableWeapon secondary;
 	
 	private bool flag;
 	
 	protected int team;
+	
+	// Added from PlayerController, must refactorice to AgentNpc
+	protected int currentDirection;
+	protected const int DIR_IZQUIERDA = 1;
+	protected const int DIR_DERECHA = 2;
+	
+	// Sounds
+	protected AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
+	public Parpadeig p; // Public visibility, in PlayerController was public.
+	
+	// GameObjects
+	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra;
 
 	protected void setHealth(int n) {
 		health = n;
@@ -46,6 +60,10 @@ public class Actor : MonoBehaviour {
 	protected virtual void fireShieldNotification(){}
 	
 	protected void fireFlagnotification(bool taken, bool robot){ this.hud.notifyFlag(taken,robot); }
+	protected void firePointsNotification(int points) {
+		// Notify the current points to the HUD, it can be used by NPC team.
+		this.hud.notifyPoints(this.team, points);
+	}
 	
 	public string getPrimaryWeapon(){ return primaryWeapon.ToString(); }
 	public string getSecondaryWeapon(){ return secondaryWeapon.ToString(); }
@@ -62,6 +80,10 @@ public class Actor : MonoBehaviour {
 		}else{
 			setHealth(health - damage);
 		}
+	}
+	
+	void OnCollisionEnter(Collision collision) {
+		// ADD the necessary code here.
 	}
 	
 	public int getShield(){ return shield; }
@@ -91,4 +113,8 @@ public class Actor : MonoBehaviour {
 	
 	public Vector3 getCoordinates(){ return transform.position; }
 	
+	public bool isEnemy(Actor a){
+		if (a == null) return false;
+		return getTeam() != a.getTeam();
+	}
 }

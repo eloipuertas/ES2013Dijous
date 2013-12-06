@@ -129,5 +129,6 @@ public class WeaponInfo : MonoBehaviour {
 		GUI.Label(posImg,t);//painting the texture on gui
 		GUI.Label(posTextName,TextName,style);//painting text info on gui
 		GUI.Label(posTextDmg,TextDmg,style);
+	
 	}
 }

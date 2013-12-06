@@ -51,25 +51,25 @@ public class WeaponFactory
 	}
 	
 	private DistanceWeapon createGun() {
-		return new DistanceWeapon("Gun",15,750,10*VALUE_PER_UNITY,20);
+		return new DistanceWeapon("Gun",15,750,10*VALUE_PER_UNITY,20,1000);
 	}
 	
 	private DistanceWeapon createShotGun() {
-		return new DistanceWeapon("ShotGun",40,2000,4*VALUE_PER_UNITY,10);
+		return new DistanceWeapon("ShotGun",40,2000,4*VALUE_PER_UNITY,10,1500);
 	}
 	
 	private DistanceWeapon createAssaultRifle() {
-		return new DistanceWeapon("AssaultRifle",10,200,10*VALUE_PER_UNITY,30);
+		return new DistanceWeapon("AssaultRifle",10,200,10*VALUE_PER_UNITY,30,1200);
 	}
 	/* =========================================================================================
 	 * THROWABLE-TYPE WEAPONS
 	 * =========================================================================================
 	 */ 
 	private ThrowableWeapon createGranade() {
-		return new ThrowableWeapon("Granade",60,2000,8*VALUE_PER_UNITY,3);
+		return new ThrowableWeapon("Granade",60,2000,8*VALUE_PER_UNITY,3,500);
 	}
 	private ThrowableWeapon createMine() {
-		return new ThrowableWeapon("Mine",60,2000,0,3);
+		return new ThrowableWeapon("Mine",60,2000,0,3,500);
 	}
 	/* =========================================================================================
 	 * SPECIAL-TYPE WEAPONS
@@ -80,7 +80,7 @@ public class WeaponFactory
 	}
 	
 	private SpecialDistanceWeapon createSniperRifle() {
-		return new SpecialDistanceWeapon("SniperRifle",100,5*5000,30*VALUE_PER_UNITY,30*1000,5);
+		return new SpecialDistanceWeapon("SniperRifle",100,5*5000,30*VALUE_PER_UNITY,30*1000,5,5000);
 	}
 }
 
