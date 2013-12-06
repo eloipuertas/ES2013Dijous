@@ -198,7 +198,7 @@ public class DynamicChickenCreation : MonoBehaviour {
                                         break;
                                 default: // case 5
                                         c.transform.position = new Vector3(14806.89f,414.3137f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival5_Agresiva";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival1";
                                         c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_ESCOPETA;
                                         break;
                         }

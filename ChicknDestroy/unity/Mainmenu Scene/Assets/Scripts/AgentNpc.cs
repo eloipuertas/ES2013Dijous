@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 
+//[RequireComponent(typeof(Grid))]
 public class AgentNpc : FSM {
 	
 	//Agent finite stats
@@ -63,12 +64,13 @@ public class AgentNpc : FSM {
 	private Vector3 lastPos;
 	private bool changeDir = true;
 	
-	
+	private Vector3[,] grid;
 	
 	/*################################################################
 	###################### INITIALIZATION OF NPC #####################*/
 	 
 	protected override void Ini(){
+		grid = ((Grid)GameObject.Find ("GameStartUp").GetComponent("Grid")).getGrid();
 		loadRoute();
 		setInitialsAttributes();
 		updateModelWeapon();
@@ -77,6 +79,7 @@ public class AgentNpc : FSM {
 	}
 	
 	void setInitialsAttributes(){
+		
 		nextTarget = rutaActual[keyPosActual];
 		curState = FSM.Run;
 			
@@ -104,9 +107,8 @@ public class AgentNpc : FSM {
 		string []lines = content.Split('|');
 		foreach(string s in lines){
 			string []pos = s.Split(',');
-			//Debug.Log(pos.Length);
-			float x = float.Parse(pos[0]);
-			float y = float.Parse(pos[1]);
+			float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
+			float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
 			float z = float.Parse(pos[2]);
 			rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
 			posindex +=1;

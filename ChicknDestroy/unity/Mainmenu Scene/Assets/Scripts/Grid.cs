@@ -16,7 +16,7 @@ public class Grid : MonoBehaviour {
 				grid[i,j] = new Vector3(x0+100f,y0+100f,0f);
 				/*GameObject cell = Resources.Load("cell") as GameObject;
 				cell.name = "cell-x"+i+"y"+j;
-				cell.transform.position = grid[i,j];
+				cell.transform.position = new Vector3(x0+100f,y0+100f,100f);
 				Instantiate (cell);*/
 				y0 += 200f;
 			}
