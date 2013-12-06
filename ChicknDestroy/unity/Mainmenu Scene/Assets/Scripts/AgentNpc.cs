@@ -147,6 +147,8 @@ public class AgentNpc : FSM {
 			if (this.getHealth() <= 0) curState = FSM.Dead;
 
 		}
+		/*if(gameObject.name.CompareTo("Philo2")==0)
+			print(getZone(getXGrid(),getYGrid()));*/
 	}
 	
 
@@ -696,6 +698,43 @@ public class AgentNpc : FSM {
 		y = y/200;
 		
 		return y;
+	}
+	
+	private string getZone(int x,int y){
+		if((x>=0 && x<=6) && (y>=0 && y<=3))
+			return "Zona1";
+		if((x>=0 && x<=7) && (y>=4 && y<=6))
+			return "Zona2";
+		if((x>=8 && x<=80) && (y>=0 && y<=0))
+			return "Zona3";
+		if((x>=8 && x<=80) && (y>=1 && y<=1))
+			return "Zona4";
+		if((x>=10 && x<=31) && (y>=2 && y<=2))
+			return "Zona5";
+		if((x>=17 && x<=36) && (y>=3 && y<=4))
+			return "Zona6";
+		if((x>=41 && x<=47) && (y>=2 && y<=4))
+			return "Zona7";
+		if((x>=50 && x<=72) && (y>=2 && y<=4))
+			return "Zona8";
+		if((x>=74 && x<=77) && (y>=2 && y<=4))
+			return "Zona9";
+		if((x>=78 && x<=80) && (y>=2 && y<=3))
+			return "Zona10";
+		if((x>=81 && x<=88) && (y>=0 && y<=3))
+			return "Zona11";
+		if((x>=82 && x<=88) && (y>=4 && y<=6))
+			return "Zona12";
+		if((x>=77 && x<=81) && (y>=5 && y<=6))
+			return "Zona13";
+		if((x>=53 && x<=71) && (y>=3 && y<=5))
+			return "Zona14";
+		if((x>=7 && x<=8) && (y>=3 && y<=4))
+			return "Zona15";
+		if((x>=8 && x<=11) && (y>=5 && y<=6))
+			return "Zona16";
+		
+		return "Zone0";
 	}
 }
 
