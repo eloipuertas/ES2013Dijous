@@ -682,31 +682,31 @@ public class AgentNpc : FSM {
 		//}
 	}
 	
-	private int getXGrid(){
+	private int getXGrid(){//return the X grid position where gameobject is at the scene 
 		int x;
 		x = (int)gameObject.transform.position.x;
-		x = x-(-1221);
+		x = x-(-1221);//-1221 is 0 X value
 		
 		x = x/200;
-		if(x>89)
+		if(x>89)//error control
 			x = 89;
 		
 		return x;
 	}
 	
-	private int getYGrid(){
+	private int getYGrid(){//return the Y grid position where gameobject is at the scene 
 		int y;
 		y = (int)gameObject.transform.position.y;
-		y = y-(-110);
+		y = y-(-110);//-110 is 0 Y value
 		
 		y = y/200;
-		if(y>6)
+		if(y>6)//error control
 			y = 6;
 		
 		return y;
 	}
 	
-	private string getZone(int x,int y){
+	private string getZone(int x,int y){//Tranlate X and Y grid position to zone
 		if((x>=0 && x<=6) && (y>=0 && y<=3))
 			return "Zona1";
 		if((x>=0 && x<=7) && (y>=4 && y<=6))
@@ -743,7 +743,7 @@ public class AgentNpc : FSM {
 		return "Zone0";
 	}
 	
-	private bool notAPickUpObject(GameObject o){
+	private bool notAPickUpObject(GameObject o){//Check if the object is an able to be picked up object
 		bool weapon = true;
 		
 		if(new Regex("escopeta.").IsMatch(o.name))
