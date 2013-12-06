@@ -117,4 +117,10 @@ public class Actor : MonoBehaviour {
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
+	/*
+	 * Notify the score change. This will view if the actor have won the game.
+	 */ 
+	public void notifyScoreChange(int points) {
+		gameManager.notifyScoreChange(this.team,points);
+	}
 }

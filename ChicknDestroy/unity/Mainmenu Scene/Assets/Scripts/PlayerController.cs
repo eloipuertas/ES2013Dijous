@@ -660,7 +660,7 @@ public class PlayerController : Actor {
 	*/
 	public void notifyHudPoints(int p) {
 		this.hud.notifyPoints(p);
-		gameManager.notifyScoreChange(this.hud.getPoints());
+		notifyScoreChange(this.hud.getPoints ());
 	}
 	
 	protected void fireHealthNotification(){ this.hud.notifyHealthChange(this.health);}
