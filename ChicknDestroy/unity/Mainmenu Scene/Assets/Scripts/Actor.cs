@@ -47,9 +47,11 @@ public class Actor : MonoBehaviour {
 
 	protected void setHealth(int n) {
 		health = n;
-		fireHealthNotification();
+		//fireHealthNotification();
+		if (this.GetType () == typeof(PlayerController)) this.hud.notifyHealthChange(this.health);
 		if (health <= 0) {
-			fireDeathNotification();
+			//fireDeathNotification();
+			if(this.GetType() == typeof(PlayerController))this.gameManager.notifyPlayerDeath();
 		}
 	}
 	

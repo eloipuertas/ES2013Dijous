@@ -78,6 +78,8 @@ public class PlayerController : Actor {
 	
 	void Start () {
 		hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		this.secondary = (ThrowableWeapon)(WeaponFactory.instance ().create (WeaponFactory.WeaponType.GRANADE));
+		this.hud.notifyAmmo (2,this.secondary.getCAmmo ());
 		
 		rigid =	GetComponent<Rigidbody>();
 		
@@ -473,7 +475,7 @@ public class PlayerController : Actor {
 			sonidoPowerUp.Play();
 			if(this.primary.GetType() == typeof(DistanceWeapon)) {
 				//((DistanceWeapon)this.primary).reload(5);
-				((DistanceWeapon)this.primary).reload(Random.Range(1,15)); // Reload random bullets.
+				((DistanceWeapon)this.primary).reload(Random.Range(1,30)); // Reload random bullets.
 				if (this.GetType()  == typeof(PlayerController))
 					this.hud.notifyAmmo(1,((DistanceWeapon)this.primary).getCAmmo());
 			}
@@ -502,11 +504,19 @@ public class PlayerController : Actor {
 	
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
 	
-	void OnCollisionStay (Collision hit) { 
+	void OnCollisionStay (Collision collision) {
+		float currentTimeDamage = Time.time - damageTime;
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
+			|| collision.gameObject.tag == "punxes") {
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
 		
-		
-	    if (hit.gameObject.tag == "plataforma_moviment")
-	        transform.parent = hit.transform ; 
+	    if (collision.gameObject.tag == "plataforma_moviment")
+	        transform.parent = collision.transform ; 
 		else
 	        transform.parent = null;
 		
@@ -595,7 +605,7 @@ public class PlayerController : Actor {
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)) {
 					actor.dealDamage(this.primary.getDamage()); // Katana damage???
-					p.mostrarDany(); // ???
+					p.mostrarDany();
 				}
 				
 			}

@@ -26,6 +26,7 @@ public class DistanceWeapon : Weapon
 	
 	public bool attack() {
 		if (!this.ready || this.current_ammo<=0) return false;
+		this.ready = false;
 		this.current_ammo--;
 		this.delay_control.Start ();
 		return true;
