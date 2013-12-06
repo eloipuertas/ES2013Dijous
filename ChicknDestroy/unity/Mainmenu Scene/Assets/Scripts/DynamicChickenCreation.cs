@@ -150,7 +150,7 @@ public class DynamicChickenCreation : MonoBehaviour {
                         switch(chicken){
                                 case 1:
                                         c.transform.position = new Vector3(-44.11278f,-80.28318f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "rutaAliada1";
+                                        c.AddComponent<AgentNpc>().direrutas = "Zona1Ruta1";
 										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
 
                                         break;

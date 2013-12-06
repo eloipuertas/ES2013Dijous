@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-
+using System.Text.RegularExpressions;
 
 //[RequireComponent(typeof(Grid))]
 public class AgentNpc : FSM {
@@ -147,8 +147,8 @@ public class AgentNpc : FSM {
 			if (this.getHealth() <= 0) curState = FSM.Dead;
 
 		}
-		/*if(gameObject.name.CompareTo("Philo2")==0)
-			print(getZone(getXGrid(),getYGrid()));*/
+		//if(gameObject.name.CompareTo("Philo1 ")==0)
+			//print(getZone(getXGrid(),getYGrid()));
 	}
 	
 
@@ -195,8 +195,10 @@ public class AgentNpc : FSM {
 			((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 15))){
 			
 			keyPosActual+=1;
-			if (keyPosActual == rutaActual.Count)
+			if (keyPosActual == rutaActual.Count){
 				keyPosActual = 0;
+				/*loadRoute(getZone())*/
+			}
 		}
 	}
 	
@@ -582,7 +584,7 @@ public class AgentNpc : FSM {
 			
 			endpos = posAux + ((derecha)?Vector3.right:Vector3.left) * dist;
 			Debug.DrawLine(posAux, endpos, Color.blue, 0.01f);
-			if(Physics.Raycast(posAux, (derecha)?Vector3.right:Vector3.left, out hit,dist))
+			if(Physics.Raycast(posAux, (derecha)?Vector3.right:Vector3.left, out hit,dist) && notAPickUpObject(hit.collider.gameObject))
 				trobat = true;
 			
 		}
@@ -686,6 +688,8 @@ public class AgentNpc : FSM {
 		x = x-(-1221);
 		
 		x = x/200;
+		if(x>89)
+			x = 89;
 		
 		return x;
 	}
@@ -696,6 +700,8 @@ public class AgentNpc : FSM {
 		y = y-(-110);
 		
 		y = y/200;
+		if(y>6)
+			y = 6;
 		
 		return y;
 	}
@@ -705,7 +711,7 @@ public class AgentNpc : FSM {
 			return "Zona1";
 		if((x>=0 && x<=7) && (y>=4 && y<=6))
 			return "Zona2";
-		if((x>=8 && x<=80) && (y>=0 && y<=0))
+		if((x>=7 && x<=80) && (y>=0 && y<=0))
 			return "Zona3";
 		if((x>=8 && x<=80) && (y>=1 && y<=1))
 			return "Zona4";
@@ -735,6 +741,24 @@ public class AgentNpc : FSM {
 			return "Zona16";
 		
 		return "Zone0";
+	}
+	
+	private bool notAPickUpObject(GameObject o){
+		bool weapon = true;
+		
+		if(new Regex("escopeta.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("gun.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("katana.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("granada.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("lifeUp.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("shield.").IsMatch(o.name))
+			weapon = false;
+		return weapon;
 	}
 }
 
