@@ -35,6 +35,7 @@ public class Weapon : CDObject
 	public bool attack() {
 		if (!this.ready)return false;
 		this.delay_control.Start ();
+		this.ready = false;
 		return true;
 	}
 	

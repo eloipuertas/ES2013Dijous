@@ -43,12 +43,12 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
+	//private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
 
-	private Parpadeig p; //-- To Actor!!
-	private FlagManagement flagManagement;
-	private GameObject detected;
-	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, sang; //-- To Actor!!
+	//private Parpadeig p; //-- To Actor!!
+	//private FlagManagement flagManagement; // To Actor!!
+	//private GameObject detected;
+	//private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, sang; //-- To Actor!!
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
@@ -77,6 +77,7 @@ public class PlayerController : Actor {
 	// private bool dead; // To Actor!!
 	
 	void Start () {
+		hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		
 		rigid =	GetComponent<Rigidbody>();
 		
@@ -417,16 +418,12 @@ public class PlayerController : Actor {
 	void OnCollisionEnter(Collision collision){
 		
 		float currentTimeDamage = Time.time - damageTime;
-		// Fix it, there only must add the points when we take (collide) with the enemy flag! (FIXED)
 		if (collision.gameObject.tag == "Bandera") {
-		
 			switch (team) {
-					
 				case 1: flag = collision.gameObject.transform.position.x < 0; break;
 				case 2: flag = collision.gameObject.transform.position.x > 0; break;
 				
 				default: break;
-				
 			}
 			
 			if (flag) {
@@ -434,33 +431,28 @@ public class PlayerController : Actor {
 				hud.notifyFlag(true, team==2);
 				Destroy (collision.gameObject);
 			}
-
 		}
 		
-		//dany per foc o guillotina
+		//dany per foc o guillotina o punxes
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
 			|| collision.gameObject.tag == "punxes") {
-			// I Guess i can use the same method as for view the "Punxes" Object collision.
-			if (currentTimeDamage > damageDuration) { // Put a timer and refactorize to Actor
+			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
 				p.mostrarDany();
 				damageTime = Time.time;
 			}
 		}
 		if (collision.gameObject.name =="base") {
-			
 			if (flag) {
 				switch (team) {
-				
 					case 1: if (collision.gameObject.transform.position.x > 0) flagManagement.setflagPlaced(team); break;
 					case 2: if (collision.gameObject.transform.position.x < 0) flagManagement.setflagPlaced(team); break;
 						
 					default:break;
 				}
-				
 				flag = false;
-				notifyHudPoints(team, 300); //team
-				hud.notifyFlag(false, team==2);
+				notifyHudPoints(this.team, 300); //team
+				hud.notifyFlag(false, this.team==2);
 		
 			}
 		}
@@ -598,14 +590,11 @@ public class PlayerController : Actor {
 				if (this.primary.GetType() == typeof(DistanceWeapon))
 					this.hud.notifyAmmo (1,((DistanceWeapon)this.primary).getCAmmo());
 			}
-				
 		} else { // Melee weapon.
-			
 			if(detected != null){
-				
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)) {
-					actor.dealDamage(100); // Katana damage???
+					actor.dealDamage(this.primary.getDamage()); // Katana damage???
 					p.mostrarDany(); // ???
 				}
 				
@@ -614,6 +603,7 @@ public class PlayerController : Actor {
 		ataque = false;
 	}
 	// Must refactor to Actor
+	/* Refactorized to Actor.cs
 	protected bool doPrimaryAttack() {
 		if (primary.attack ()) {
 			GameObject nouTir = null;
@@ -646,8 +636,9 @@ public class PlayerController : Actor {
 			return true;
 		}
 		return false;
-	}
+	}*/
 	// Better refactor to actor, but now it's not necessary.
+	/* Refactor to Actor.cs
 	protected bool doSecondaryAttack() {
 		//ataqueSecundario = true;
 		if (this.secondary.attack()) {
@@ -672,7 +663,7 @@ public class PlayerController : Actor {
 		}
 		return false;
 	}
-	
+	*/
 	private GameObject raycastFront(){
 		RaycastHit hit;
 		
@@ -706,7 +697,8 @@ public class PlayerController : Actor {
 		}
 		return ret;
 	}
-	// This function must be refactoriced to Actor.
+	// This function is useless.
+	/*
 	private string raycastVertical() {
 		RaycastHit hit;
 		bool ret = false;
@@ -719,7 +711,7 @@ public class PlayerController : Actor {
 		if (!ret)
 			return "";
 		return hit.collider.tag;
-	}
+	}*/
 	
 	/* Refactor to Actor.cs
 	private bool isEnemy(Actor a){

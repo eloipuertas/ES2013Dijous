@@ -37,10 +37,13 @@ public class Actor : MonoBehaviour {
 	
 	// Sounds
 	protected AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
+	protected AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioGrenade, audioMachineGun;
+	
+	protected FlagManagement flagManagement;
 	public Parpadeig p; // Public visibility, in PlayerController was public.
 	
 	// GameObjects
-	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra;
+	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 
 	protected void setHealth(int n) {
 		health = n;
@@ -81,7 +84,75 @@ public class Actor : MonoBehaviour {
 			setHealth(health - damage);
 		}
 	}
-	
+	/* ==========================================================================
+	 * @LynosSorien -- Attack methods.
+	 * ==========================================================================
+	 */
+	// Used for DistanceWeapon Only.
+	protected bool doPrimaryAttack() {
+		if (((DistanceWeapon)primary).attack ()) {
+			GameObject nouTir = null;
+			// The velocity vector (currently (+-1000,0,0) can be changed with parametter "velocity" of DistanceWeapon.
+			int velocity = ((DistanceWeapon)this.primary).getVelocity();
+			switch(currentDirection){
+				case DIR_IZQUIERDA:
+					nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+					velocity*=-1;
+					// nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange); Changed to use the velocity parametter
+					break;
+				case DIR_DERECHA:
+					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+					// nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange); // Same as before.
+					break;
+				default:
+					break;
+			}
+			nouTir.rigidbody.AddForce(new Vector3(velocity, 0, 0), ForceMode.VelocityChange);
+			
+			GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
+			b.setEquip(team);
+			b.setArma(weapon);
+			b.setDamage (primary.getDamage()); // Damage from weapon (primary) to bullet.
+			
+			if (weapon == WEAPON_ESCOPETA)
+				sonidoDisparoEscopeta.Play();
+			else
+				sonidoDisparoPistola.Play();
+			return true;
+		}
+		return false;
+	}
+	protected bool doSecondaryAttack() {
+		//ataqueSecundario = true;
+		if (((ThrowableWeapon)this.secondary).attack()) {
+			GameObject novaGranada = null;
+			int velocity = ((ThrowableWeapon)this.secondary).getVelocity();
+			if (currentDirection == DIR_DERECHA) {
+				novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
+				//novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
+			} else {
+				novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
+				//novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
+				velocity*=-1;
+			}
+			novaGranada.rigidbody.AddForce(new Vector3(velocity, 0, 0), ForceMode.VelocityChange);
+			
+			GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
+			//b.setEquip(1);
+			// @LynosSorien -- Added the normal comportament to granade.
+			b.setEquip(this.team);
+			b.setDamage (this.secondary.getDamage());
+			return true;
+		}
+		return false;
+	}
+	/* ==========================================================================
+	 * @LynosSorien -- END Attack methods.
+	 * ==========================================================================
+	 */
+	/*
+	 * 
+	 */ 
 	void OnCollisionEnter(Collision collision) {
 		// ADD the necessary code here.
 	}
@@ -93,15 +164,20 @@ public class Actor : MonoBehaviour {
 	public void setWeapon(int weapon){
 		// @LynosSorien -- Add the creation of the primary Weapon.
 		this.weapon = weapon;
+		int ammo;
 		switch(weapon) {
 			case WEAPON_KATANA:
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.KATANA);
 			break;
 			case WEAPON_ESCOPETA:
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.SHOTGUN);
+			ammo = ((DistanceWeapon)this.primary).getCAmmo();
+			if(this.GetType () == typeof(PlayerController)) this.hud.notifyAmmo(1,ammo);
 			break;
 			case WEAPON_PISTOLA:
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.GUN);
+			ammo = ((DistanceWeapon)this.primary).getCAmmo();
+			if(this.GetType () == typeof(PlayerController)) this.hud.notifyAmmo(1,ammo);
 			break;
 		}
 		updateModelWeapon();

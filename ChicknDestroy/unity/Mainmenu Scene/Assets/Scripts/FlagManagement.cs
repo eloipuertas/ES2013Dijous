@@ -27,7 +27,6 @@ public class FlagManagement : MonoBehaviour {
 				
 			default: break;
 		}
-			
 		mastil.renderer.enabled = b;
 		tela.renderer.enabled = b;
 		

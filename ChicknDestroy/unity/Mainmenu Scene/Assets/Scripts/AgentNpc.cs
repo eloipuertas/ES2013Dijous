@@ -38,10 +38,10 @@ public class AgentNpc : FSM {
 	//Especifications
 	private int jumpForce = 500;
 	private float velocity = 175f;
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
-	private Parpadeig p;
-	private FlagManagement flagManagement;
-	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
+	//private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun; // To Actor!!
+	//private Parpadeig p;
+	//private FlagManagement flagManagement; // -- To Actor!!
+	//private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
 	//Npc atributes
 	//private int puntuacio = 200; -- Useless
@@ -67,7 +67,9 @@ public class AgentNpc : FSM {
 	private Vector3 lastPos;
 	private bool changeDir = true;
 	
-	
+	void Start() {
+		hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+	}
 	
 	/*################################################################
 	###################### INITIALIZATION OF NPC #####################*/
@@ -372,13 +374,12 @@ public class AgentNpc : FSM {
 			if(detected != null){ // Detect an enemy target?
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)){
-
 					if (!animations.IsPlaying(anim)){
 						animations.Play(anim);
 						haAtacado = false;
 					} else if (!haAtacado && animations[anim].time > (animations[anim].length*2f/3f)){
-						haAtacado = true; // haAtacado = doPrimaryAttack();
 						if (primary.attack()) { // When doPrimaryAttack will be refactoriced, then it will be removed.
+							haAtacado = true; // haAtacado = doPrimaryAttack();
 							actor.dealDamage(this.primary.getDamage());
 							p.mostrarDany();
 						} // Guess..
@@ -406,7 +407,7 @@ public class AgentNpc : FSM {
 						animations.Play(anim);
 						haAtacado = false;
 					} else if (!haAtacado && animations[anim].time > 0.5f){
-						haAtacado = true;
+						/*haAtacado = true;
 						// This part must be refactoriced to Actor.cs
 						if (this.primary.attack()) { // If the attack is done...
 							if(derecha){
@@ -425,7 +426,10 @@ public class AgentNpc : FSM {
 							if (weapon == WEAPON_PISTOLA)sonidoDisparoPistola.Play();
 							else if(weapon == WEAPON_ESCOPETA) sonidoDisparoEscopeta.Play();
 						}
-						
+						*/
+						haAtacado = true;
+						doPrimaryAttack ();
+						//if(doPrimaryAttack())haAtacado = true;
 					}
 					
 
