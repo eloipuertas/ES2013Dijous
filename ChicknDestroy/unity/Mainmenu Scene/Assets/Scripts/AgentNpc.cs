@@ -18,7 +18,7 @@ public class AgentNpc : FSM {
 	//sonidos
 	//private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta; // Up to Actor.
 	
-	private PlayerController playerController; // -- Used to view if there are from the same team.
+	//private PlayerController playerController; // -- Used to view if there are from the same team. (NOT USED)
 	
 	//Modelos de armas
 	private GameObject[] weap_mod;
@@ -83,7 +83,7 @@ public class AgentNpc : FSM {
 		curState = FSM.Run;
 			
 		this.setHealth(100);
-		this.setShield (0); // Added, shield to 0.
+		this.setShield (0); // @LynosSorien - Added, shield to 0.
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
@@ -92,7 +92,7 @@ public class AgentNpc : FSM {
 		sonidoDisparoEscopeta = audios[4];
 		
 		p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
-		playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
+		//playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController; // NOT USED
 	
 	}
 	
@@ -525,8 +525,7 @@ public class AgentNpc : FSM {
 			if (!dead){
 				animateIfExist("muerteDerecha","muerteIzquierda");
 				dead = true;
-				if (playerController.getTeam() != team)
-					notifyDeadtoPlayer(); // HUD notification??
+				notifyDead(); // HUD notification??
 			}else
 				Destroy(gameObject);
 		}
@@ -541,8 +540,13 @@ public class AgentNpc : FSM {
 		
 	}
 	
-	private void notifyDeadtoPlayer() {
-		playerController.notifyHudPoints(100);
+	private void notifyDead() {
+		//Change the notification.
+		//playerController.notifyHudPoints(100);
+		int t;
+		if (this.team == 1) t = 2;
+		else t = 1;
+		this.notifyHudPoints(t,100);
 	}
 
 	

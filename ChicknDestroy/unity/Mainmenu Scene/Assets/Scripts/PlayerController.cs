@@ -389,8 +389,11 @@ public class PlayerController : Actor {
 		float currentTimeDamage = Time.time - damageTime;
 		// Fix it, there only must add the points when we take (collide) with the enemy flag! (FIXED)
 		if (collision.gameObject.tag == "bandera") {
-			hud.notifyFlag(true, true);
-			notifyHudPoints(300);
+			bool robo;
+			if(this.team==1)robo = false;
+			else robo=true;
+			hud.notifyFlag(true, robo);
+			notifyHudPoints(this.team,300);
 		}
 		
 		//dany per foc o guillotina
@@ -407,20 +410,20 @@ public class PlayerController : Actor {
 		//quan agafa un escut, crida al mètode addShield de Actor.cs
 		if(collision.gameObject.tag == "escut") {
 				sonidoEscudo.Play();
-				hud.notifyShieldChange(100);
+				if(this.GetType () == typeof(PlayerController))hud.notifyShieldChange(100);
 				addShield(100);
 		}
 		
 		//quan agafa una cura, crida al mètode heal de Actor.cs
 		if(collision.gameObject.tag == "upVida"){ 
 				sonidoPowerUp.Play();
- 				heal(50);
+ 				heal(Random.Range(20,70));
 		}
-		
 		if (collision.gameObject.tag == "escopeta_off") {
 			sonidoPowerUp.Play();
 			if(this.primary.GetType() == typeof(DistanceWeapon)) {
-				((DistanceWeapon)this.primary).reload(5);
+				//((DistanceWeapon)this.primary).reload(5);
+				((DistanceWeapon)this.primary).reload(Random.Range(1,15)); // Reload random bullets.
 				if (this.GetType()  == typeof(PlayerController))
 					this.hud.notifyAmmo(1,((DistanceWeapon)this.primary).getCAmmo());
 			}
@@ -658,10 +661,11 @@ public class PlayerController : Actor {
 		return getTeam() != a.getTeam();
 	}
 	*/
-	public void notifyHudPoints(int p) {
-		this.hud.notifyPoints(p);
+	/* Refactor to Actor.cs
+	public void notifyHudPoints(int team,int p) {
+		this.hud.notifyPoints(team,p);
 		notifyScoreChange(this.hud.getPoints ());
-	}
+	}*/
 	
 	protected void fireHealthNotification(){ this.hud.notifyHealthChange(this.health);}
 	protected void fireDeathNotification(){ this.gameManager.notifyPlayerDeath();}
