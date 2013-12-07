@@ -89,7 +89,7 @@ public class WeaponInfo : MonoBehaviour {
             if(isGranada){//if is granada type
                 //c.playAnimation();
                 //c.weapon = 7;
-                hud.notifySecondaryWeapon(1);
+                //hud.notifySecondaryWeapon(1);
             }
             if(isMetralleta){//if is metralleta type
             }
