@@ -500,7 +500,7 @@ public class AgentNpc : FSM {
                 return getTeam() != a.getTeam();
         }*/
         
-        protected override void updateModelWeapon(){
+        public void updateModelWeapon(){
                 print ("hola k ase");
                 if (weap_mod == null){
                         weap_mod = new GameObject[3];
