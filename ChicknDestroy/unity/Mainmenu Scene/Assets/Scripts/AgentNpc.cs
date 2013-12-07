@@ -527,7 +527,6 @@ public class AgentNpc : FSM {
         }*/
         
         public void updateModelWeapon(){
-                print ("hola k ase");
                 if (weap_mod == null){
                         weap_mod = new GameObject[3];
                         weap_mod[WEAPON_KATANA-1] = GameObject.Find(gameObject.name+"/grk");
