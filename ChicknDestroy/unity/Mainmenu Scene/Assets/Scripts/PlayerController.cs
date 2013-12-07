@@ -157,7 +157,7 @@ public class PlayerController : Actor {
 	*/
 	}
 		
-	void initSounds() {
+	/*void initSounds() { // -- Refactor to Actor.cs
 		sonidoSalto = gameObject.AddComponent<AudioSource>();
 		sonidoSalto.clip = Resources.Load("sounds/saltar") as AudioClip;
 		
@@ -188,7 +188,7 @@ public class PlayerController : Actor {
 
 		// NEW CODE
 		
-	}
+	}*/
 	
 	void FixedUpdate(){
 		

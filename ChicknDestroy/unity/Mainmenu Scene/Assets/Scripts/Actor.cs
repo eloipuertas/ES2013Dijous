@@ -9,7 +9,7 @@ public class Actor : MonoBehaviour {
 	protected GameObject primaryWeapon;
 	protected GameObject secondaryWeapon;
 	
-	protected HUD hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+	protected HUD hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 	protected GameManager gameManager = null;
 
 	public int weapon;
@@ -44,7 +44,39 @@ public class Actor : MonoBehaviour {
 	
 	// GameObjects
 	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
+	
+	/*
+	 * 
+	 */ 
+	protected void initSounds() { // -- Refactor to Actor.cs
+		sonidoSalto = gameObject.AddComponent<AudioSource>();
+		sonidoSalto.clip = Resources.Load("sounds/saltar") as AudioClip;
+		
+		sonidoPowerUp = gameObject.AddComponent<AudioSource>();
+		sonidoPowerUp.clip = Resources.Load("sounds/power_up_curt") as AudioClip;
+		
+		sonidoEscudo = gameObject.AddComponent<AudioSource>();
+		sonidoEscudo.clip = Resources.Load("sounds/so_escut") as AudioClip;
+		
+		sonidoDisparoPistola = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoPistola.clip = Resources.Load("sounds/tir_pistola_015") as AudioClip;
+		
+		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
+		
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioKatana = gameObject.AddComponent<AudioSource>();
+		audioKatana.clip = Resources.Load("sounds/katana") as AudioClip;
 
+		audioGrenade = gameObject.AddComponent<AudioSource>();
+		audioGrenade.clip = Resources.Load("sounds/granada_voice") as AudioClip;
+	}
+	
 	protected void setHealth(int n) {
 		health = n;
 		//fireHealthNotification();
