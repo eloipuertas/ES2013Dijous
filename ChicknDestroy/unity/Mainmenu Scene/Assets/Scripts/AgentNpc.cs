@@ -71,6 +71,7 @@ public class AgentNpc : FSM {
                 updateModelWeapon();
                 updateNextTarget();
 				initSounds ();
+				initFlagManagement();
         }
         
         void setInitialsAttributes(){
@@ -81,10 +82,6 @@ public class AgentNpc : FSM {
 				this.setShield (0);
                 sortidaBalaDreta = GameObject.Find(gameObject.name+"/sbd");
                 sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
-                
-                AudioSource[] audios = GetComponents<AudioSource>();
-                sonidoDisparoPistola = audios[3];
-                sonidoDisparoEscopeta = audios[4];
                 
                 p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
                 //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;

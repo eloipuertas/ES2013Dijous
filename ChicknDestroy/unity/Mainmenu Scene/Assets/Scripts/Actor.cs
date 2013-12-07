@@ -9,7 +9,7 @@ public class Actor : MonoBehaviour {
 	protected GameObject primaryWeapon;
 	protected GameObject secondaryWeapon;
 	
-	protected HUD hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+	protected HUD hud;
 	protected GameManager gameManager = null;
 
 	public int weapon;
@@ -237,5 +237,10 @@ public class Actor : MonoBehaviour {
 	 */ 
 	public void notifyScoreChange(int points) {
 		gameManager.notifyScoreChange(this.team,points);
+	}
+	
+	protected void initFlagManagement() {
+		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
+		flagManagement.loadFlag(team);
 	}
 }

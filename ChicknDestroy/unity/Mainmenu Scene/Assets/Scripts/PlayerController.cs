@@ -102,8 +102,7 @@ public class PlayerController : Actor {
 		animDuration = 0.3f;
 		
 		initSounds();
-		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
-		flagManagement.flagBase(team, false);
+		initFlagManagement();
 		
 		health = 100;
 		shield = 0;
@@ -429,7 +428,7 @@ public class PlayerController : Actor {
 			}
 			
 			if (flag) {
-				flagManagement.setflagObtained(team);
+				flagManagement.setflagObtained();
 				hud.notifyFlag(true, team==2);
 				Destroy (collision.gameObject);
 			}
