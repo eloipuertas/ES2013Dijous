@@ -95,8 +95,7 @@ public class PlayerController : Actor {
 
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
-		//REMOVER EL COMENTARIO
-		//gameManager.setTarget(this.transform);
+		gameManager.setTarget(this.transform);
 		
 		
 		initAnimations();
