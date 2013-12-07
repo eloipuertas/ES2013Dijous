@@ -33,8 +33,9 @@ public class GameManager : MonoBehaviour {
 			
 			cam.SetTarget(go.transform);
 			cam.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, cam.transform.position.z);
-			currentTarget = targetName.Clone().ToString();
+			
 		}
+		currentTarget = targetName.Clone().ToString();
 //FI CAMARA NPCs
 	}
 	// Update is called once per frame
