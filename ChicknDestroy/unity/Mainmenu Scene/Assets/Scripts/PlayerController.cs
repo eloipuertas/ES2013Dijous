@@ -94,8 +94,8 @@ public class PlayerController : Actor {
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
-		//REMOVER EL COMENTARIO
-		//gameManager.setTarget(this.transform);
+		//Asignamos la camara al personaje controlable.
+		gameManager.setTarget(this.transform);
 		
 		
 		initAnimations();

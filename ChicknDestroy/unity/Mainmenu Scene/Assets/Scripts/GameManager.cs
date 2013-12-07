@@ -6,11 +6,14 @@ public class GameManager : MonoBehaviour {
 	private static int SCORE_TO_WIN = 800;
 	//public GameObject player;
 	private GameCamera cam;
-	public bool GameSelRobot = true;
-	public int gravity = 800;
+	//public bool GameSelRobot = true;
+	public int gravity = 900;
 	private float loseOrWinTime = 5F;//time later the lose or win of a player (5 seconds Timer)
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
+	
+	public string targetName;
+	private string currentTarget;
 	
 	public AudioSource audioLoose, audioAmbient, audioWin;
 	
@@ -19,18 +22,33 @@ public class GameManager : MonoBehaviour {
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
 		Physics.gravity = new Vector3(0, -gravity, 0);
-		if(PlayerPrefs.GetInt("Team") == 1)
-			cam.transform.position = new Vector3(15700F,26.20233F,-643.3362F);
 		
-//CAMARA PARA NPCs		
-		GameObject go;
-		//go = GameObject.Find("Robot2");
-		go = GameObject.Find("Philo1");
-		setTarget(go.transform);
+		//if(PlayerPrefs.GetInt("Team") == 1)
+		//	cam.transform.position = new Vector3(15700F,26.20233F,-643.3362F);
+		
+//CAMARA PARA NPCs	
+		if (!targetName.Equals("")) {
+			GameObject go;
+			go = GameObject.Find(targetName);
+			
+			cam.SetTarget(go.transform);
+			cam.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, cam.transform.position.z);
+			currentTarget = targetName.Clone().ToString();
+		}
 //FI CAMARA NPCs
 	}
 	// Update is called once per frame
 	void Update () {
+		
+		if (!targetName.Equals("") && !currentTarget.Equals(targetName)) {
+			GameObject go;
+			go = GameObject.Find(targetName);
+			
+			cam.SetTarget(go.transform);
+			cam.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, cam.transform.position.z);
+			currentTarget = targetName.Clone().ToString();
+		}
+		
 		bool endRequested = false;
 		if (winCondition()) {
 			if (!audioWin.isPlaying) {
@@ -100,7 +118,9 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void setTarget(Transform tr){
-		cam.SetTarget(tr.transform);
-		cam.transform.position = new Vector3(tr.transform.position.x, tr.transform.position.y, cam.transform.position.z);
+		if(targetName.Equals("")){
+			cam.SetTarget(tr.transform);
+			cam.transform.position = new Vector3(tr.transform.position.x, tr.transform.position.y, cam.transform.position.z);
+		}
 	}
 }
