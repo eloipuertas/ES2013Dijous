@@ -33,6 +33,8 @@ ModelImporter:
     100054: Cylinder
     100056: Cylinder_001
     100058: //RootNode
+    100060: Camera
+    100062: Lamp
     400000: Armature
     400002: Bone
     400004: Bone_001
@@ -63,6 +65,8 @@ ModelImporter:
     400054: Cylinder
     400056: Cylinder_001
     400058: //RootNode
+    400060: Camera
+    400062: Lamp
     4300000: Cylinder
     4300002: Cylinder_001
     7400000: Default Take
@@ -90,6 +94,8 @@ ModelImporter:
     7400044: saltarIzquierda
     7400046: saltoVerticalDer
     7400048: saltoVerticalIzq
+    7400050: atacarIzq_001
+    7400052: muerteIzquierda_001
     9500000: //RootNode
     11100000: //RootNode
     13700000: Cylinder
