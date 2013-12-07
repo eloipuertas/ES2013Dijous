@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
+using System.Text.RegularExpressions;
 
+//[RequireComponent(typeof(Grid))]
 public class AgentNpc : FSM {
         
         //Agent finite stats
@@ -59,12 +61,13 @@ public class AgentNpc : FSM {
         private Vector3 lastPos;
         private bool changeDir = true;
         
-        
+        private Vector3[,] grid;
         
         /*################################################################
         ###################### INITIALIZATION OF NPC #####################*/
         
         protected override void Ini(){
+				grid = ((Grid)GameObject.Find ("GameStartUp").GetComponent("Grid")).getGrid();
 				this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
                 loadRoute();
                 setInitialsAttributes();
@@ -99,9 +102,8 @@ public class AgentNpc : FSM {
                 string []lines = content.Split('|');
                 foreach(string s in lines){
                         string []pos = s.Split(',');
-                        //Debug.Log(pos.Length);
-                        float x = float.Parse(pos[0]);
-                        float y = float.Parse(pos[1]);
+						float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
+						float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
                         float z = float.Parse(pos[2]);
                         rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
                         posindex +=1;
@@ -128,6 +130,8 @@ public class AgentNpc : FSM {
                 if (this.getHealth() <= 0) curState = FSM.Dead;
 
             }
+			//if(gameObject.name.CompareTo("Philo1 ")==0)
+				//print(getZone(getXGrid(),getYGrid()));
         }
         
 
@@ -174,8 +178,10 @@ public class AgentNpc : FSM {
                         ((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 15))){
                         
                         keyPosActual+=1;
-                        if (keyPosActual == rutaActual.Count)
-                                keyPosActual = 0;
+						if (keyPosActual == rutaActual.Count){
+							keyPosActual = 0;
+							/*loadRoute(getZone())*/
+						}
                 }
         }
         
@@ -296,7 +302,7 @@ public class AgentNpc : FSM {
                                                 if(isEnemy(a)){ // Comprobar rivales
                                                         curState = FSM.Attack;
                                                         //animateIfExist("atacarDer","atacarIzq");
-                                                } else {
+                                                } else if (derecha){
                                                         curState = FSM.Jump;
                                                 }
                                                 break;
@@ -372,7 +378,7 @@ public class AgentNpc : FSM {
                     if(isEnemy(a)){ // Comprobar rivales
                             curState = FSM.Attack;
                             //animateIfExist("atacarDer","atacarIzq");
-                    } else {
+                    } else if (derecha) {
                             jump();
                     }
                     break;
@@ -468,19 +474,30 @@ public class AgentNpc : FSM {
                 return Mathf.Sqrt (distX*distX + distY*distY);
         }
         private GameObject raycastFront(int dist){
-                RaycastHit hit;
-                float mitadAltura = rigidbody.collider.bounds.extents.y*0.7f;
-                Vector3 pos = getPosition();
-                bool trobat = false;
-                for (int i=0;i<3 && !trobat;i++){
-                        if(Physics.Raycast(pos, (derecha)?Vector3.right:Vector3.left, out hit,dist))
-                                trobat = true;
-                        else
-                                pos+=Vector3.up*mitadAltura;
-                }
-                if (!trobat)
-                        return null;
-                return hit.collider.gameObject;
+			RaycastHit hit;
+
+			Vector3 pos = getPosition();
+			Vector3 posAux = pos;
+			Vector3 endpos;
+			bool trobat = false;
+			float altura = rigidbody.collider.bounds.extents.y * 2;
+			int ndiv = 3;
+			float deltaAltura = (altura-5.0f)/(float)ndiv;
+			
+			pos = pos + Vector3.down*(altura/2.0f);
+			
+			for (int i=1;i <= ndiv && !trobat; i+=1){
+				
+				posAux = pos + Vector3.up*i*deltaAltura;
+				
+				endpos = posAux + ((derecha)?Vector3.right:Vector3.left) * dist;
+				Debug.DrawLine(posAux, endpos, Color.blue, 0.01f);
+				if(Physics.Raycast(posAux, (derecha)?Vector3.right:Vector3.left, out hit,dist) && notAPickUpObject(hit.collider.gameObject))
+				trobat = true;
+			}
+			if (!trobat)
+				return null;
+			return hit.collider.gameObject;
         }
         private bool anythingOn(Vector3 pos){
                 Vector3 vec = new Vector3(pos.x,pos.y,-200);
@@ -488,12 +505,21 @@ public class AgentNpc : FSM {
                 return Physics.Linecast(vec,vec2);
         }
         private bool onGround(){
-                float mitadAmplada = rigidbody.collider.bounds.extents.x;
-                bool ground = false;
-                for (int i=-1;i<2 && !ground;i++){
-                        ground = Physics.Raycast(getPosition()+Vector3.right*mitadAmplada*i, Vector3.down, 3);
-                }
-                return ground;
+			float ancho = rigidbody.collider.bounds.extents.x * 2;
+			float alto = rigidbody.collider.bounds.extents.y;
+			Vector3 pos = getPosition() + Vector3.left*(ancho/2.0f);
+			Vector3 posAux;
+			
+			int ndiv = 3;
+			float deltaAncho = ancho/(float)ndiv;
+			
+			bool ground = false;
+			for (int i=0;i<ndiv && !ground; i+=1){
+				posAux = pos + Vector3.right*i*deltaAncho;
+				ground = Physics.Raycast(posAux, Vector3.down, alto);
+				Debug.DrawLine(posAux, posAux + Vector3.down*(alto), Color.red, 0.01f);
+			}
+			return ground;
         }
         /*private bool isEnemy(Actor a){
                 if (a == null) return false;
@@ -554,11 +580,90 @@ public class AgentNpc : FSM {
         }
         
         private Vector3 getPosition(){
-                if(getTeam() == PHILO_TEAM){
+                //if(getTeam() == PHILO_TEAM){
                         return transform.position;
-                } else {
-                        return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-0.1f);
-                }
+                //} else {
+                //        return transform.position + Vector3.down*(rigidbody.collider.bounds.extents.y-0.1f);
+                //}
         }
+		
+	private int getXGrid(){//return the X grid position where gameobject is at the scene 
+		int x;
+		x = (int)gameObject.transform.position.x;
+		x = x-(-1221);//-1221 is 0 X value
+		
+		x = x/200;
+		if(x>89)//error control
+			x = 89;
+		
+		return x;
+	}
+	
+	private int getYGrid(){//return the Y grid position where gameobject is at the scene 
+		int y;
+		y = (int)gameObject.transform.position.y;
+		y = y-(-110);//-110 is 0 Y value
+		
+		y = y/200;
+		if(y>6)//error control
+			y = 6;
+		
+		return y;
+	}
+	
+	private string getZone(int x,int y){//Tranlate X and Y grid position to zone
+		if((x>=0 && x<=6) && (y>=0 && y<=3))
+			return "Zona1";
+		if((x>=0 && x<=7) && (y>=4 && y<=6))
+			return "Zona2";
+		if((x>=7 && x<=80) && (y>=0 && y<=0))
+			return "Zona3";
+		if((x>=8 && x<=80) && (y>=1 && y<=1))
+			return "Zona4";
+		if((x>=10 && x<=31) && (y>=2 && y<=2))
+			return "Zona5";
+		if((x>=17 && x<=36) && (y>=3 && y<=4))
+			return "Zona6";
+		if((x>=41 && x<=47) && (y>=2 && y<=4))
+			return "Zona7";
+		if((x>=50 && x<=72) && (y>=2 && y<=4))
+			return "Zona8";
+		if((x>=74 && x<=77) && (y>=2 && y<=4))
+			return "Zona9";
+		if((x>=78 && x<=80) && (y>=2 && y<=3))
+			return "Zona10";
+		if((x>=81 && x<=88) && (y>=0 && y<=3))
+			return "Zona11";
+		if((x>=82 && x<=88) && (y>=4 && y<=6))
+			return "Zona12";
+		if((x>=77 && x<=81) && (y>=5 && y<=6))
+			return "Zona13";
+		if((x>=53 && x<=71) && (y>=3 && y<=5))
+			return "Zona14";
+		if((x>=7 && x<=8) && (y>=3 && y<=4))
+			return "Zona15";
+		if((x>=8 && x<=11) && (y>=5 && y<=6))
+			return "Zona16";
+		
+		return "Zone0";
+	}
+	
+	private bool notAPickUpObject(GameObject o){//Check if the object is an able to be picked up object
+		bool weapon = true;
+		
+		if(new Regex("escopeta.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("gun.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("katana.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("granada.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("lifeUp.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("shield.").IsMatch(o.name))
+			weapon = false;
+		return weapon;
+	}
 }
 

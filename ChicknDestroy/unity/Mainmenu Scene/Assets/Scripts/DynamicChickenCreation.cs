@@ -53,7 +53,8 @@ public class DynamicChickenCreation : MonoBehaviour {
                 */
                 for(int i=1; i<6; i++){
                         if (i==Chicken) continue;
-                        GameObject ob = CreateChicken(Team,i);        
+                        GameObject ob = CreateChicken(Team,i); 
+					
                         initAsNPC(ob,Team,i);
                         ob.GetComponent<AgentNpc>().setTeam(Team);
                         ob.tag = "Allied";
@@ -150,15 +151,17 @@ public class DynamicChickenCreation : MonoBehaviour {
                         switch(chicken){
                                 case 1:
                                         c.transform.position = new Vector3(-44.11278f,-80.28318f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "rutaAliada1";
+                                        c.AddComponent<AgentNpc>().direrutas = "Zona1Ruta1";
 										c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
+										
                                         break;
                                 case 2:
                                         c.transform.position = new Vector3(494.1796f,-80.28318f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaAliada2";
 										c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
+
                                         break;
                                 case 3:
                                         c.transform.position = new Vector3(549.9143f,245.3285f,0.8170023f);
@@ -203,9 +206,10 @@ public class DynamicChickenCreation : MonoBehaviour {
                                         break;
                                 default: // case 5
                                         c.transform.position = new Vector3(14806.89f,414.3137f,0.8170023f);
-                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival5_Agresiva";
+                                        c.AddComponent<AgentNpc>().direrutas = "rutaRival1";
                                         c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_ESCOPETA);
 										c.AddComponent<FlagManagement>();
+
                                         break;
                         }
                 }
