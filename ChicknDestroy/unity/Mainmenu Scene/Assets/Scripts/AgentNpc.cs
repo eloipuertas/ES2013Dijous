@@ -174,6 +174,10 @@ public class AgentNpc : FSM {
 			nextTarget = closestEnemy.transform.position;
 			nextTarget.z = 0;
 			relPos = nextTarget - getPosition();
+			// Si la vida es inferior a 30. huye!
+			if (getHealth() < 30){
+				relPos.x *= -1;
+			}
 			targetEnemy = true;
 			return;
 		}
