@@ -62,7 +62,7 @@ public class AgentNpc : FSM {
 	private bool changeDir = true;
 	
 	private Vector3[,] grid;
-	private float targetTimer = 10f;
+	private float targetTimer = 5f;
 	
 	/*################################################################
 	###################### INITIALIZATION OF NPC #####################*/
@@ -183,7 +183,7 @@ public class AgentNpc : FSM {
 			((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 15))){
 			
 			keyPosActual+=1;
-			targetTimer = 10f;
+			targetTimer = 5f;
 			if (keyPosActual == rutaActual.Count){
 				keyPosActual = 0;
 				/*loadRoute(getZone())*/
@@ -191,7 +191,7 @@ public class AgentNpc : FSM {
 		}
 		if(targetTimer <= 0){
 			keyPosActual = 0;
-			targetTimer = 10f;
+			targetTimer = 5f;
 			/*loadRoute(getZone())*/
 		}
 		targetTimer-=Time.deltaTime;
