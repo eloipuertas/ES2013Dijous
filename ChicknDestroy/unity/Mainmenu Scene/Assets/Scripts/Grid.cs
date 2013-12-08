@@ -7,6 +7,7 @@ public class Grid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		//GameObject.Find("Patios").SetActive(false);//uncoment this line to view the grid better
 		float x0,y0;//cell bottom x and bootom y value
 		x0 = -1221f;
 		grid = new Vector3[18000/200,1400/200];//width:18000|height:1400|grid size:200x200
@@ -45,15 +46,14 @@ public class Grid : MonoBehaviour {
 		cell.transform.position = new Vector3(x0+100f,y0+100f,80f);
 		celltext.transform.position = new Vector3(x0+80f,y0+110f,80f);
 		
-		Instantiate (cell);
-		Instantiate(celltext);
 		
-
 		Light l = cell.GetComponent("Light") as Light;
 		l.intensity = 1.38f;
 		l.range = 200;
 		setColorZone (i,j,l);
 		
+		Instantiate (cell);
+		Instantiate(celltext);
 
 	}
 	
