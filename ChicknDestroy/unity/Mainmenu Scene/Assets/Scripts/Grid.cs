@@ -14,10 +14,7 @@ public class Grid : MonoBehaviour {
 			y0 = -110f;
 			for(int j = 0; j < grid.GetLength(1);j++){
 				grid[i,j] = new Vector3(x0+100f,y0+100f,0f);
-				/*GameObject cell = Resources.Load("cell") as GameObject;
-				cell.name = "cell-x"+i+"y"+j;
-				cell.transform.position = new Vector3(x0+100f,y0+100f,80f);
-				Instantiate (cell);*/
+				//gridShow(i,j,x0,y0);//uncoment this line to view the grid at the scene
 				y0 += 200f;
 			}
 			x0 += 200f;
@@ -34,5 +31,19 @@ public class Grid : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+	}
+	
+	private void gridShow(int i,int j,float x0,float y0){
+		GameObject cell = Resources.Load("cell") as GameObject;
+		cell.name = "cell-x"+i+"y"+j;
+		cell.transform.position = new Vector3(x0+100f,y0+100f,80f);
+		GameObject celltext = Resources.Load("celltext") as GameObject;
+		cell.name = "cell-x"+i+"y"+j;
+		TextMesh t = celltext.GetComponent("TextMesh") as TextMesh;
+		t.text = "cell-x"+i+"y"+j;
+		cell.transform.position = new Vector3(x0+100f,y0+100f,80f);
+		celltext.transform.position = new Vector3(x0+80f,y0+110f,80f);
+		Instantiate (cell);
+		Instantiate(celltext);
 	}
 }
