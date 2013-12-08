@@ -23,6 +23,12 @@ ModelImporter:
     100034: Pie_Derecho
     100036: Pie_Izquierdo
     100038: Tronco
+    100040: Camera
+    100042: Lamp_000
+    100044: Lamp_001
+    100046: Lamp_002
+    100048: Lamp_003
+    100050: Lamp_004
     400000: Armature
     400002: B_Derecho
     400004: B_Izquierdo
@@ -43,6 +49,12 @@ ModelImporter:
     400034: Pie_Derecho
     400036: Pie_Izquierdo
     400038: Tronco
+    400040: Camera
+    400042: Lamp_000
+    400044: Lamp_001
+    400046: Lamp_002
+    400048: Lamp_003
+    400050: Lamp_004
     4300000: Escopeta
     4300002: Cuerpo
     7400000: Default Take
