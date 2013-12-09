@@ -92,7 +92,7 @@ public class Grid : MonoBehaviour {
 				l.color = new Color(1,0.5f,1); break;
 			case "Zona16":
 				l.color = new Color(0,0,0); break;
-			default:
+			default://default is Zona0
 				l.color = new Color(1,1,1); break;
 
 		}
@@ -133,6 +133,6 @@ public class Grid : MonoBehaviour {
 		if((x>=8 && x<=11) && (y>=5 && y<=6))
 			return "Zona16";
 		
-		return "Zone0";
+		return "Zona0";
 	}
 }

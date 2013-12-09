@@ -651,7 +651,7 @@ public class AgentNpc : FSM {
 		if((x>=8 && x<=11) && (y>=5 && y<=6))
 			return "Zona16";
 		
-		return "Zone0";
+		return "Zona0";
 	}
 	
 	private bool notAPickUpObject(GameObject o){//Check if the object is an able to be picked up object
