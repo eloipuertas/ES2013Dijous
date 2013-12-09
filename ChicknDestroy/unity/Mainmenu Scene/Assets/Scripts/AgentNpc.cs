@@ -131,8 +131,11 @@ public class AgentNpc : FSM {
 			if (this.getHealth() <= 0) curState = FSM.Dead;
 
 		}
-		if(gameObject.name.CompareTo("Robot3")==0)
+		/*if(gameObject.name.CompareTo("Robot1")==0){
+			print(getNeighbors(getZone(getXGrid(),getYGrid())).Length);
 			print(getZone(getXGrid(),getYGrid()));
+		}*/
+		
 	}
         
 
@@ -672,6 +675,104 @@ public class AgentNpc : FSM {
 		if(new Regex("shield.").IsMatch(o.name))
 			weapon = false;
 		return weapon;
+	}
+	
+	private string[] getNeighbors(string zona){//returns de Neighbors of a zone
+		string [] neighbors;
+		
+		switch(zona){
+			case "Zona1":
+			neighbors = new string[3];
+			neighbors[0] = "Zona3";neighbors[1] = "Zona14";neighbors[2] = "Zona15";
+			break;
+			
+			case "Zona2":
+			neighbors = new string[2];
+			neighbors[0] = "Zona15";neighbors[1] = "Zona16";
+			break;
+			
+			case "Zona3":
+			neighbors = new string[4];
+			neighbors[0] = "Zona1";neighbors[1] = "Zona4";neighbors[2] = "Zona8";neighbors[3] = "Zona10";
+			break;
+			
+			case "Zona4":
+			neighbors = new string[7];
+			neighbors[0] = "Zona1";neighbors[1] = "Zona3";neighbors[2] = "Zona5";neighbors[3] = "Zona6";neighbors[4] = "Zona7";neighbors[5] = "Zona11";neighbors[6] = "Zona17";
+			break;
+			
+			case "Zona5":
+			neighbors = new string[3];
+			neighbors[0] = "Zona4";neighbors[1] = "Zona6";neighbors[2] = "Zona17";
+			break;
+			
+			case "Zona6":
+			neighbors = new string[2];
+			neighbors[0] = "Zona4";neighbors[0] = "Zona5";
+			break;
+			
+			case "Zona7":
+			neighbors = new string[1];
+			neighbors[0] = "Zona4";
+			break;
+			
+			case "Zona8":
+			neighbors = new string[4];
+			neighbors[0] = "Zona3";neighbors[1] = "Zona9";neighbors[2] = "Zona14";
+			break;
+			
+			case "Zona9":
+			neighbors = new string[2];
+			neighbors[0] = "Zona8";neighbors[1] = "Zona10";
+			break;
+			
+			case "Zona10":
+			neighbors = new string[3];
+			neighbors[0] = "Zona9";neighbors[1] = "Zona11";neighbors[2] = "Zona12";
+			break;
+			
+			case "Zona11":
+			neighbors = new string[3];
+			neighbors[0] = "Zona3";neighbors[1] = "Zona4";neighbors[2] = "Zona10";
+			break;
+			
+			case "Zona12":
+			neighbors = new string[2];
+			neighbors[0] = "Zona10";neighbors[1] = "Zona13";
+			break;
+			
+			case "Zona13":
+			neighbors = new string[1];
+			neighbors[0] = "Zona12";
+			break;
+			
+			case "Zona14":
+			neighbors = new string[1];
+			neighbors[0] = "Zona8";
+			break;
+			
+			case "Zona15":
+			neighbors = new string[3];
+			neighbors[0] = "Zona1";neighbors[1] = "Zona2";neighbors[2] = "Zona17";
+			break;
+			
+			case "Zona16":
+			neighbors = new string[1];
+			neighbors[0] = "Zona2";
+			break;
+			
+			case "Zona17":
+			neighbors = new string[3];
+			neighbors[0] = "Zona4";neighbors[1] = "Zona5";neighbors[2] = "Zona15";
+			break;
+			
+			default://default is Zona0
+			neighbors = new string[1];
+			neighbors[0] = "Zona0";
+			break;
+
+		}
+		return neighbors;
 	}
 }
 
