@@ -244,25 +244,6 @@ public class AgentNpc : FSM {
                         if (nextTarget.z < 1 || Mathf.Abs(relPos.x) > 15)
                                 transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
 
-                
-                
-                
-                        // Ha detectado algo a distancia "stopDistance" delante del player?:
-                        /*switch(getWeapon()){
-                                case WEAPON_KATANA:
-                                                rangeWeapon = 0;
-                                                break;
-                                case WEAPON_PISTOLA:
-                                                rangeWeapon = 300;
-                                                break;
-                                case WEAPON_ESCOPETA:
-                                                rangeWeapon = 100;
-                                                break;
-                                default:
-                                                rangeWeapon = 0;
-                                                break;
-                        }*/
-
                         GameObject detected = raycastFront(stopDistance+rangeWeapon);
                         if(detected != null){        
                                 switch(detected.tag){

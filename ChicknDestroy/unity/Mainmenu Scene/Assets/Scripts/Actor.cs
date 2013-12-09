@@ -95,7 +95,8 @@ public class Actor : MonoBehaviour {
 	
 	protected void setShield(int n){
 		shield = n;
-		fireShieldNotification();
+		// fireShieldNotification();
+		if (this.GetType() == typeof(PlayerController)) this.hud.notifyShieldChange(this.shield);
 	}
 	
 	protected virtual void fireHealthNotification(){}
