@@ -27,6 +27,7 @@ public class Actor : MonoBehaviour {
 	protected ThrowableWeapon secondary;
 	
 	protected bool flag;
+	protected bool esBajable;
 	
 	protected int team;
 	
@@ -41,6 +42,9 @@ public class Actor : MonoBehaviour {
 	
 	protected FlagManagement flagManagement;
 	public Parpadeig p; // Public visibility, in PlayerController was public.
+	
+	protected float damageTime;
+	protected float damageDuration;
 	
 	// GameObjects
 	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
@@ -189,6 +193,88 @@ public class Actor : MonoBehaviour {
 	 */ 
 	void OnCollisionEnter(Collision collision) {
 		// ADD the necessary code here.
+		float currentTimeDamage = Time.time - damageTime;
+		if (collision.gameObject.tag == "Bandera") {
+			switch (team) {
+				case 1: flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: flag = collision.gameObject.transform.position.x > 0; break;
+				
+				default: break;
+			}
+			
+			if (flag) {
+				flagManagement.setflagObtained();
+				hud.notifyFlag(true, team==2);
+				Destroy (collision.gameObject);
+			}
+		}
+		
+		//dany per foc o guillotina o punxes
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
+			|| collision.gameObject.tag == "punxes") {
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+		if (collision.gameObject.name =="base") {
+			if (flag) {
+				switch (team) {
+					case 1: if (collision.gameObject.transform.position.x > 0) flagManagement.setflagPlaced(team); break;
+					case 2: if (collision.gameObject.transform.position.x < 0) flagManagement.setflagPlaced(team); break;
+						
+					default:break;
+				}
+				flag = false;
+				notifyHudPoints(this.team, 300); //team
+				hud.notifyFlag(false, this.team==2);
+		
+			}
+		}
+			
+		//quan agafa un escut, crida al mètode addShield de Actor.cs
+		if(collision.gameObject.tag == "escut") {
+				sonidoEscudo.Play();
+				if(this.GetType () == typeof(PlayerController))hud.notifyShieldChange(100);
+				addShield(100);
+		}
+		
+		//quan agafa una cura, crida al mètode heal de Actor.cs
+		if(collision.gameObject.tag == "upVida"){ 
+				sonidoPowerUp.Play();
+ 				heal(Random.Range(20,70));
+		}
+		if (collision.gameObject.tag == "escopeta_off") {
+			sonidoPowerUp.Play();
+			if(this.primary.GetType() == typeof(DistanceWeapon)) {
+				//((DistanceWeapon)this.primary).reload(5);
+				((DistanceWeapon)this.primary).reload(Random.Range(1,30)); // Reload random bullets.
+				if (this.GetType()  == typeof(PlayerController))
+					this.hud.notifyAmmo(1,((DistanceWeapon)this.primary).getCAmmo());
+			}
+		}
+		
+		if (this.GetType() == typeof(PlayerController)) {
+			esBajable = (collision.gameObject.layer == 8);
+		}
+	}
+	
+	void OnCollisionStay(Collision collision) {
+		float currentTimeDamage = Time.time - damageTime;
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
+			|| collision.gameObject.tag == "punxes") {
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+		
+	    if (collision.gameObject.tag == "plataforma_moviment")
+	        transform.parent = collision.transform ; 
+		else
+	        transform.parent = null;
 	}
 	
 	public int getShield(){ return shield; }

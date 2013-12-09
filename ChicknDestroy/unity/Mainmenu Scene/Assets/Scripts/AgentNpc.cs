@@ -15,11 +15,6 @@ public class AgentNpc : FSM {
                 Dead,
         }
         
-        //sonidos
-        //private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
-        
-        //private PlayerController playerController;
-        
         //Modelos de armas
         private GameObject[] weap_mod;
         //Lectors de rutes
@@ -495,10 +490,6 @@ public class AgentNpc : FSM {
                 }
                 return ground;
         }
-        /*private bool isEnemy(Actor a){
-                if (a == null) return false;
-                return getTeam() != a.getTeam();
-        }*/
         
         public void updateModelWeapon(){
                 print ("hola k ase");

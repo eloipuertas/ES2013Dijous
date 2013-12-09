@@ -52,11 +52,11 @@ public class PlayerController : Actor {
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
-	private float damageTime;
+	// private float damageTime; -- To Actor!
 	
 	//indica el tiempo de duracion de animacion
 	private float animDuration;
-	private float damageDuration;
+	// private float damageDuration; -- To Actor!
 	
 	//private int currentDirection; // to Actor
 	private int currentState;
@@ -73,7 +73,9 @@ public class PlayerController : Actor {
 	private Rigidbody rigid;
 	
 	private GameObject gre, grk, grp;
-	private bool esBajable, disparoActivo, ataque, ataqueSecundario;
+	private bool disparoActivo, ataque, ataqueSecundario;
+	// private bool esBajable;
+	
 	// private bool dead; // To Actor!!
 	
 	void Start () {
@@ -416,7 +418,7 @@ public class PlayerController : Actor {
 	* On es tracten les colisions amb els objectes de l'escenari.
 	* Method must be refactoriced to Actor
 	*/
-	void OnCollisionEnter(Collision collision){
+	/*void OnCollisionEnter(Collision collision){
 		
 		float currentTimeDamage = Time.time - damageTime;
 		if (collision.gameObject.tag == "Bandera") {
@@ -486,15 +488,15 @@ public class PlayerController : Actor {
 		}else {
 			esBajable = false;
 		}
-		/*
+		
 		Add an special collider for the chickens when one is above from the other. We can make that the chicken
 		that are above just jump and deal damage to the other chiken.
 		For implement this, we can just add two new collider boxes, one on the top with ID = 1 and the other
 		one on the bottom with ID = 2. (Or simply make a two specifications of object collider to diferenciate it).
 		When there two collides, the chicken with collide ID = 2 will deal damage to the other and will jump (as a normal jump).
 		Also can be added an special effect (like the chicken that have given the damage will turn a superdeformed chicken for a while).
-		*/
-	}
+		
+	}*/
 	
 	void showBlood(Vector3 p) {;
 		GameObject bloodExpl = Instantiate(sang, p, Quaternion.identity) as GameObject;
@@ -503,7 +505,7 @@ public class PlayerController : Actor {
 	
 	/* Para que se mueva conjuntamente con las plataformas horizontales */
 	
-	void OnCollisionStay (Collision collision) {
+	/*void OnCollisionStay (Collision collision) {
 		float currentTimeDamage = Time.time - damageTime;
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
 			|| collision.gameObject.tag == "punxes") {
@@ -519,7 +521,7 @@ public class PlayerController : Actor {
 		else
 	        transform.parent = null;
 		
-	}
+	}*/
 	
 	/*
 	* mètode que carrega un model o un altre en funció de l'arma utilitzada.
