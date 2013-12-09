@@ -131,8 +131,8 @@ public class AgentNpc : FSM {
 			if (this.getHealth() <= 0) curState = FSM.Dead;
 
 		}
-		//if(gameObject.name.CompareTo("Philo1 ")==0)
-			//print(getZone(getXGrid(),getYGrid()));
+		if(gameObject.name.CompareTo("Robot3")==0)
+			print(getZone(getXGrid(),getYGrid()));
 	}
         
 
@@ -626,13 +626,13 @@ public class AgentNpc : FSM {
 			return "Zona3";
 		if((x>=8 && x<=80) && (y>=1 && y<=1))
 			return "Zona4";
-		if((x>=10 && x<=31) && (y>=2 && y<=2))
+		if((x>=16 && x<=31) && (y>=2 && y<=2))
 			return "Zona5";
 		if((x>=17 && x<=36) && (y>=3 && y<=4))
 			return "Zona6";
 		if((x>=41 && x<=47) && (y>=2 && y<=4))
 			return "Zona7";
-		if((x>=50 && x<=72) && (y>=2 && y<=4))
+		if((x>=50 && x<=72) && (y>=2 && y<=2))
 			return "Zona8";
 		if((x>=74 && x<=77) && (y>=2 && y<=4))
 			return "Zona9";
@@ -650,6 +650,8 @@ public class AgentNpc : FSM {
 			return "Zona15";
 		if((x>=8 && x<=11) && (y>=5 && y<=6))
 			return "Zona16";
+		if((x>=10 && x<=15) && (y>=2 && y<=3))
+			return "Zona17";
 		
 		return "Zona0";
 	}

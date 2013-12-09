@@ -7,7 +7,7 @@ public class Grid : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//GameObject.Find("Patios").SetActive(false);//uncoment this line to view the grid better
+		GameObject.Find("Patios").SetActive(false);//uncoment this line to view the grid better
 		float x0,y0;//cell bottom x and bootom y value
 		x0 = -1221f;
 		grid = new Vector3[18000/200,1400/200];//width:18000|height:1400|grid size:200x200
@@ -15,7 +15,7 @@ public class Grid : MonoBehaviour {
 			y0 = -110f;
 			for(int j = 0; j < grid.GetLength(1);j++){
 				grid[i,j] = new Vector3(x0+100f,y0+100f,0f);
-				//gridShow(i,j,x0,y0);//uncoment this line to view the grid at the scene
+				gridShow(i,j,x0,y0);//uncoment this line to view the grid at the scene
 				
 				y0 += 200f;
 			}
@@ -90,6 +90,8 @@ public class Grid : MonoBehaviour {
 				l.color = new Color(1,0.5f,1); break;
 			case "Zona16":
 				l.color = new Color(0,0,0); break;
+			case "Zona17":
+				l.color = new Color(0.1f,0.2f,0.8f); break;
 			default://default is Zona0
 				l.color = new Color(1,1,1); break;
 
@@ -106,13 +108,13 @@ public class Grid : MonoBehaviour {
 			return "Zona3";
 		if((x>=8 && x<=80) && (y>=1 && y<=1))
 			return "Zona4";
-		if((x>=10 && x<=31) && (y>=2 && y<=2))
+		if((x>=16 && x<=31) && (y>=2 && y<=2))
 			return "Zona5";
 		if((x>=17 && x<=36) && (y>=3 && y<=4))
 			return "Zona6";
 		if((x>=41 && x<=47) && (y>=2 && y<=4))
 			return "Zona7";
-		if((x>=50 && x<=72) && (y>=2 && y<=4))
+		if((x>=50 && x<=72) && (y>=2 && y<=2))
 			return "Zona8";
 		if((x>=74 && x<=77) && (y>=2 && y<=4))
 			return "Zona9";
@@ -130,6 +132,8 @@ public class Grid : MonoBehaviour {
 			return "Zona15";
 		if((x>=8 && x<=11) && (y>=5 && y<=6))
 			return "Zona16";
+		if((x>=10 && x<=15) && (y>=2 && y<=3))
+			return "Zona17";
 		
 		return "Zona0";
 	}
