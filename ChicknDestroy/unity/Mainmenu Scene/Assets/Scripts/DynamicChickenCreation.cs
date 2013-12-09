@@ -71,61 +71,61 @@ public class DynamicChickenCreation : MonoBehaviour {
         
         
         GameObject setRoboChicken1(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_fire")) as GameObject;//ok
                 c.name = "Robot1";
                 return c;
         }
         
         GameObject setRoboChicken2(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_matrix")) as GameObject;//ok
                 c.name = "Robot2";
                 return c;
         }
         
         GameObject setRoboChicken3(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_water")) as GameObject;//ok
                 c.name = "Robot3";
                 return c;
         }
         
         GameObject setRoboChicken4(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_droid")) as GameObject;//ok
                 c.name = "Robot4";
                 return c;
         }
         
         GameObject setRoboChicken5(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/robo_chicken")) as GameObject;//ok
                 c.name = "Robot5";
                 return c;
         }
         
         GameObject setPhiloChicken1(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/philo_bomb")) as GameObject;//ok
                 c.name = "Philo1";
                 return c;
         }
         
         GameObject setPhiloChicken2(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_crazy")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/philo_graduated")) as GameObject;//ok
                 c.name = "Philo2";
                 return c;
         }
         
         GameObject setPhiloChicken3(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_graduated")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_4eyes")) as GameObject;//ok
                 c.name = "Philo3";
                 return c;
         }
         
         GameObject setPhiloChicken4(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_4eyes")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_crazy")) as GameObject;//ok
                 c.name = "Philo4";
                 return c;
         }
         
         GameObject setPhiloChicken5(){
-                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;
+                GameObject c = Instantiate(Resources.Load("ChickenPrefabs/Philo_leader")) as GameObject;//ok
                 c.name = "Philo5";
                 return c;
         }
@@ -151,25 +151,25 @@ public class DynamicChickenCreation : MonoBehaviour {
                                 case 1:
                                         c.transform.position = new Vector3(-44.11278f,-80.28318f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaAliada1";
-										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
+										c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 case 2:
                                         c.transform.position = new Vector3(494.1796f,-80.28318f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaAliada2";
-										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
+										c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 case 3:
                                         c.transform.position = new Vector3(549.9143f,245.3285f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaAliada3";
-										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_PISTOLA;
+										c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 default: // case 4
                                         c.transform.position = new Vector3(135.0389f,77.73074f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaAliada4";
-										c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_ESCOPETA;
+										c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_ESCOPETA);
 										c.AddComponent<FlagManagement>();
                                         break;
                         }
@@ -180,31 +180,31 @@ public class DynamicChickenCreation : MonoBehaviour {
                                 case 1:
                                         c.transform.position = new Vector3(12000.105f,-91.74977f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaRival1";
-                                        c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_PISTOLA;
+                                        c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 case 2:
                                         c.transform.position = new Vector3(13000.58f,118.5825f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaRival2";
-                                        c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
+                                        c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 case 3:
                                         c.transform.position = new Vector3(15700.028f,-81.72346f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaRival3";
-                                        c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_PISTOLA;
+                                        c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_PISTOLA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 case 4:
                                         c.transform.position = new Vector3(13051.11f,118.5825f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaRival4";
-                                        c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_KATANA;
+                                        c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
                                         break;
                                 default: // case 5
                                         c.transform.position = new Vector3(14806.89f,414.3137f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaRival5_Agresiva";
-                                        c.GetComponent<AgentNpc>().weapon = Actor.WEAPON_ESCOPETA;
+                                        c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_ESCOPETA);
 										c.AddComponent<FlagManagement>();
                                         break;
                         }

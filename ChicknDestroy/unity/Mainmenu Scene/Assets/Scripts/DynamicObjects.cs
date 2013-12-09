@@ -158,6 +158,7 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.Find("escopeta1") == null && timeShotguns[0] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name = "escopeta1";
+			x.tag = "escopeta";
 			x.transform.position = new Vector3(1407.095F,495.142F,-16.07605F);
 			x.transform.eulerAngles = new Vector3(0F,180F,0F);
 			x.transform.localScale = new Vector3(1F,1F,1F);
@@ -166,19 +167,22 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.Find("escopeta2") == null && timeShotguns[1] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name = "escopeta2";
+			x.tag = "escopeta";
 			x.transform.position = new Vector3(14049.33F,484.6809F,-1.233887F);
 			x.transform.eulerAngles = new Vector3(0F,360F,0F);
 			x.transform.localScale = new Vector3(1F,1F,1F);
 			timeShotguns[1] = 30F;
 		}
-		/*if(GameObject.Find("escopeta3") == null && timeShotguns[2] <= 0){
+		if(GameObject.Find("escopeta3") == null && timeShotguns[2] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name= "escopeta3";
-			x.transform.position = new Vector3(3506.292F,680.0528F,-10.07793F);
-			x.transform.eulerAngles = new Vector3(0F,270F,0F);
-			x.transform.localScale = new Vector3(4437.306F,5000F,5000F);
-			timeShotguns[2] = 30F;
+			x.tag = "escopeta";
+			x.transform.position = new Vector3(14981.84F,-81.11998F,-1.002815F);
+			x.transform.eulerAngles = new Vector3(0F,180F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
+			timeShotguns[2] = 5F;
 		}
+		/*
 		if(GameObject.Find("escopeta4") == null && timeShotguns[3] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name = "escopeta4";
@@ -195,6 +199,7 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.Find("katana1") == null && timeKatanas[0] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/katana")) as GameObject;
 			x.name = "katana1";
+			x.tag = "katana";
 			x.transform.position = new Vector3(5669.616F,212.7787F,-24.7574F);
 			x.transform.eulerAngles = new Vector3(0F,45F,77.0473F);
 			x.transform.localScale = new Vector3(1F,1F,1F);
@@ -316,6 +321,7 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.Find("gun1") == null && timeGuns[0] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/gun")) as GameObject;
 			x.name = "gun1";
+			x.tag = "pistola";
 			x.transform.position = new Vector3(-291.5449F,115.6344F,-8.241943F);
 			x.transform.eulerAngles = new Vector3(0F,0F,0F);
 			x.transform.localScale = new Vector3(1F,1F,1F);

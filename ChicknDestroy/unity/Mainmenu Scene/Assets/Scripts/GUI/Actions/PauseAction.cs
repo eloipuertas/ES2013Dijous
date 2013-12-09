@@ -9,7 +9,7 @@ public class PauseAction : IActionButton
 	}
 	
 	public void action() {
-		
+		Time.timeScale = 0;
 	}
 }
 

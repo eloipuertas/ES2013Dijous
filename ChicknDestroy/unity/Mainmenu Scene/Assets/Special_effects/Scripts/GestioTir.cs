@@ -2,7 +2,10 @@
 using System.Collections;
 
 public class GestioTir : MonoBehaviour {
-
+	
+	// @LynosSorien -- added damage attribute.
+	private int damage;
+	
 	private int equip;
 	private int arma;
 	
@@ -14,9 +17,10 @@ public class GestioTir : MonoBehaviour {
 	void Start() {
 		if (arma == 2 || arma == 3) GameObject.Destroy(gameObject, (float)0.6); //bala de pistola i escopeta 
 		else GameObject.Destroy(gameObject, 2); //granada
+			
 	}
 	
-	void OnCollisionEnter(Collision collision){
+	void OnCollisionEnter(Collision collision){ // When collide
 		
 		GameObject expl = null;
 		
@@ -34,14 +38,16 @@ public class GestioTir : MonoBehaviour {
 				switch(arma){
 					case Actor.WEAPON_PISTOLA:
 						expl = Instantiate(sangPistola, contact.point, Quaternion.identity) as GameObject;
-						actor.dealDamage(15);
+						//actor.dealDamage(15);
 						break;
 					case Actor.WEAPON_ESCOPETA:
 						expl = Instantiate(sangEscopeta, contact.point, Quaternion.identity) as GameObject;
-						actor.dealDamage(40);
+						//actor.dealDamage(40);
 						break;
 					default: break;
 				}
+				
+				actor.dealDamage(this.damage);
 				
 				Destroy(expl, (float)0.2);
 				
@@ -68,6 +74,14 @@ public class GestioTir : MonoBehaviour {
 	
 	public int getArma() {
 		return this.arma;
+	}
+	
+	public void setDamage(int damage) {
+		this.damage = damage;
+	}
+	
+	public int getDamage() {
+		return damage;
 	}
 	
 	private bool isEnemy(Actor a){

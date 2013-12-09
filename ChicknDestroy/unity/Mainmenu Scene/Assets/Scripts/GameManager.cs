@@ -11,10 +11,12 @@ public class GameManager : MonoBehaviour {
 	private float loseOrWinTime = 5F;//time later the lose or win of a player (5 seconds Timer)
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
+	private int player_team;
 	
 	public AudioSource audioLoose, audioAmbient, audioWin;
 	
 	void Start () {
+		player_team = PlayerPrefs.GetInt ("Team"); // Get the player team.
 		cam = GetComponent<GameCamera>();
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
@@ -85,10 +87,13 @@ public class GameManager : MonoBehaviour {
 		this.looseConditionLastUpdate = true;
 	}
 	
-	public void notifyScoreChange(int score) {
+	/*public void notifyScoreChange(int score) {
 		this.winConditionLastUpdate = score >= SCORE_TO_WIN;			
+	}*/
+	public void notifyScoreChange(int team, int score) {
+		if (team == this.player_team) this.winConditionLastUpdate = score>=SCORE_TO_WIN;
+		else this.looseConditionLastUpdate = score>=SCORE_TO_WIN;
 	}
-	
 	public bool winCondition () {
 		return winConditionLastUpdate;	
 	}

@@ -46,23 +46,14 @@ public class WeaponInfo : MonoBehaviour {
 	
 	void OnTriggerStay(Collider whoIs){
 		if(isPlayer && Input.GetKey(KeyCode.E)){//if player is over the weapon object
-			PlayerController c = whoIs.gameObject.GetComponent("PlayerController") as PlayerController;
 			if(isEscopeta){//if is escopeta type
-                //c.//we report the player that must play the pickUp weapon animation
-                c.setWeapon(2);//we report to the Player that must change the weapon
-				c.updateModelWeapon();
-                hud.notifyPrimaryWeapon(2);//we notify the the hud to change te primaryWeapon image
+                changeWeapon(2, true, whoIs);
             }
             if(isRevolver){//if is revolver type
-				c.setWeapon(3);
-				c.updateModelWeapon();
-                hud.notifyPrimaryWeapon(3);
+				changeWeapon(3, true, whoIs);
             }
             if(isKatana){//if is katana type
-                //c.playAnimation();
-                c.setWeapon(1);
-				c.updateModelWeapon();
-                hud.notifyPrimaryWeapon(1);
+                changeWeapon(1, true, whoIs);
             }
             if(isRifle){//if is rifle type
                     
@@ -77,11 +68,47 @@ public class WeaponInfo : MonoBehaviour {
             }
             if(isMetralleta){//if is metralleta type
             }
-            Destroy(this.gameObject);//once the weapon is picked up the object is destroyed
-			
-			
+            Destroy(this.gameObject);//once the weapon is picked up the object is destroyed			
+		}
+		else if(!isPlayer) {
+			if(isEscopeta){//if is escopeta type
+                changeWeapon(2, false, whoIs);
+            }
+            if(isRevolver){//if is revolver type
+				changeWeapon(3, false, whoIs);
+            }
+            if(isKatana){//if is katana type
+                changeWeapon(1, false, whoIs);
+            }
+            if(isRifle){//if is rifle type
+                    
+            }
+            if(isMina){//if is mina type
+                    
+            }
+            if(isGranada){//if is granada type
+                //c.playAnimation();
+                //c.weapon = 7;
+                //hud.notifySecondaryWeapon(1);
+            }
+            if(isMetralleta){//if is metralleta type
+            }
+            Destroy(this.gameObject);//once the weapon is picked up the object is destroyed(isMetralleta){//if is metralleta type
 		}
 		
+	}
+	
+	private void changeWeapon(int weapon, bool p, Collider whoIs) {
+		if (p) { //player
+			PlayerController c = whoIs.gameObject.GetComponent("PlayerController") as PlayerController;
+			c.setWeapon(weapon);//we report to the Player that must change the weapon
+			c.updateModelWeapon();
+	        hud.notifyPrimaryWeapon(weapon);//we notify the the hud to change te primaryWeapon image
+		}else {
+			AgentNpc c = whoIs.gameObject.GetComponent("AgentNpc") as AgentNpc;
+			c.setWeapon(weapon);//we report to the Player that must change the weapon
+			c.updateModelWeapon();
+		}
 	}
 	
 	void OnGUI(){//show on gui
@@ -129,5 +156,6 @@ public class WeaponInfo : MonoBehaviour {
 		GUI.Label(posImg,t);//painting the texture on gui
 		GUI.Label(posTextName,TextName,style);//painting text info on gui
 		GUI.Label(posTextDmg,TextDmg,style);
+	
 	}
 }

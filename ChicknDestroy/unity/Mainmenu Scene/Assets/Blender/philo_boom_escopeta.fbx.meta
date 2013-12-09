@@ -1,0 +1,133 @@
+fileFormatVersion: 2
+guid: 424022f603ac33c4fb548b84552d9c4c
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Armature
+    100002: B_Derecho
+    100004: B_Derecho_EXT
+    100006: B_Izquierdo
+    100008: B_Izquierdo_EXT
+    100010: C_Derecha
+    100012: C_Izquierda
+    100014: Cabeza
+    100016: Cadera
+    100018: Clav_Derecha
+    100020: Clav_Izquierda
+    100022: Cola
+    100024: Coleta
+    100026: Dise_o
+    100028: Escopeta
+    100030: Espada
+    100032: P_Derecha
+    100034: P_Izquierda
+    100036: //RootNode
+    100038: Pie_Derecho
+    100040: Pie_Izquierdo
+    100042: Tronco
+    400000: Armature
+    400002: B_Derecho
+    400004: B_Derecho_EXT
+    400006: B_Izquierdo
+    400008: B_Izquierdo_EXT
+    400010: C_Derecha
+    400012: C_Izquierda
+    400014: Cabeza
+    400016: Cadera
+    400018: Clav_Derecha
+    400020: Clav_Izquierda
+    400022: Cola
+    400024: Coleta
+    400026: Dise_o
+    400028: Escopeta
+    400030: Espada
+    400032: P_Derecha
+    400034: P_Izquierda
+    400036: //RootNode
+    400038: Pie_Derecho
+    400040: Pie_Izquierdo
+    400042: Tronco
+    4300000: Dise_o
+    4300002: Escopeta
+    7400000: Default Take
+    7400002: atacarDer
+    7400004: atacarDer_001
+    7400006: atacarDerCorriendo
+    7400008: atacarIzq
+    7400010: atacarIzqCorriendo
+    7400012: atacarSecDer
+    7400014: atacarSecDerCorriendo
+    7400016: atacarSecIzq
+    7400018: atacarSecIzqCorriendo
+    7400020: caidaDerecha
+    7400022: caidaIzquierda
+    7400024: correrDerecha
+    7400026: correrIzquierda
+    7400028: giroDerIzq
+    7400030: giroIzqDer
+    7400032: muerteDerecha
+    7400034: muerteIzquierda
+    7400036: paradaDerecha
+    7400038: paradaIzquierda
+    7400040: recogerItemDer
+    7400042: recogerItemIzq
+    7400044: saltarDerecha
+    7400046: saltarIzquierda
+    7400048: saltoVerticalDer
+    7400050: saltoVerticalIzq
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Dise_o
+    13700002: Escopeta
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 

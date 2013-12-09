@@ -5,6 +5,7 @@ public class FlagManagement : MonoBehaviour {
 	
 	private AudioSource audioFlagObtained;
 	private AudioSource audioFlagPlaced;
+	GameObject mastil,tela;
 
 	void Start () {
 		audioFlagObtained = gameObject.AddComponent<AudioSource>();
@@ -13,10 +14,28 @@ public class FlagManagement : MonoBehaviour {
 		audioFlagPlaced.clip = Resources.Load("sounds/flagPlaced") as AudioClip;
 	}
 	
-	public void flagBase(int team, bool b) {
+	public void flagBase(bool b) {
+		mastil.renderer.enabled = b;
+		tela.renderer.enabled = b;	
+	}
 		
-		GameObject mastil = null, tela = null;
-			
+	public void setflagPlaced(int team) {
+		audioFlagPlaced.Play();
+		flagBase(true);
+		flagDistroyed(team);
+	}
+	
+	public void setflagObtained() {
+		audioFlagObtained.Play();
+		flagBase(false);
+	}
+	
+	private void flagDistroyed(int team) {
+		DynamicObjects d = (GameObject.Find("GameStartUp").GetComponent("DynamicObjects")) as DynamicObjects;
+		d.notifyFlagDistroyed(team);
+	}
+	
+	public void loadFlag(int team) {
 		switch(team) {
 			case 1: mastil = GameObject.Find("flagPhilo"+"/mastil");
 					tela = GameObject.Find("flagPhilo"+"/tela");
@@ -27,26 +46,7 @@ public class FlagManagement : MonoBehaviour {
 				
 			default: break;
 		}
-			
-		mastil.renderer.enabled = b;
-		tela.renderer.enabled = b;
-		
-	}
-		
-	public void setflagPlaced(int team) {
-		audioFlagPlaced.Play();
-		flagBase(team, true);
-		flagDistroyed(team);
-	}
-	
-	public void setflagObtained(int team) {
-		audioFlagObtained.Play();
-		flagBase(team, false);
-	}
-	
-	private void flagDistroyed(int team) {
-		DynamicObjects d = (GameObject.Find("GameStartUp").GetComponent("DynamicObjects")) as DynamicObjects;
-		d.notifyFlagDistroyed(team);
+		flagBase(false);
 	}
 	
 }

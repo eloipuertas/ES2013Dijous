@@ -1,0 +1,140 @@
+fileFormatVersion: 2
+guid: 5012d668415832742be496125f5b87e2
+ModelImporter:
+  serializedVersion: 15
+  fileIDToRecycleName:
+    100000: Armature
+    100002: B_Derecho
+    100004: B_Izquierdo
+    100006: C_Derecha
+    100008: C_Izquierda
+    100010: Cabeza
+    100012: Cadera
+    100014: Clav_Derecha
+    100016: Clav_Izquierda
+    100018: Cola
+    100020: Coleta
+    100022: Cuerpo
+    100024: Escopeta
+    100026: Espada
+    100028: //RootNode
+    100030: P_Derecha
+    100032: P_Izquierda
+    100034: Pie_Derecho
+    100036: Pie_Izquierdo
+    100038: Tronco
+    100040: Camera
+    100042: Lamp_000
+    100044: Lamp_001
+    100046: Lamp_002
+    100048: Lamp_003
+    100050: Lamp_004
+    400000: Armature
+    400002: B_Derecho
+    400004: B_Izquierdo
+    400006: C_Derecha
+    400008: C_Izquierda
+    400010: Cabeza
+    400012: Cadera
+    400014: Clav_Derecha
+    400016: Clav_Izquierda
+    400018: Cola
+    400020: Coleta
+    400022: Cuerpo
+    400024: Escopeta
+    400026: Espada
+    400028: //RootNode
+    400030: P_Derecha
+    400032: P_Izquierda
+    400034: Pie_Derecho
+    400036: Pie_Izquierdo
+    400038: Tronco
+    400040: Camera
+    400042: Lamp_000
+    400044: Lamp_001
+    400046: Lamp_002
+    400048: Lamp_003
+    400050: Lamp_004
+    4300000: Escopeta
+    4300002: Cuerpo
+    7400000: Default Take
+    7400002: atacarDer
+    7400004: atacarDerCorriendo
+    7400006: atacarIzq
+    7400008: atacarIzqCorriendo
+    7400010: atacarSecDer
+    7400012: atacarSecDerCorriendo
+    7400014: atacarSecIzq
+    7400016: atacarSecIzqCorriendo
+    7400018: caidaDerecha
+    7400020: caidaIzquierda
+    7400022: correrDerecha
+    7400024: correrIzquierda
+    7400026: giroDerIzq
+    7400028: giroIzqDer
+    7400030: muerteDerecha
+    7400032: muerteIzquierda
+    7400034: paradaDerecha
+    7400036: paradaIzquierda
+    7400038: recogerItemDer
+    7400040: recogerItemIzq
+    7400042: saltarDerecha
+    7400044: saltarIzquierda
+    7400046: saltoVerticalDer
+    7400048: saltoVerticalIzq
+    9500000: //RootNode
+    11100000: //RootNode
+    13700000: Cuerpo
+    13700002: Escopeta
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    handles: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  additionalBone: 1
+  animationType: 1
+  userData: 
