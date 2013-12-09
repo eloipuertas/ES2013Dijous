@@ -44,7 +44,7 @@ public class Actor : MonoBehaviour {
 	public Parpadeig p; // Public visibility, in PlayerController was public.
 	
 	protected float damageTime;
-	protected float damageDuration;
+	protected float damageDuration = 1.0f;
 	
 	// GameObjects
 	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
@@ -227,7 +227,7 @@ public class Actor : MonoBehaviour {
 			|| collision.gameObject.tag == "punxes") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
-				p.mostrarDany();
+				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
 				damageTime = Time.time;
 			}
 		}
@@ -285,7 +285,7 @@ public class Actor : MonoBehaviour {
 			|| collision.gameObject.tag == "punxes") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
-				p.mostrarDany();
+				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
 				damageTime = Time.time;
 			}
 		}
