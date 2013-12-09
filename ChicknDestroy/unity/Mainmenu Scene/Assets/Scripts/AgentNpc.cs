@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 //[RequireComponent(typeof(Grid))]
 public class AgentNpc : FSM {
         
+
 	//Agent finite stats
 	public enum FSM{
 			None,
@@ -17,10 +18,6 @@ public class AgentNpc : FSM {
 			Dead,
 	}
 	
-	//sonidos
-	//private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
-	
-	//private PlayerController playerController;
 	
 	//Modelos de armas
 	private GameObject[] weap_mod;
@@ -47,6 +44,7 @@ public class AgentNpc : FSM {
 	
 	//Npc propierties
 	private Vector3 spawnPoint;
+
 
 	//Status
 	private FSM curState;
@@ -76,9 +74,11 @@ public class AgentNpc : FSM {
 		updateNextTarget();
 		initSounds ();
 		initFlagManagement();
+		
 	}
 	
 	void setInitialsAttributes(){
+		this.secondary = (ThrowableWeapon)WeaponFactory.instance ().create (WeaponFactory.WeaponType.GRANADE);
 		nextTarget = rutaActual[keyPosActual];
 		curState = FSM.Run;
 				
@@ -270,24 +270,7 @@ public class AgentNpc : FSM {
 			transform.Translate(new Vector3((derecha)?velocity:-velocity,0,0) * Time.deltaTime);
 
 
-
-
 		// Ha detectado algo a distancia "stopDistance" delante del player?:
-		switch(getWeapon()){
-			case WEAPON_KATANA:
-				rangeWeapon = 0;
-				break;
-			case WEAPON_PISTOLA:
-				rangeWeapon = 300;
-				break;
-			case WEAPON_ESCOPETA:
-				rangeWeapon = 100;
-				break;
-			default:
-				rangeWeapon = 0;
-				break;
-		}
-
 		GameObject detected = raycastFront(stopDistance+rangeWeapon);
 		if(detected != null){        
 			switch(detected.tag){
@@ -480,7 +463,6 @@ public class AgentNpc : FSM {
 	}
         
         
-        
 	private float distanceX(Vector3 a, Vector3 b){
 		return Mathf.Abs (a.x - b.x);
 	}
@@ -536,10 +518,7 @@ public class AgentNpc : FSM {
 		}
 		return ground;
 	}
-	/*private bool isEnemy(Actor a){
-		if (a == null) return false;
-		return getTeam() != a.getTeam();
-	}*/
+
         
 	public void updateModelWeapon(){
 		if (weap_mod == null){

@@ -27,6 +27,7 @@ public class Actor : MonoBehaviour {
 	protected ThrowableWeapon secondary;
 	
 	protected bool flag;
+	protected bool esBajable;
 	
 	protected int team;
 	
@@ -41,6 +42,11 @@ public class Actor : MonoBehaviour {
 	
 	protected FlagManagement flagManagement;
 	public Parpadeig p; // Public visibility, in PlayerController was public.
+	
+	protected float damageTime;
+	protected float damageDuration = 1.0f;
+	
+	protected int rangeWeapon = 0;
 	
 	// GameObjects
 	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
@@ -89,7 +95,8 @@ public class Actor : MonoBehaviour {
 	
 	protected void setShield(int n){
 		shield = n;
-		fireShieldNotification();
+		// fireShieldNotification();
+		if (this.GetType() == typeof(PlayerController)) this.hud.notifyShieldChange(this.shield);
 	}
 	
 	protected virtual void fireHealthNotification(){}
@@ -124,6 +131,7 @@ public class Actor : MonoBehaviour {
 	 */
 	// Used for DistanceWeapon Only.
 	protected bool doPrimaryAttack() {
+		bool flag = false;
 		if (((DistanceWeapon)primary).attack ()) {
 			GameObject nouTir = null;
 			// The velocity vector (currently (+-1000,0,0) can be changed with parametter "velocity" of DistanceWeapon.
@@ -152,9 +160,21 @@ public class Actor : MonoBehaviour {
 				sonidoDisparoEscopeta.Play();
 			else
 				sonidoDisparoPistola.Play();
-			return true;
+			flag = true;
 		}
-		return false;
+		if (((DistanceWeapon)this.primary).getCAmmo () == 0) {
+			setWeapon(WEAPON_KATANA);
+			if (this.GetType () == typeof(PlayerController)){
+				this.hud.notifyMessage (new Vector2(100,100),"CHANGE WEAPON TO KATANA");
+				((PlayerController)this).updateModelWeapon();
+				this.hud.notifyPrimaryWeapon (WEAPON_KATANA);
+				this.hud.notifyAmmo (1,0);
+			}
+			else {
+				((AgentNpc)this).updateModelWeapon();
+			}
+		}
+		return flag;
 	}
 	protected bool doSecondaryAttack() {
 		//ataqueSecundario = true;
@@ -189,6 +209,94 @@ public class Actor : MonoBehaviour {
 	 */ 
 	void OnCollisionEnter(Collision collision) {
 		// ADD the necessary code here.
+		float currentTimeDamage = Time.time - damageTime;
+		if (collision.gameObject.tag == "Bandera") {
+			switch (team) {
+				case 1: flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: flag = collision.gameObject.transform.position.x > 0; break;
+				
+				default: break;
+			}
+			
+			if (flag) {
+				flagManagement.setflagObtained();
+				hud.notifyFlag(true, team==2);
+				Destroy (collision.gameObject);
+			}
+		}
+		
+		//dany per foc o guillotina o punxes
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
+			|| collision.gameObject.tag == "punxes") {
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+		if (collision.gameObject.name =="base") {
+			if (flag) {
+				switch (team) {
+					case 1: if (collision.gameObject.transform.position.x > 0) flagManagement.setflagPlaced(team); break;
+					case 2: if (collision.gameObject.transform.position.x < 0) flagManagement.setflagPlaced(team); break;
+						
+					default:break;
+				}
+				flag = false;
+				notifyHudPoints(this.team, 300); //team
+				hud.notifyFlag(false, this.team==2);
+		
+			}
+		}
+			
+		//quan agafa un escut, crida al mètode addShield de Actor.cs
+		if(collision.gameObject.tag == "escut") {
+				sonidoEscudo.Play();
+				if(this.GetType () == typeof(PlayerController))hud.notifyShieldChange(100);
+				addShield(100);
+		}
+		
+		//quan agafa una cura, crida al mètode heal de Actor.cs
+		if(collision.gameObject.tag == "upVida"){ 
+				sonidoPowerUp.Play();
+ 				heal(Random.Range(20,70));
+		}
+		if (collision.gameObject.tag == "escopeta_off") {
+			sonidoPowerUp.Play();
+			if(this.primary.GetType() == typeof(DistanceWeapon)) {
+				((DistanceWeapon)this.primary).reload(Random.Range(1,30)); // Reload random bullets.
+				if (this.GetType()  == typeof(PlayerController))
+					this.hud.notifyAmmo(1,((DistanceWeapon)this.primary).getCAmmo());
+			}
+		}
+		
+		if (collision.gameObject.tag == "granada") {
+			sonidoPowerUp.Play();
+			((ThrowableWeapon)this.secondary).reload(Random.Range(1,3)); // Reload random bullets.
+			if (this.GetType()  == typeof(PlayerController))
+				this.hud.notifyAmmo(2,((ThrowableWeapon)this.secondary).getCAmmo());
+		}
+		
+		if (this.GetType() == typeof(PlayerController)) {
+			esBajable = (collision.gameObject.layer == 8);
+		}
+	}
+	
+	void OnCollisionStay(Collision collision) {
+		float currentTimeDamage = Time.time - damageTime;
+		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
+			|| collision.gameObject.tag == "punxes") {
+			if (currentTimeDamage > damageDuration) {
+				dealDamage(5);
+				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+		
+	    if (collision.gameObject.tag == "plataforma_moviment")
+	        transform.parent = collision.transform ; 
+		else
+	        transform.parent = null;
 	}
 	
 	public int getShield(){ return shield; }
@@ -201,14 +309,17 @@ public class Actor : MonoBehaviour {
 		int ammo;
 		switch(weapon) {
 			case WEAPON_KATANA:
+			this.rangeWeapon = 0;
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.KATANA);
 			break;
 			case WEAPON_ESCOPETA:
+			this.rangeWeapon = 100;
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.SHOTGUN);
 			ammo = ((DistanceWeapon)this.primary).getCAmmo();
 			if(this.GetType () == typeof(PlayerController)) this.hud.notifyAmmo(1,ammo);
 			break;
 			case WEAPON_PISTOLA:
+			this.rangeWeapon = 300;
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.GUN);
 			ammo = ((DistanceWeapon)this.primary).getCAmmo();
 			if(this.GetType () == typeof(PlayerController)) this.hud.notifyAmmo(1,ammo);
