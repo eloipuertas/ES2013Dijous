@@ -43,42 +43,45 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta;
-	Parpadeig p;
-	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
+	//private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
+
+	//private Parpadeig p; //-- To Actor!!
+	//private FlagManagement flagManagement; // To Actor!!
+	//private GameObject detected;
+	//private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, sang; //-- To Actor!!
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
-	private float damageTime;
+	// private float damageTime; -- To Actor!
 	
 	//indica el tiempo de duracion de animacion
 	private float animDuration;
-	private float damageDuration;
+	// private float damageDuration; -- To Actor!
 	
-	private int currentDirection;
+	//private int currentDirection; // to Actor
 	private int currentState;
 	
 	private const int STATE_STOP = 1;
 	private const int STATE_RUNNING = 2;
 	private const int STATE_DEAD = 3;
 	
-	private const int DIR_IZQUIERDA = 1;
-	private const int DIR_DERECHA = 2;
+	//private const int DIR_IZQUIERDA = 1; // To Actor
+	//private const int DIR_DERECHA = 2; // To Actor
 	
 	private Animation myAnim;
 	
 	private Rigidbody rigid;
 	
 	private GameObject gre, grk, grp;
-	private bool esBajable, disparoActivo, ataque, dead, ataqueSecundario;
+	private bool disparoActivo, ataque, ataqueSecundario;
+	// private bool esBajable;
 	
-	// NEW CODE ----  @LynosSorien
-	private TimerPool timers;
-	
-	private Weapon primary;
-	private Weapon secondary;
+	// private bool dead; // To Actor!!
 	
 	void Start () {
+		hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		this.secondary = (ThrowableWeapon)(WeaponFactory.instance ().create (WeaponFactory.WeaponType.GRANADE));
+		this.hud.notifyAmmo (2,this.secondary.getCAmmo ());
 		
 		rigid =	GetComponent<Rigidbody>();
 		
@@ -90,13 +93,7 @@ public class PlayerController : Actor {
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
-		AudioSource[] audios = GetComponents<AudioSource>();
-		
-		sonidoSalto = audios[0];
-		sonidoPowerUp = audios[1];
-		sonidoEscudo = audios[2];
-		sonidoDisparoPistola = audios[3];
-		sonidoDisparoEscopeta = audios[4];
+		sang = Resources.Load("effects_prefabs/sangPistola") as GameObject;
 
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
@@ -106,6 +103,8 @@ public class PlayerController : Actor {
 		initAnimations();
 		animDuration = 0.3f;
 		
+		initSounds();
+		initFlagManagement();
 		
 		health = 100;
 		shield = 0;
@@ -132,31 +131,10 @@ public class PlayerController : Actor {
 	}
 	/* NEW CODE --- @LynosSorien
 	 * Function to init the TimerPool.
+	 * Refactorice to Actor.
 	 */ 
 	private void initTimers() {
 		this.timers = new TimerPool(5);
-		
-		this.timers.start (100,spikeDamageLapse,true); // Config the SpikeDamage (and start it).
-	}
-	
-	void walkDamage() {
-		/*
-		Function with active waiting loop. Change it for TimerPool.start() method.
-		*/
-		/* OLD CODE
-		float currentTimeDamage = Time.time - damageTime;
-		string tagHit = raycastVertical();
-		// Move to method listener
-		if (tagHit.Equals("punxes")){
-			if (currentTimeDamage > damageDuration) {
-				dealDamage(5);
-				p.mostrarDany();
-				damageTime = Time.time; // Remove from method listener (once it's copy)
-			}
-		}
-		*/
-		// NEW CODE
-		
 	}
 	
 	void FixedUpdate(){
@@ -168,8 +146,6 @@ public class PlayerController : Actor {
 			// deteccion de enemigos, mediante acercamiento.
 			detected = raycastFront();
 			
-			walkDamage(); // Usless function
-			
 		
 			float rawHori = Input.GetAxisRaw("Horizontal");
 			float rawVert = Input.GetAxisRaw("Vertical");
@@ -178,24 +154,12 @@ public class PlayerController : Actor {
 			if (!ataque && Input.GetButtonDown("Fire1")) {
 				ataque = true;		
 			}
-				
 			if (!ataqueSecundario && Input.GetButtonDown("Fire2")) {
 				ataqueSecundario = true;
-				
-				GameObject novaGranada = null;
-				if (currentDirection == DIR_DERECHA) {
-					novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-					novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
-				} else {
-					novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-					novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
-				}
-				GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
-				b.setEquip(1);
-				
-				
+				if(doSecondaryAttack()) // Moved to this function.
+					if(this.secondary.GetType() == typeof(ThrowableWeapon))
+						this.hud.notifyAmmo(2,((ThrowableWeapon)this.secondary).getCAmmo());
 			}
-			
 			
 			if (isGround()) {
 				if (rawVert > 0) {
@@ -224,7 +188,6 @@ public class PlayerController : Actor {
 				doAnim("muerteIzquierda");
 		}
 	}
-
 	void Update () {
 		// Va muy rapido, nada aqui :D
 	}
@@ -372,54 +335,6 @@ public class PlayerController : Actor {
 		}
 
 	}
-	
-	
-
-	
-	/*
-	* On es tracten les colisions amb els objectes de l'escenari.
-	*/
-	void OnCollisionEnter(Collision collision){
-		
-		float currentTimeDamage = Time.time - damageTime;
-		// Fix it, there only must add the points when we take (collide) with the enemy flag!
-		if (collision.gameObject.tag == "bandera") {
-			hud.notifyFlag(true, true);
-			notifyHudPoints(300);
-		}
-		
-		//dany per foc o guillotina
-		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
-			if (currentTimeDamage > damageDuration) {
-				dealDamage(5);
-				p.mostrarDany();
-				damageTime = Time.time;
-			}
-		}
-			
-		//quan agafa un escut, crida al mètode addShield de Actor.cs
-		if(collision.gameObject.tag == "escut") {
-				sonidoEscudo.Play();
-				hud.notifyShieldChange(100);
-				addShield(100);
-		}
-		
-		//quan agafa una cura, crida al mètode heal de Actor.cs
-		if(collision.gameObject.tag == "upVida"){ 
-				sonidoPowerUp.Play();
- 				heal(50);
-		}
-		
-		if (collision.gameObject.tag == "escopeta_off") {
-			sonidoPowerUp.Play();
-		}
-
-		//colisió amb plataformes que es poden baixar
-		if (collision.gameObject.layer == 8) {
-			esBajable = true;
-		}else {
-			esBajable = false;
-		}
 		/*
 		Add an special collider for the chickens when one is above from the other. We can make that the chicken
 		that are above just jump and deal damage to the other chiken.
@@ -428,18 +343,10 @@ public class PlayerController : Actor {
 		When there two collides, the chicken with collide ID = 2 will deal damage to the other and will jump (as a normal jump).
 		Also can be added an special effect (like the chicken that have given the damage will turn a superdeformed chicken for a while).
 		*/
-	}
 	
-	/* Para que se mueva conjuntamente con las plataformas horizontales */
-	
-	void OnCollisionStay (Collision hit) { 
-		
-		
-	    if (hit.gameObject.tag == "plataforma_moviment")
-	        transform.parent = hit.transform ; 
-		else
-	        transform.parent = null;
-		
+	void showBlood(Vector3 p) {;
+		GameObject bloodExpl = Instantiate(sang, p, Quaternion.identity) as GameObject;
+		Destroy(bloodExpl, (float)0.4);
 	}
 	
 	/*
@@ -459,6 +366,7 @@ public class PlayerController : Actor {
 				disparoActivo = false;
 				p.setCos(GameObject.Find(gameObject.name+"/grk/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/grk/weapon"));
+				audioKatana.Play();
 				break;
 			case WEAPON_ESCOPETA:
 				myAnim = gre.animation;
@@ -469,6 +377,7 @@ public class PlayerController : Actor {
 				p.setCos(GameObject.Find(gameObject.name+"/gre/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/gre/weapon"));
 				disparoActivo = true;
+				audioMachineGun.Play();
 				break;
 		case WEAPON_PISTOLA:
 				myAnim = grp.animation;
@@ -479,53 +388,32 @@ public class PlayerController : Actor {
 				p.setCos(GameObject.Find(gameObject.name+"/grp/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/grp/weapon"));
 				disparoActivo = true;
+				audioMachineGun.Play();
 				break;
 			default:
 				break;
 		}
 		
 	}
-	
+	// Do an attack (For Player) -- Primary Weapon only (Guess)
 	void realizarAtaque() {
-		if(disparoActivo) {
-			GameObject nouTir = null;
-			
-			switch(currentDirection){
-				case DIR_IZQUIERDA:
-					nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-					nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange);
-					break;
-				case DIR_DERECHA:
-					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-					nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange);
-					break;
-				default:
-					break;
+		if(disparoActivo) { // View if the weapon is long range type.
+			if(doPrimaryAttack()) {
+				if (this.primary.GetType() == typeof(DistanceWeapon))
+					this.hud.notifyAmmo (1,((DistanceWeapon)this.primary).getCAmmo());
 			}
-			
-			GestioTir b = nouTir.GetComponent("GestioTir") as GestioTir;
-			b.setEquip(team);
-			b.setArma(weapon);
-			
-			if (weapon == WEAPON_ESCOPETA)
-				sonidoDisparoEscopeta.Play();
-			else
-				sonidoDisparoPistola.Play();
-				
-		} else {
-			
+		} else { // Melee weapon.
 			if(detected != null){
-				
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)) {
-					actor.dealDamage(100);
+					actor.dealDamage(this.primary.getDamage()); // Katana damage???
+					p.mostrarDany();
 				}
 				
 			}
 		}
 		ataque = false;
 	}
-	
 	private GameObject raycastFront(){
 		RaycastHit hit;
 		
@@ -560,43 +448,8 @@ public class PlayerController : Actor {
 		return ret;
 	}
 	
-	private string raycastVertical() {
-		RaycastHit hit;
-		bool ret = false;
-		
-		for (int i = -2; i < 2 && !ret; ++i) {
-			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, out hit, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
-			
-		}
-		
-		if (!ret)
-			return "";
-		return hit.collider.tag;
-	}
-	
-	
-	private bool isEnemy(Actor a){
-		if (a == null) return false;
-		return getTeam() != a.getTeam();
-	}
-	
-	public void notifyHudPoints(int p) {
-		this.hud.notifyPoints(p);
-		gameManager.notifyScoreChange(this.hud.getPoints());
-	}
-	
 	protected void fireHealthNotification(){ this.hud.notifyHealthChange(this.health);}
 	protected void fireDeathNotification(){ this.gameManager.notifyPlayerDeath();}
 	protected void fireShieldNotification(){ this.hud.notifyShieldChange(this.shield);}
-	
-	
-	// --------------- NEW CODE --- @LynosSorien
-	// LISTENER METHODS!
-	public void spikeDamageLapse(object sender, ElapsedEventArgs e) {
-		string tagHit = raycastVertical();
-		if (tagHit.Equals("punxes")){
-				dealDamage(5);
-				p.mostrarDany();
-		}
-	}
+
 }

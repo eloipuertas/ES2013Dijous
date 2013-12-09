@@ -128,7 +128,7 @@ public class HUD : MonoBehaviour{
 		
 		
 		this.primary_ammo = new SpriteGroup(new Vector2(10,Screen.height-40), new Vector2(40,40),new Vector2(20,0),
-			20,"primarios/bala");
+			20,"primarios/balas");
 		this.secondary_ammo = new SpriteGroup(new Vector2(Screen.width-200,Screen.height-40), new Vector2(40,40),
 			new Vector2(20,0), 3, "secundarios/granada");
 		
@@ -329,5 +329,9 @@ public class HUD : MonoBehaviour{
 	
 	public int getPoints() {
 		return this.player_points;
+	}
+	
+	public int getNPCPoints() {
+		return this.npc_points;
 	}
 }
