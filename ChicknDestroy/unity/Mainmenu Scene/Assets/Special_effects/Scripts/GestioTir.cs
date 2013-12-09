@@ -14,7 +14,6 @@ public class GestioTir : MonoBehaviour {
 	void Start() {
 		if (arma == 2 || arma == 3) GameObject.Destroy(gameObject, (float)0.6); //bala de pistola i escopeta 
 		else GameObject.Destroy(gameObject, 2); //granada
-			
 	}
 	
 	void OnCollisionEnter(Collision collision){

@@ -16,9 +16,10 @@ public class AgentNpc : FSM {
 	}
 	
 	//sonidos
-	private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
+	private AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoBandera;
 	
 	private PlayerController playerController;
+	private FlagManagement flagManagement;
 	
 	//Modelos de armas
 	private GameObject[] weap_mod;
@@ -73,6 +74,20 @@ public class AgentNpc : FSM {
 		setInitialsAttributes();
 		updateModelWeapon();
 		updateNextTarget();
+		initSounds();
+	}
+	
+	void initSounds() {
+		
+		sonidoDisparoPistola = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoPistola.clip = Resources.Load("sounds/tir_pistola_015") as AudioClip;
+		
+		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
+		
+		sonidoBandera = gameObject.AddComponent<AudioSource>();
+		sonidoBandera.clip = Resources.Load("sounds/flag") as AudioClip;
+		
 	}
 	
 	void setInitialsAttributes(){
@@ -83,12 +98,11 @@ public class AgentNpc : FSM {
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
-		AudioSource[] audios = GetComponents<AudioSource>();
-		sonidoDisparoPistola = audios[3];
-		sonidoDisparoEscopeta = audios[4];
-		
 		p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
 		playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
+		
+		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
+		flagManagement.flagBase(team, false);
 	
 	}
 	
@@ -517,6 +531,28 @@ public class AgentNpc : FSM {
 	
 	/*################################################################
 	######################## UTILITY FUNCTIONS ######################*/
+	
+	void OnCollisionEnter(Collision collision){
+		
+		if (collision.gameObject.tag == "Bandera") {
+			
+			switch (team) {
+				
+				case 1: flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: flag = collision.gameObject.transform.position.x > 0; break;
+				
+				default: break;
+				
+			}
+			
+			if (flag) {
+				sonidoBandera.Play();
+				Destroy (collision.gameObject);
+				//notifyHudPoints(300);
+			}
+		}
+		
+	}
 	
 	public bool jump(){
 		

@@ -42,9 +42,10 @@ public class PlayerController : Actor {
 	private float heightHero;
 	
 	//sonido
-	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta;
-	Parpadeig p;
-	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected;
+	private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
+	private Parpadeig p;
+	private FlagManagement flagManagement;
+	private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
@@ -83,23 +84,19 @@ public class PlayerController : Actor {
 		sortidaBalaDreta =  GameObject.Find(gameObject.name+"/sbd");
 		sortidaBalaEsquerra = GameObject.Find(gameObject.name+"/sbe");
 		
-		AudioSource[] audios = GetComponents<AudioSource>();
-		
-		sonidoSalto = audios[0];
-		sonidoPowerUp = audios[1];
-		sonidoEscudo = audios[2];
-		sonidoDisparoPistola = audios[3];
-		sonidoDisparoEscopeta = audios[4];
+		sang = Resources.Load("effects_prefabs/sangPistola") as GameObject;
 		
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
 		gameManager.setTarget(this.transform);
 		
-		
 		initAnimations();
 		animDuration = 0.3f;
 		
+		initSounds();
+		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
+		flagManagement.flagBase(team, false);
 		
 		health = 100;
 		shield = 0;
@@ -129,11 +126,42 @@ public class PlayerController : Actor {
 		
 		if (tagHit.Equals("punxes")){
 			if (currentTimeDamage > damageDuration) {
+				showBlood(gameObject.transform.position);
 				dealDamage(5);
 				p.mostrarDany();
 				damageTime = Time.time;
 			}
 		}
+		
+	}
+	
+	void initSounds() {
+		sonidoSalto = gameObject.AddComponent<AudioSource>();
+		sonidoSalto.clip = Resources.Load("sounds/saltar") as AudioClip;
+		
+		sonidoPowerUp = gameObject.AddComponent<AudioSource>();
+		sonidoPowerUp.clip = Resources.Load("sounds/power_up_curt") as AudioClip;
+		
+		sonidoEscudo = gameObject.AddComponent<AudioSource>();
+		sonidoEscudo.clip = Resources.Load("sounds/so_escut") as AudioClip;
+		
+		sonidoDisparoPistola = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoPistola.clip = Resources.Load("sounds/tir_pistola_015") as AudioClip;
+		
+		sonidoDisparoEscopeta = gameObject.AddComponent<AudioSource>();
+		sonidoDisparoEscopeta.clip = Resources.Load("sounds/tir_escopeta_0849") as AudioClip;
+		
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioMachineGun = gameObject.AddComponent<AudioSource>();
+		audioMachineGun.clip = Resources.Load("sounds/machine_gun") as AudioClip;
+		
+		audioKatana = gameObject.AddComponent<AudioSource>();
+		audioKatana.clip = Resources.Load("sounds/katana") as AudioClip;
+
+		audioGrenade = gameObject.AddComponent<AudioSource>();
+		audioGrenade.clip = Resources.Load("sounds/granada_voice") as AudioClip;
 		
 	}
 	
@@ -163,10 +191,12 @@ public class PlayerController : Actor {
 				GameObject novaGranada = null;
 				if (currentDirection == DIR_DERECHA) {
 					novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-					novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(Vector3.up * 250, ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(new Vector3(400, 0, 0), ForceMode.VelocityChange);
 				} else {
 					novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-					novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(Vector3.up * 250, ForceMode.VelocityChange);
+					novaGranada.rigidbody.AddForce(new Vector3(-400, 0, 0), ForceMode.VelocityChange);
 				}
 				GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
 				b.setEquip(1);
@@ -350,25 +380,61 @@ public class PlayerController : Actor {
 		}
 
 	}
-	
-	
-
-	
-	
-	void OnCollisionEnter(Collision collision){
 		
+	void OnCollisionEnter(Collision collision){
+				
 		float currentTimeDamage = Time.time - damageTime;
 		
-		if (collision.gameObject.tag == "bandera") {
-			hud.notifyFlag(true, true);
-			notifyHudPoints(300);
+		if (collision.gameObject.tag == "Bandera") {
+		
+			switch (team) {
+					
+				case 1: flag = collision.gameObject.transform.position.x < 0; break;
+				case 2: flag = collision.gameObject.transform.position.x > 0; break;
+				
+				default: break;
+				
+			}
+			
+			if (flag) {
+				flagManagement.setflagObtained(team);
+				hud.notifyFlag(true, team==2);
+				Destroy (collision.gameObject);
+			}
 		}
 		
-		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina") {
+		if (collision.gameObject.tag =="foc") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
 				p.mostrarDany();
 				damageTime = Time.time;
+			}
+		}
+			
+		if (collision.gameObject.tag =="guillotina") {
+			if (currentTimeDamage > damageDuration) {
+				showBlood(collision.contacts[0].point);
+				dealDamage(5);
+				p.mostrarDany();
+				damageTime = Time.time;
+			}
+		}
+		
+		if (collision.gameObject.name =="base") {
+			
+			if (flag) {
+				switch (team) {
+				
+					case 1: if (collision.gameObject.transform.position.x > 0) flagManagement.setflagPlaced(team); break;
+					case 2: if (collision.gameObject.transform.position.x < 0) flagManagement.setflagPlaced(team); break;
+						
+					default:break;
+				}
+				
+				flag = false;
+				notifyHudPoints(300); //team
+				hud.notifyFlag(false, team==2);
+		
 			}
 		}
 			
@@ -407,6 +473,11 @@ public class PlayerController : Actor {
 		
 	}
 	
+	void showBlood(Vector3 p) {;
+		GameObject bloodExpl = Instantiate(sang, p, Quaternion.identity) as GameObject;
+		Destroy(bloodExpl, (float)0.4);
+	}
+	
 	
 	public void updateModelWeapon() {
 		
@@ -421,6 +492,7 @@ public class PlayerController : Actor {
 				disparoActivo = false;
 				p.setCos(GameObject.Find(gameObject.name+"/grk/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/grk/weapon"));
+				audioKatana.Play();
 				break;
 			case WEAPON_ESCOPETA:
 				myAnim = gre.animation;
@@ -431,6 +503,7 @@ public class PlayerController : Actor {
 				p.setCos(GameObject.Find(gameObject.name+"/gre/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/gre/weapon"));
 				disparoActivo = true;
+				audioMachineGun.Play();
 				break;
 		case WEAPON_PISTOLA:
 				myAnim = grp.animation;
@@ -441,6 +514,7 @@ public class PlayerController : Actor {
 				p.setCos(GameObject.Find(gameObject.name+"/grp/body"));
 				p.setArma(GameObject.Find(gameObject.name+"/grp/weapon"));
 				disparoActivo = true;
+				audioMachineGun.Play();
 				break;
 			default:
 				break;
@@ -541,10 +615,11 @@ public class PlayerController : Actor {
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
-	
+
 	public void notifyHudPoints(int p) {
 		this.hud.notifyPoints(p);
 		gameManager.notifyScoreChange(this.hud.getPoints());
 	}
+
 	
 }
