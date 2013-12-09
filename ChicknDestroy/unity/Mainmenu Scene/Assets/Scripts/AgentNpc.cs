@@ -35,7 +35,7 @@ public class AgentNpc : FSM {
         private int puntuacio = 200;
         private int radioVision = 425;
         private int stopDistance = 40;
-        private int rangeWeapon = 0;
+        // private int rangeWeapon = 0;
         
         
         //Npc propierties
@@ -81,7 +81,7 @@ public class AgentNpc : FSM {
                 
                 p = GameObject.FindGameObjectWithTag("Player").GetComponent("Parpadeig") as Parpadeig;
                 //playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
-        
+				
         }
         
         void loadRoute(){
@@ -248,7 +248,7 @@ public class AgentNpc : FSM {
                 
                 
                         // Ha detectado algo a distancia "stopDistance" delante del player?:
-                        switch(getWeapon()){
+                        /*switch(getWeapon()){
                                 case WEAPON_KATANA:
                                                 rangeWeapon = 0;
                                                 break;
@@ -261,7 +261,7 @@ public class AgentNpc : FSM {
                                 default:
                                                 rangeWeapon = 0;
                                                 break;
-                        }
+                        }*/
 
                         GameObject detected = raycastFront(stopDistance+rangeWeapon);
                         if(detected != null){        

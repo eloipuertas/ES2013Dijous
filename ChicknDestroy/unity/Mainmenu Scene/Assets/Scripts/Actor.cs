@@ -46,6 +46,8 @@ public class Actor : MonoBehaviour {
 	protected float damageTime;
 	protected float damageDuration = 1.0f;
 	
+	protected int rangeWeapon = 0;
+	
 	// GameObjects
 	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
@@ -306,14 +308,17 @@ public class Actor : MonoBehaviour {
 		int ammo;
 		switch(weapon) {
 			case WEAPON_KATANA:
+			this.rangeWeapon = 0;
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.KATANA);
 			break;
 			case WEAPON_ESCOPETA:
+			this.rangeWeapon = 100;
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.SHOTGUN);
 			ammo = ((DistanceWeapon)this.primary).getCAmmo();
 			if(this.GetType () == typeof(PlayerController)) this.hud.notifyAmmo(1,ammo);
 			break;
 			case WEAPON_PISTOLA:
+			this.rangeWeapon = 300;
 			this.primary = WeaponFactory.instance().create(WeaponFactory.WeaponType.GUN);
 			ammo = ((DistanceWeapon)this.primary).getCAmmo();
 			if(this.GetType () == typeof(PlayerController)) this.hud.notifyAmmo(1,ammo);
