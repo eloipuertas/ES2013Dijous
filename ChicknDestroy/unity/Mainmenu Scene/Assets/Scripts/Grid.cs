@@ -21,8 +21,6 @@ public class Grid : MonoBehaviour {
 			}
 			x0 += 200f;
 		}
-		
-		//GameObject.Find("Patios").SetActive(false);//uncoment this line to view the grid better
 	
 	}
 	
@@ -42,9 +40,9 @@ public class Grid : MonoBehaviour {
 		GameObject celltext = Resources.Load("celltext") as GameObject;
 		cell.name = "cell-x"+i+"y"+j;
 		TextMesh t = celltext.GetComponent("TextMesh") as TextMesh;
-		t.text = "cell-x"+i+"y"+j;
+		t.text = "cell-x"+i+"y"+j+"("+getZone(i,j)+")";
 		cell.transform.position = new Vector3(x0+100f,y0+100f,80f);
-		celltext.transform.position = new Vector3(x0+80f,y0+110f,80f);
+		celltext.transform.position = new Vector3(x0+60f,y0+110f,80f);
 		
 		
 		Light l = cell.GetComponent("Light") as Light;
@@ -128,7 +126,7 @@ public class Grid : MonoBehaviour {
 			return "Zona13";
 		if((x>=53 && x<=71) && (y>=3 && y<=5))
 			return "Zona14";
-		if((x>=7 && x<=8) && (y>=3 && y<=4))
+		if((x>=7 && x<=9) && (y>=2 && y<=3))
 			return "Zona15";
 		if((x>=8 && x<=11) && (y>=5 && y<=6))
 			return "Zona16";

@@ -646,7 +646,7 @@ public class AgentNpc : FSM {
 			return "Zona13";
 		if((x>=53 && x<=71) && (y>=3 && y<=5))
 			return "Zona14";
-		if((x>=7 && x<=8) && (y>=3 && y<=4))
+		if((x>=7 && x<=9) && (y>=2 && y<=3))
 			return "Zona15";
 		if((x>=8 && x<=11) && (y>=5 && y<=6))
 			return "Zona16";
