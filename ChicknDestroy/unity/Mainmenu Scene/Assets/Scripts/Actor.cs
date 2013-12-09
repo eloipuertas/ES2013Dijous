@@ -128,6 +128,7 @@ public class Actor : MonoBehaviour {
 	 */
 	// Used for DistanceWeapon Only.
 	protected bool doPrimaryAttack() {
+		bool flag = false;
 		if (((DistanceWeapon)primary).attack ()) {
 			GameObject nouTir = null;
 			// The velocity vector (currently (+-1000,0,0) can be changed with parametter "velocity" of DistanceWeapon.
@@ -156,9 +157,21 @@ public class Actor : MonoBehaviour {
 				sonidoDisparoEscopeta.Play();
 			else
 				sonidoDisparoPistola.Play();
-			return true;
+			flag = true;
 		}
-		return false;
+		if (((DistanceWeapon)this.primary).getCAmmo () == 0) {
+			setWeapon(WEAPON_KATANA);
+			if (this.GetType () == typeof(PlayerController)){
+				this.hud.notifyMessage (new Vector2(100,100),"CHANGE WEAPON TO KATANA");
+				((PlayerController)this).updateModelWeapon();
+				this.hud.notifyPrimaryWeapon (WEAPON_KATANA);
+				this.hud.notifyAmmo (1,0);
+			}
+			else {
+				((AgentNpc)this).updateModelWeapon();
+			}
+		}
+		return flag;
 	}
 	protected bool doSecondaryAttack() {
 		//ataqueSecundario = true;
@@ -248,11 +261,17 @@ public class Actor : MonoBehaviour {
 		if (collision.gameObject.tag == "escopeta_off") {
 			sonidoPowerUp.Play();
 			if(this.primary.GetType() == typeof(DistanceWeapon)) {
-				//((DistanceWeapon)this.primary).reload(5);
 				((DistanceWeapon)this.primary).reload(Random.Range(1,30)); // Reload random bullets.
 				if (this.GetType()  == typeof(PlayerController))
 					this.hud.notifyAmmo(1,((DistanceWeapon)this.primary).getCAmmo());
 			}
+		}
+		
+		if (collision.gameObject.tag == "granada") {
+			sonidoPowerUp.Play();
+			((ThrowableWeapon)this.secondary).reload(Random.Range(1,3)); // Reload random bullets.
+			if (this.GetType()  == typeof(PlayerController))
+				this.hud.notifyAmmo(2,((ThrowableWeapon)this.secondary).getCAmmo());
 		}
 		
 		if (this.GetType() == typeof(PlayerController)) {
