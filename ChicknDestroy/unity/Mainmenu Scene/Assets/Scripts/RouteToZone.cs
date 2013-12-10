@@ -11,9 +11,9 @@ public class RouteToZone : MonoBehaviour {
 		Zona0[0] = "Zona0";
 		
 		Zona1 = new string[3];
-		Zona0[0] = "Zona3";
-		Zona0[1] = "Zona15";
-		Zona0[2] = "Zona4";
+		Zona1[0] = "Zona3";
+		Zona1[1] = "Zona15";
+		Zona1[2] = "Zona4";
 		
 		
 	
