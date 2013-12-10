@@ -38,7 +38,7 @@ public class Actor : MonoBehaviour {
 	
 	// Sounds
 	protected AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
-	protected AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioGrenade, audioMachineGun;
+	protected AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioMachineGun;
 	
 	protected FlagManagement flagManagement;
 	public Parpadeig p; // Public visibility, in PlayerController was public.
@@ -78,9 +78,6 @@ public class Actor : MonoBehaviour {
 		
 		audioKatana = gameObject.AddComponent<AudioSource>();
 		audioKatana.clip = Resources.Load("sounds/katana") as AudioClip;
-
-		audioGrenade = gameObject.AddComponent<AudioSource>();
-		audioGrenade.clip = Resources.Load("sounds/granada_voice") as AudioClip;
 	}
 	
 	protected void setHealth(int n) {

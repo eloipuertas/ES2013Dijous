@@ -24,36 +24,29 @@ public class GestioTir : MonoBehaviour {
 		
 		GameObject expl = null;
 		
-		if (gameObject.tag == "granada") {
+		if (gameObject.tag == "granada")
 				expl = GameObject.Instantiate(explosioGranada, transform.position, Quaternion.identity) as GameObject;
-		} else {
-			Actor actor = collision.gameObject.GetComponent(typeof(Actor)) as Actor;
-			if (isEnemy (actor)){
+		
+		Actor actor = collision.gameObject.GetComponent(typeof(Actor)) as Actor;
+		if (isEnemy (actor)){
 				
-				audioDany.Play();
+			audioDany.Play();
+			
+			ContactPoint contact = collision.contacts[0]; //punt de contacte de la bala amb el NPC
 				
-				ContactPoint contact = collision.contacts[0]; //punt de contacte de la bala amb el NPC
-				
-				
-				switch(arma){
-					case Actor.WEAPON_PISTOLA:
-						expl = Instantiate(sangPistola, contact.point, Quaternion.identity) as GameObject;
-						//actor.dealDamage(15);
-						break;
-					case Actor.WEAPON_ESCOPETA:
-						expl = Instantiate(sangEscopeta, contact.point, Quaternion.identity) as GameObject;
-						//actor.dealDamage(40);
-						break;
-					default: break;
-				}
-				
-				actor.dealDamage(this.damage);
-				
-				Destroy(expl, (float)0.2);
-				
+			switch(arma){
+				case Actor.WEAPON_PISTOLA:
+					expl = Instantiate(sangPistola, contact.point, Quaternion.identity) as GameObject;
+					break;
+				case Actor.WEAPON_ESCOPETA:
+					expl = Instantiate(sangEscopeta, contact.point, Quaternion.identity) as GameObject;
+					break;
+				default: break;
 			}
+				
+			actor.dealDamage(this.damage); //la granada tambe treu dany
 			
-			
+			Destroy(expl, (float)0.2);			
 		}
 		
 		GameObject.Destroy(gameObject);
