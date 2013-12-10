@@ -62,6 +62,7 @@ public class AgentNpc : FSM {
 	private Vector3[,] grid;
 	private float targetTimer = 5f;
 	
+	
 	/*################################################################
 	###################### INITIALIZATION OF NPC #####################*/
 	
@@ -234,7 +235,7 @@ public class AgentNpc : FSM {
 			}
 		}
 
-
+		bool girar = false;
 		// Cambio de direccion si changeDir me lo permite, y estoy de espaldas al target
 		if ((!targetEnemy || changeDir) && derecha != (relPos.x > 0)){
 			derecha = !derecha;
@@ -243,8 +244,7 @@ public class AgentNpc : FSM {
 			lastPos = getPosition();
 			changeDir = false;        // No voy a permitir cambiar de direccion en la siguiente iteracion
 			if(ground){
-				animateIfExist("giroIzqDer","giroDerIzq");
-				//return;
+				girar = true;
 			}
 		}
 		
@@ -310,7 +310,9 @@ public class AgentNpc : FSM {
 			}
 
 		}
-
+		if(girar)
+			animateIfExist("giroIzqDer","giroDerIzq");
+		
 		updateNextTarget();
 
 	}
