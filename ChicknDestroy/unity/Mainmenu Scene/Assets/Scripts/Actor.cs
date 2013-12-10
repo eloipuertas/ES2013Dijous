@@ -134,17 +134,14 @@ public class Actor : MonoBehaviour {
 		bool flag = false;
 		if (((DistanceWeapon)primary).attack ()) {
 			GameObject nouTir = null;
-			// The velocity vector (currently (+-1000,0,0) can be changed with parametter "velocity" of DistanceWeapon.
 			int velocity = ((DistanceWeapon)this.primary).getVelocity();
 			switch(currentDirection){
 				case DIR_IZQUIERDA:
 					nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
 					velocity*=-1;
-					// nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange); Changed to use the velocity parametter
 					break;
 				case DIR_DERECHA:
 					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-					// nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange); // Same as before.
 					break;
 				default:
 					break;
@@ -177,22 +174,19 @@ public class Actor : MonoBehaviour {
 		return flag;
 	}
 	protected bool doSecondaryAttack() {
-		//ataqueSecundario = true;
 		if (((ThrowableWeapon)this.secondary).attack()) {
 			GameObject novaGranada = null;
 			int velocity = ((ThrowableWeapon)this.secondary).getVelocity();
 			if (currentDirection == DIR_DERECHA) {
 				novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-				//novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
 			} else {
 				novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-				//novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
 				velocity*=-1;
 			}
+			novaGranada.rigidbody.AddForce(Vector3.up * 250, ForceMode.VelocityChange);
 			novaGranada.rigidbody.AddForce(new Vector3(velocity, 0, 0), ForceMode.VelocityChange);
 			
 			GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
-			//b.setEquip(1);
 			// @LynosSorien -- Added the normal comportament to granade.
 			b.setEquip(this.team);
 			b.setDamage (this.secondary.getDamage());

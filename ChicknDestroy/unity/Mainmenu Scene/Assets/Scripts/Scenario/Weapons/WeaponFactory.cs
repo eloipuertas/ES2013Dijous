@@ -66,7 +66,7 @@ public class WeaponFactory
 	 * =========================================================================================
 	 */ 
 	private ThrowableWeapon createGranade() {
-		return new ThrowableWeapon("Granade",60,2000,8*VALUE_PER_UNITY,3,500);
+		return new ThrowableWeapon("Granade",60,2000,8*VALUE_PER_UNITY,3,400);
 	}
 	private ThrowableWeapon createMine() {
 		return new ThrowableWeapon("Mine",60,2000,0,3,500);

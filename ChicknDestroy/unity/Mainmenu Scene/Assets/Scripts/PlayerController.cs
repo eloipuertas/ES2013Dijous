@@ -42,31 +42,17 @@ public class PlayerController : Actor {
 	private float acceleration = 50;
 	private float heightHero;
 	
-	//sonido
-	//private AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, sonidoDisparoPistola, sonidoDisparoEscopeta, audioKatana, audioGrenade, audioMachineGun;
-
-	//private Parpadeig p; //-- To Actor!!
-	//private FlagManagement flagManagement; // To Actor!!
-	//private GameObject detected;
-	//private GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, sang; //-- To Actor!!
-	
 	//indica el tiempo transcurrido de animacion
 	private float animTime;
-	// private float damageTime; -- To Actor!
 	
 	//indica el tiempo de duracion de animacion
 	private float animDuration;
-	// private float damageDuration; -- To Actor!
 	
-	//private int currentDirection; // to Actor
 	private int currentState;
 	
 	private const int STATE_STOP = 1;
 	private const int STATE_RUNNING = 2;
 	private const int STATE_DEAD = 3;
-	
-	//private const int DIR_IZQUIERDA = 1; // To Actor
-	//private const int DIR_DERECHA = 2; // To Actor
 	
 	private Animation myAnim;
 	
@@ -74,9 +60,7 @@ public class PlayerController : Actor {
 	
 	private GameObject gre, grk, grp;
 	private bool disparoActivo, ataque, ataqueSecundario;
-	// private bool esBajable;
 	
-	// private bool dead; // To Actor!!
 	
 	void Start () {
 		hud =  (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
@@ -112,7 +96,6 @@ public class PlayerController : Actor {
 		
 		heightHero = rigid.collider.bounds.extents.y;
 		
-		//weapon = WEAPON_ESCOPETA;
 		updateModelWeapon();
 		
 		granada = Resources.Load("ChickenPrefabs/weapons/granada") as GameObject;
