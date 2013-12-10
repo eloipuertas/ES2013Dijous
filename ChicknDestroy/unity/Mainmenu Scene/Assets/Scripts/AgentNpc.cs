@@ -62,6 +62,7 @@ public class AgentNpc : FSM {
 	private Vector3[,] grid;
 	private float targetTimer = 5f;
 	private string goingTo;
+	private RouteToZone rtz;
 	
 	
 	/*################################################################
@@ -70,6 +71,7 @@ public class AgentNpc : FSM {
 	protected override void Ini(){
 		grid = ((Grid)GameObject.Find ("GameStartUp").GetComponent("Grid")).getGrid();
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		rtz = GameObject.Find ("GameStartUp").GetComponent("RouteToZone") as RouteToZone;
 		loadRoute();
 		setInitialsAttributes();
 		updateModelWeapon();
