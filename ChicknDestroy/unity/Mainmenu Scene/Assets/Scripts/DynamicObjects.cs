@@ -12,6 +12,7 @@ public class DynamicObjects : MonoBehaviour {
 	private float [] timeShields = {0F};//60F
 	private float [] timeGranades = {0F,0F,0F,0F};//30F
 	private float [] timeGuns = {0F};//30F
+	private float [] timeAmmo = {0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F};//20F
 	
 	// Use this for initialization
 	void Start () {//creation of all dyynamic objects
@@ -22,7 +23,7 @@ public class DynamicObjects : MonoBehaviour {
 		createShields();
 		createGranades();
 		createGuns();
-	
+		createAmmo();
 	}
 	
 	// Update is called once per frame
@@ -34,6 +35,7 @@ public class DynamicObjects : MonoBehaviour {
 		checkShields();
 		checkGranades();
 		checkGuns();
+		checkAmmo();
 	}
 	
 	void checkShotguns(){
@@ -74,6 +76,19 @@ public class DynamicObjects : MonoBehaviour {
 		}
 		if(respawn)
 			createLives();
+	}
+	
+	void checkAmmo(){
+		bool respawn = false;
+		for(int i=0;i<16;i++){
+			if(GameObject.Find("escopeta_off"+(i+1)) == null){
+				timeAmmo[i] -= Time.deltaTime;
+				if(timeAmmo[i] <= 0F)
+					respawn = true;
+			}
+		}
+		if(respawn)
+			createAmmo();
 	}
 	
 	void checkFlags(){
@@ -263,6 +278,141 @@ public class DynamicObjects : MonoBehaviour {
 			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
 			x.animation.playAutomatically = true;
 			timeLife[5] = 30F;
+		}
+
+	}
+	
+	void createAmmo(){
+		GameObject x;
+		if(GameObject.Find("escopeta_off1") == null && timeAmmo[0] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off1";
+			x.transform.position = new Vector3(3792.807F,177.9243F,3.688934F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[0] = 20F;
+		}
+		if(GameObject.Find("escopeta_off2") == null && timeAmmo[1] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off2";
+			x.transform.position = new Vector3(-1173.035F,228.3625F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[1] = 20F;
+		}
+		if(GameObject.Find("escopeta_off3") == null && timeAmmo[2] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off3";
+			x.transform.position = new Vector3(1684.181F,-107.321F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[2] = 20F;
+		}
+		if(GameObject.Find("escopeta_off4") == null && timeAmmo[3] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off4";
+			x.transform.position = new Vector3(9989.39F,-107.321F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[3] = 20F;
+		}
+		if(GameObject.Find("escopeta_off5") == null && timeAmmo[4] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off5";
+			x.transform.position = new Vector3(14718.52F,-107.321F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[4] = 20F;
+		}
+		if(GameObject.Find("escopeta_off6") == null && timeAmmo[5] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off6";
+			x.transform.position = new Vector3(16489.25F,82.34254F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[5] = 20F;
+		}
+		if(GameObject.Find("escopeta_off7") == null && timeAmmo[6] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off7";
+			x.transform.position = new Vector3(2438.683F,113.2963F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[6] = 20F;
+		}
+		if(GameObject.Find("escopeta_off8") == null && timeAmmo[7] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off8";
+			x.transform.position = new Vector3(4605.907F,367.8213F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[7] = 20F;
+		}
+		
+		if(GameObject.Find("escopeta_off9") == null && timeAmmo[8] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off9";
+			x.transform.position = new Vector3(2665.333F,645.7471F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[8] = 20F;
+		}
+		
+		if(GameObject.Find("escopeta_off10") == null && timeAmmo[9] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off10";
+			x.transform.position = new Vector3(7411.874F,-107.3926F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[9] = 20F;
+		}
+		if(GameObject.Find("escopeta_off11") == null && timeAmmo[10] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off11";
+			x.transform.position = new Vector3(5537.748F,339.8465F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[10] = 20F;
+		}
+		if(GameObject.Find("escopeta_off12") == null && timeAmmo[11] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off12";
+			x.transform.position = new Vector3(7618.475F,299.9227F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[11] = 20F;
+		}
+		if(GameObject.Find("escopeta_off13") == null && timeAmmo[12] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off13";
+			x.transform.position = new Vector3(9815.473F,621.5377F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[12] = 20F;
+		}
+		if(GameObject.Find("escopeta_off14") == null && timeAmmo[13] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off14";
+			x.transform.position = new Vector3(10484.96F,366.7649F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[13] = 20F;
+		}
+		if(GameObject.Find("escopeta_off15") == null && timeAmmo[14] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off15";
+			x.transform.position = new Vector3(12811.26F,651.9682F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[14] = 20F;
+		}
+		if(GameObject.Find("escopeta_off16") == null && timeAmmo[15] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta_off")) as GameObject;
+			x.name = "escopeta_off16";
+			x.transform.position = new Vector3(12481.17F,113.3352F,3.6889345F);
+			x.transform.eulerAngles = new Vector3(90F,90F,0F);
+			x.transform.localScale = new Vector3(1900F,1900F,350F);
+			timeAmmo[15] = 20F;
 		}
 
 		

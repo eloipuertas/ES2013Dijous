@@ -252,11 +252,11 @@ public class Actor : MonoBehaviour {
 		
 		//quan agafa una cura, crida al mètode heal de Actor.cs
 		if(collision.gameObject.tag == "upVida"){ 
-				sonidoPowerUp.Play();
+				if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
  				heal(Random.Range(20,70));
 		}
 		if (collision.gameObject.tag == "escopeta_off") {
-			sonidoPowerUp.Play();
+			if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
 			if(this.primary.GetType() == typeof(DistanceWeapon)) {
 				((DistanceWeapon)this.primary).reload(Random.Range(1,30)); // Reload random bullets.
 				if (this.GetType()  == typeof(PlayerController))
@@ -265,7 +265,7 @@ public class Actor : MonoBehaviour {
 		}
 		
 		if (collision.gameObject.tag == "granada") {
-			sonidoPowerUp.Play();
+			if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
 			((ThrowableWeapon)this.secondary).reload(Random.Range(1,3)); // Reload random bullets.
 			if (this.GetType()  == typeof(PlayerController))
 				this.hud.notifyAmmo(2,((ThrowableWeapon)this.secondary).getCAmmo());
