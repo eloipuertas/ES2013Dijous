@@ -22,7 +22,7 @@ public class AgentNpc : FSM {
 	//Modelos de armas
 	private GameObject[] weap_mod;
 	//Lectors de rutes
-	private int keyPosActual = 1;
+	private int keyPosActual = 0;
 	public string direrutas = "rutaRival1";
 	private List <Vector3> rutaActual = new List<Vector3>();
 	private bool routeJump = false;        
@@ -195,12 +195,12 @@ public class AgentNpc : FSM {
 			keyPosActual+=1;
 			targetTimer = 5f;
 			if (keyPosActual == rutaActual.Count){
-				keyPosActual = 1;
+				keyPosActual = 0;
 				/*loadRoute(getZone())*/
 			}
 		}
 		if(targetTimer <= 0){
-			keyPosActual = 1;
+			keyPosActual = 0;
 			targetTimer = 5f;
 			/*loadRoute(getZone())*/
 		}
