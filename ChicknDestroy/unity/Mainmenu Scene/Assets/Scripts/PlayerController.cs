@@ -81,6 +81,7 @@ public class PlayerController : Actor {
 
 		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		
+		//Asignamos la camara al personaje controlable.
 		gameManager.setTarget(this.transform);
 		
 		
