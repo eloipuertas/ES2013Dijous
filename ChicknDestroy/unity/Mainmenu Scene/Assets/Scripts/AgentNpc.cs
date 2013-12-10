@@ -22,7 +22,7 @@ public class AgentNpc : FSM {
 	//Modelos de armas
 	private GameObject[] weap_mod;
 	//Lectors de rutes
-	private int keyPosActual = 0;
+	private int keyPosActual = 1;
 	public string direrutas = "rutaRival1";
 	private List <Vector3> rutaActual = new List<Vector3>();
 	private bool routeJump = false;        
@@ -61,6 +61,7 @@ public class AgentNpc : FSM {
 	
 	private Vector3[,] grid;
 	private float targetTimer = 5f;
+	private string goingTo;
 	
 	
 	/*################################################################
@@ -103,12 +104,16 @@ public class AgentNpc : FSM {
 		string content = bindata.text;
 		string []lines = content.Split('|');
 		foreach(string s in lines){
-			string []pos = s.Split(',');
-			float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
-			float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
-			float z = float.Parse(pos[2]);
-			rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
-			posindex +=1;
+			if(lines[0] != s){
+				string []pos = s.Split(',');
+				float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
+				float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
+				float z = float.Parse(pos[2]);
+				rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
+				posindex +=1;
+			}else{
+				goingTo = s;
+			}
 		}
 		content ="";
 		posindex = 0;
@@ -188,12 +193,12 @@ public class AgentNpc : FSM {
 			keyPosActual+=1;
 			targetTimer = 5f;
 			if (keyPosActual == rutaActual.Count){
-				keyPosActual = 0;
+				keyPosActual = 1;
 				/*loadRoute(getZone())*/
 			}
 		}
 		if(targetTimer <= 0){
-			keyPosActual = 0;
+			keyPosActual = 1;
 			targetTimer = 5f;
 			/*loadRoute(getZone())*/
 		}
