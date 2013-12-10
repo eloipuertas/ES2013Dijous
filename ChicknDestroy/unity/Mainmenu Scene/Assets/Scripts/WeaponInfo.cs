@@ -15,8 +15,7 @@ public class WeaponInfo : MonoBehaviour {
 	private GUIStyle style;
 	private HUD hud;
 	
-<<<<<<< HEAD
-=======
+
 	private const int GRANADE = 0, KATANA = 1, GUN = 2, SHOTGUN = 3, ASSAULTRIFLE = 4, SNIPERRIFLE = 5, UBCARPET = 6, MINE =7;
 	private Sprite weapon_info;
 	/*void OnCollisionEnter(Collision whoIs) {//we set at true when player enters in the weapon object box collider
@@ -30,7 +29,7 @@ public class WeaponInfo : MonoBehaviour {
 			isPlayer = false;	
 		}
 	}*/
->>>>>>> origin/devel-colliders-463
+
 	void Start(){
 		style = new GUIStyle();
 		style.normal.textColor = Color.red;
