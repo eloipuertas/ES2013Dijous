@@ -132,8 +132,7 @@ public class AgentNpc : FSM {
 
 		}
 		/*if(gameObject.name.CompareTo("Robot1")==0){
-			print(getNeighbors(getZone(getXGrid(),getYGrid())).Length);
-			print(getZone(getXGrid(),getYGrid()));
+			print(nextTarget);
 		}*/
 		
 	}
