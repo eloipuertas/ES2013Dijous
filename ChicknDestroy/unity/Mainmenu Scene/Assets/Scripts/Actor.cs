@@ -162,7 +162,7 @@ public class Actor : MonoBehaviour {
 		if (((DistanceWeapon)this.primary).getCAmmo () == 0) {
 			setWeapon(WEAPON_KATANA);
 			if (this.GetType () == typeof(PlayerController)){
-				this.hud.notifyMessage (new Vector2(100,100),"CHANGE WEAPON TO KATANA");
+				// this.hud.notifyMessage (new Vector2(100,100),"CHANGE WEAPON TO KATANA");
 				((PlayerController)this).updateModelWeapon();
 				this.hud.notifyPrimaryWeapon (WEAPON_KATANA);
 				this.hud.notifyAmmo (1,0);
