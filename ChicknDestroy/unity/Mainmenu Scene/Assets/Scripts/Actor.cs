@@ -220,8 +220,11 @@ public class Actor : MonoBehaviour {
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
 			|| collision.gameObject.tag == "punxes") {
 			if (currentTimeDamage > damageDuration) {
+				if(this.GetType () == typeof(PlayerController)) {
+					p.mostrarDany();
+					showBlood(collision);
+				}					
 				dealDamage(5);
-				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
 				damageTime = Time.time;
 			}
 		}
@@ -345,5 +348,19 @@ public class Actor : MonoBehaviour {
 	protected void initFlagManagement() {
 		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
 		flagManagement.loadFlag(team);
+	}
+	
+	protected void showBlood(Collision collision) {
+		GameObject bloodExpl = null;
+		
+		switch(collision.gameObject.tag) {
+			case "guillotina": bloodExpl = Instantiate(sang, collision.contacts[0].point, Quaternion.identity) as GameObject;
+							   break;
+			case "punxes": bloodExpl = Instantiate(sang, gameObject.transform.position, Quaternion.identity) as GameObject;
+						   break;
+			default:break;
+		}
+		
+		Destroy(bloodExpl, (float)0.4);
 	}
 }

@@ -327,11 +327,6 @@ public class PlayerController : Actor {
 		Also can be added an special effect (like the chicken that have given the damage will turn a superdeformed chicken for a while).
 		*/
 	
-	void showBlood(Vector3 p) {;
-		GameObject bloodExpl = Instantiate(sang, p, Quaternion.identity) as GameObject;
-		Destroy(bloodExpl, (float)0.4);
-	}
-	
 	/*
 	* mètode que carrega un model o un altre en funció de l'arma utilitzada.
 	* a més, cambia alguns flags, com per exemple boolean disparoActivo.
