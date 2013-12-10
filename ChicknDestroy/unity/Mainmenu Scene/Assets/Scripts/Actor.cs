@@ -38,7 +38,7 @@ public class Actor : MonoBehaviour {
 	
 	// Sounds
 	protected AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
-	protected AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioGrenade, audioMachineGun;
+	protected AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioMachineGun;
 	
 	protected FlagManagement flagManagement;
 	public Parpadeig p; // Public visibility, in PlayerController was public.
@@ -81,9 +81,6 @@ public class Actor : MonoBehaviour {
 		
 		audioKatana = gameObject.AddComponent<AudioSource>();
 		audioKatana.clip = Resources.Load("sounds/katana") as AudioClip;
-
-		audioGrenade = gameObject.AddComponent<AudioSource>();
-		audioGrenade.clip = Resources.Load("sounds/granada_voice") as AudioClip;
 	}
 	
 	protected void setHealth(int n) {
@@ -137,17 +134,14 @@ public class Actor : MonoBehaviour {
 		bool flag = false;
 		if (((DistanceWeapon)primary).attack ()) {
 			GameObject nouTir = null;
-			// The velocity vector (currently (+-1000,0,0) can be changed with parametter "velocity" of DistanceWeapon.
 			int velocity = ((DistanceWeapon)this.primary).getVelocity();
 			switch(currentDirection){
 				case DIR_IZQUIERDA:
 					nouTir = (GameObject) Instantiate(bala, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
 					velocity*=-1;
-					// nouTir.rigidbody.AddForce(new Vector3(-1000, 0, 0), ForceMode.VelocityChange); Changed to use the velocity parametter
 					break;
 				case DIR_DERECHA:
 					nouTir = (GameObject) Instantiate (bala, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-					// nouTir.rigidbody.AddForce(new Vector3(1000, 0, 0), ForceMode.VelocityChange); // Same as before.
 					break;
 				default:
 					break;
@@ -180,22 +174,19 @@ public class Actor : MonoBehaviour {
 		return flag;
 	}
 	protected bool doSecondaryAttack() {
-		//ataqueSecundario = true;
 		if (((ThrowableWeapon)this.secondary).attack()) {
 			GameObject novaGranada = null;
 			int velocity = ((ThrowableWeapon)this.secondary).getVelocity();
 			if (currentDirection == DIR_DERECHA) {
 				novaGranada = (GameObject) Instantiate (granada, sortidaBalaDreta.transform.position, sortidaBalaDreta.transform.rotation);
-				//novaGranada.rigidbody.AddForce(new Vector3(500, 0, 0), ForceMode.VelocityChange);
 			} else {
 				novaGranada = (GameObject) Instantiate (granada, sortidaBalaEsquerra.transform.position, sortidaBalaEsquerra.transform.rotation);
-				//novaGranada.rigidbody.AddForce(new Vector3(-500, 0, 0), ForceMode.VelocityChange);
 				velocity*=-1;
 			}
+			novaGranada.rigidbody.AddForce(Vector3.up * 250, ForceMode.VelocityChange);
 			novaGranada.rigidbody.AddForce(new Vector3(velocity, 0, 0), ForceMode.VelocityChange);
 			
 			GestioTir b = novaGranada.GetComponent("GestioTir") as GestioTir;
-			//b.setEquip(1);
 			// @LynosSorien -- Added the normal comportament to granade.
 			b.setEquip(this.team);
 			b.setDamage (this.secondary.getDamage());
@@ -258,8 +249,11 @@ public class Actor : MonoBehaviour {
 		if (collision.gameObject.tag =="foc" || collision.gameObject.tag =="guillotina" 
 			|| collision.gameObject.tag == "punxes") {
 			if (currentTimeDamage > damageDuration) {
+				if(this.GetType () == typeof(PlayerController)) {
+					p.mostrarDany();
+					showBlood(collision);
+				}					
 				dealDamage(5);
-				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
 				damageTime = Time.time;
 			}
 		}
@@ -287,11 +281,12 @@ public class Actor : MonoBehaviour {
 		
 		//quan agafa una cura, crida al mètode heal de Actor.cs
 		if(collision.gameObject.tag == "upVida"){ 
-				sonidoPowerUp.Play();
+				if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
  				heal(Random.Range(20,70));
 		}
+		
 		if (collision.gameObject.tag == "escopeta_off") {
-			sonidoPowerUp.Play();
+			if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
 			if(this.primary.GetType() == typeof(DistanceWeapon)) {
 				((DistanceWeapon)this.primary).reload(Random.Range(1,30)); // Reload random bullets.
 				if (this.GetType()  == typeof(PlayerController))
@@ -300,7 +295,7 @@ public class Actor : MonoBehaviour {
 		}
 		
 		if (collision.gameObject.tag == "granada") {
-			sonidoPowerUp.Play();
+			if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
 			((ThrowableWeapon)this.secondary).reload(Random.Range(1,3)); // Reload random bullets.
 			if (this.GetType()  == typeof(PlayerController))
 				this.hud.notifyAmmo(2,((ThrowableWeapon)this.secondary).getCAmmo());
@@ -382,5 +377,19 @@ public class Actor : MonoBehaviour {
 	protected void initFlagManagement() {
 		flagManagement = gameObject.GetComponent("FlagManagement") as FlagManagement;
 		flagManagement.loadFlag(team);
+	}
+	
+	protected void showBlood(Collision collision) {
+		GameObject bloodExpl = null;
+		
+		switch(collision.gameObject.tag) {
+			case "guillotina": bloodExpl = Instantiate(sang, collision.contacts[0].point, Quaternion.identity) as GameObject;
+							   break;
+			case "punxes": bloodExpl = Instantiate(sang, gameObject.transform.position, Quaternion.identity) as GameObject;
+						   break;
+			default:break;
+		}
+		
+		Destroy(bloodExpl, (float)0.4);
 	}
 }
