@@ -122,7 +122,7 @@ public class AgentNpc : FSM {
 			switch (curState){
 				case FSM.None: UpdateNoneState(); break;
 				case FSM.Jump: UpdateJumpState(); break;
-				case FSM.Run: UpdateRunState(); break;
+				case FSM.Run: UpdateRunState();break;
 				case FSM.Attack: UpdateAttackState(); break;
 				case FSM.Dead: UpdateDeadState(); break;
 			}
@@ -225,7 +225,6 @@ public class AgentNpc : FSM {
 		bool ground = onGround();
 
 
-
 		// Sistema para que no cambie de direccion muy rapido cuando el pollo se encuentre en
 		// las mismas x, pero en diferentes y.
 		if (!changeDir){
@@ -245,7 +244,7 @@ public class AgentNpc : FSM {
 			changeDir = false;        // No voy a permitir cambiar de direccion en la siguiente iteracion
 			if(ground){
 				animateIfExist("giroIzqDer","giroDerIzq");
-				return;
+				//return;
 			}
 		}
 		
@@ -254,7 +253,6 @@ public class AgentNpc : FSM {
 			jump();
 			return;
 		}
-
 		// Si esta tocando suelo:
 		if(ground)
 			animateIfExist("correrDerecha","correrIzquierda");                
@@ -752,5 +750,6 @@ public class AgentNpc : FSM {
 		}
 		return neighbors;
 	}
+
 }
 
