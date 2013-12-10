@@ -15,11 +15,28 @@ public class WeaponInfo : MonoBehaviour {
 	private GUIStyle style;
 	private HUD hud;
 	
+<<<<<<< HEAD
+=======
+	private const int GRANADE = 0, KATANA = 1, GUN = 2, SHOTGUN = 3, ASSAULTRIFLE = 4, SNIPERRIFLE = 5, UBCARPET = 6, MINE =7;
+	private Sprite weapon_info;
+	/*void OnCollisionEnter(Collision whoIs) {//we set at true when player enters in the weapon object box collider
+        if(whoIs.gameObject.CompareTag("Player")){
+			isPlayer = true;	
+		}
+    }
+	
+	void OnCollisionExit(Collision whoIs){//we set at false when player leaves  the weapon object box collider
+		 if(whoIs.gameObject.CompareTag("Player")){
+			isPlayer = false;	
+		}
+	}*/
+>>>>>>> origin/devel-colliders-463
 	void Start(){
 		style = new GUIStyle();
 		style.normal.textColor = Color.red;
 		style.fontSize = 30;
 		hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		this.weapon_info = new Sprite(new Rect(0,0,200,200),"");
 	}
 	
 	void OnTriggerEnter(Collider whoIs) {//we set at true when player enters in the weapon object box collider
@@ -112,38 +129,66 @@ public class WeaponInfo : MonoBehaviour {
 	void OnGUI(){//show on gui
 		if(isPlayer && activeInfo){//if player is over the weapon object
 			if(isEscopeta){//if is escopeta type
-				printWeaponInfo("primarios/escopeta.png","Escopeta","Damage: 40");
+				//printWeaponInfo("primarios/escopeta.png","Escopeta","Damage: 40");
+				printWeaponInfo (SHOTGUN);
 			}
 			
 			if(isRevolver){//if is revolver type
-				printWeaponInfo("primarios/revolver.png","Revolver","Damage: 15");
+				//printWeaponInfo("primarios/revolver.png","Revolver","Damage: 15");
+				printWeaponInfo (GUN);
 			}
 			
 			if(isKatana){//if is katana type
-				printWeaponInfo("primarios/katana.png","Katana","Damage: 25");
+				//printWeaponInfo("primarios/katana.png","Katana","Damage: 25");
+				printWeaponInfo(KATANA);
 			}
 			
 			if(isRifle){//if is rifle type
-				printWeaponInfo("primarios/rifle.png","Rifle","Damage: 100");
+				//printWeaponInfo("primarios/rifle.png","Rifle","Damage: 100");
+				printWeaponInfo (SNIPERRIFLE);
 			}
 			
 			if(isMina){//if is mina type
-				printWeaponInfo("secundarios/mina.png","Mina","Damage: 60");
+				//printWeaponInfo("secundarios/mina.png","Mina","Damage: 60");
+				printWeaponInfo(MINE);
 			}
 			/*
 			if(isGranada){//if is granada type
-				printWeaponInfo("secundarios/granada.png","Granada","Damage: 60");
+				//printWeaponInfo("secundarios/granada.png","Granada","Damage: 60");
+				printWeaponInfo(GRANADE);
 			}
 			*/
 			
 			if(isMetralleta){//if is metralleta type
-				printWeaponInfo("primarios/metralleta.png","Metralleta","Damage: 10");
+				//printWeaponInfo("primarios/metralleta.png","Metralleta","Damage: 10");
+				printWeaponInfo (ASSAULTRIFLE);
 			}
 			
 			
 		}
 	}
-	
+	private void printWeaponInfo(int weapon) {
+		Vector2 pos2d = GameObject.Find("Main Camera").camera.WorldToScreenPoint(this.transform.position);
+		switch(weapon) {
+		case GRANADE:
+			this.weapon_info.setXY (new Vector2(pos2d.x-50,pos2d.y+150));
+			this.weapon_info.setImage ("infoArmas/infoGranada");
+			break;
+		case KATANA :
+			this.weapon_info.setXY (new Vector2(pos2d.x-50,pos2d.y+150));
+			this.weapon_info.setImage ("infoArmas/infoKatana");
+			break;
+		case GUN:
+			this.weapon_info.setXY (new Vector2(pos2d.x-50,pos2d.y+150));
+			this.weapon_info.setImage ("infoArmas/infoPistola");
+			break;
+		case SHOTGUN :
+			this.weapon_info.setXY (new Vector2(pos2d.x-50,pos2d.y+150));
+			this.weapon_info.setImage ("infoArmas/infoEscopeta");
+			break;
+		}
+		this.weapon_info.render ();
+	}
 	//This function contains all is needed to paint on gui the weapon info
 	void printWeaponInfo(string fileName,string TextName,string TextDmg){		
 		w = new WWW("file://"+Application.dataPath+"/Resources/"+fileName);//Loading the weapon.png file
