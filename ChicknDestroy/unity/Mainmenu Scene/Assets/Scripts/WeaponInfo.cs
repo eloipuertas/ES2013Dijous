@@ -3,8 +3,9 @@ using System.Collections;
 
 public class WeaponInfo : MonoBehaviour {
 
-	public bool isEscopeta = false, isRevolver = false, isMetralleta = false, isKatana = false, isRifle = false, isMina = false, isGranada = false;// booleans determinate what type of weapon is
+	public bool isEscopeta = false, isRevolver = false, isMetralleta = false, isKatana = false, isRifle = false, isMina = false;//, isGranada = false;// booleans determinate what type of weapon is
 	private bool isPlayer = false;//boolean that determinate if player is colliding or not with the weapon object
+	private bool isAgent = false;
 	private WWW w;//WWW class search file with a url parameter in it's constructor to get the content, can use //http //https //ftp(this one a little bit limited) and //file protocols, so i've used in this case for get the textures from a path 
 	private Texture2D t;
 	private bool activeInfo = true;
@@ -14,17 +15,6 @@ public class WeaponInfo : MonoBehaviour {
 	private GUIStyle style;
 	private HUD hud;
 	
-	/*void OnCollisionEnter(Collision whoIs) {//we set at true when player enters in the weapon object box collider
-        if(whoIs.gameObject.CompareTag("Player")){
-			isPlayer = true;	
-		}
-    }
-	
-	void OnCollisionExit(Collision whoIs){//we set at false when player leaves  the weapon object box collider
-		 if(whoIs.gameObject.CompareTag("Player")){
-			isPlayer = false;	
-		}
-	}*/
 	void Start(){
 		style = new GUIStyle();
 		style.normal.textColor = Color.red;
@@ -33,15 +23,19 @@ public class WeaponInfo : MonoBehaviour {
 	}
 	
 	void OnTriggerEnter(Collider whoIs) {//we set at true when player enters in the weapon object box collider
-        if(whoIs.CompareTag("Player")){
+        if(whoIs.CompareTag("Player"))
 			isPlayer = true;	
-		}
+		else if(whoIs.CompareTag("Allied")||whoIs.CompareTag("NPC"))
+			isAgent = true;
+		
     }
 	
 	void OnTriggerExit(Collider whoIs){//we set at false when player leaves  the weapon object box collider
-		 if(whoIs.CompareTag("Player")){
+		if(whoIs.CompareTag("Player"))
 			isPlayer = false;	
-		}
+		else if(whoIs.CompareTag("Allied")||whoIs.CompareTag("NPC"))
+			isAgent = false;
+		
 	}
 	
 	void OnTriggerStay(Collider whoIs){
@@ -61,16 +55,18 @@ public class WeaponInfo : MonoBehaviour {
             if(isMina){//if is mina type
                     
             }
+			/*
             if(isGranada){//if is granada type
                 //c.playAnimation();
                 //c.weapon = 7;
-                hud.notifySecondaryWeapon(1);
+                //hud.notifySecondaryWeapon(1);
             }
+            */
             if(isMetralleta){//if is metralleta type
             }
             Destroy(this.gameObject);//once the weapon is picked up the object is destroyed			
 		}
-		else if(!isPlayer) {
+		else if(isAgent) { //pot ser que el collider sigui el d'una granada, s'ha de comprovar si es un personatge
 			if(isEscopeta){//if is escopeta type
                 changeWeapon(2, false, whoIs);
             }
@@ -86,11 +82,13 @@ public class WeaponInfo : MonoBehaviour {
             if(isMina){//if is mina type
                     
             }
+			/*
             if(isGranada){//if is granada type
                 //c.playAnimation();
                 //c.weapon = 7;
                 //hud.notifySecondaryWeapon(1);
             }
+            */
             if(isMetralleta){//if is metralleta type
             }
             Destroy(this.gameObject);//once the weapon is picked up the object is destroyed(isMetralleta){//if is metralleta type
@@ -132,10 +130,11 @@ public class WeaponInfo : MonoBehaviour {
 			if(isMina){//if is mina type
 				printWeaponInfo("secundarios/mina.png","Mina","Damage: 60");
 			}
-			
+			/*
 			if(isGranada){//if is granada type
 				printWeaponInfo("secundarios/granada.png","Granada","Damage: 60");
 			}
+			*/
 			
 			if(isMetralleta){//if is metralleta type
 				printWeaponInfo("primarios/metralleta.png","Metralleta","Damage: 10");

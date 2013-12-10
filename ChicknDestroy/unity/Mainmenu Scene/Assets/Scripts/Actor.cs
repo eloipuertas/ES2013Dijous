@@ -255,6 +255,7 @@ public class Actor : MonoBehaviour {
 				if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
  				heal(Random.Range(20,70));
 		}
+		
 		if (collision.gameObject.tag == "escopeta_off") {
 			if(this.GetType () == typeof(PlayerController)) sonidoPowerUp.Play();
 			if(this.primary.GetType() == typeof(DistanceWeapon)) {
