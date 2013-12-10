@@ -51,6 +51,9 @@ public class Actor : MonoBehaviour {
 	// GameObjects
 	protected GameObject bala, granada, sortidaBalaDreta, sortidaBalaEsquerra, detected, sang;
 	
+	
+	void Start() {
+	}
 	/*
 	 * 
 	 */ 
@@ -204,12 +207,38 @@ public class Actor : MonoBehaviour {
 	 * @LynosSorien -- END Attack methods.
 	 * ==========================================================================
 	 */
+	protected void specialJump() {
+		rigidbody.velocity = rigidbody.velocity + Vector3.up *750; 
+	}
 	/*
 	 * 
+	 */
+	protected bool isActor(string name) {
+		// RobotX -- 5, PhiloX -- 5
+		// 5 Letters.
+		if (name.Length < 5) return false;
+		if(name.Substring(0,5)=="Philo" || name.Substring(0,5) == "Robot") return true;
+		return false;
+	}
+	/*
+	 * Function to view if this actor is above from the other.
 	 */ 
+	protected bool isAbove(Collision collision) {
+		if(!isActor (collision.collider.name)) return false;
+		Vector3 normal = collision.contacts[0].normal;
+		if (normal.y >= 0.9) return true;
+		return false;
+	}
 	void OnCollisionEnter(Collision collision) {
 		// ADD the necessary code here.
 		float currentTimeDamage = Time.time - damageTime;
+		if (isAbove(collision)) {
+			specialJump ();
+			if(((Actor)collision.gameObject.GetComponent<Actor>()).getTeam ()!=this.team)
+				((Actor)collision.gameObject.GetComponent<Actor>()).dealDamage (10);
+			//this.hud.notifyMessage (new Vector2(Random.Range (0,400),Random.Range (0,400)),
+			//	""+((Actor)collision.gameObject.GetComponent<Actor>()).getHealth ());
+		}
 		if (collision.gameObject.tag == "Bandera") {
 			switch (team) {
 				case 1: flag = collision.gameObject.transform.position.x < 0; break;
