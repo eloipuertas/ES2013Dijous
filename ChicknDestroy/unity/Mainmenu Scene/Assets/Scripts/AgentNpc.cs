@@ -40,6 +40,7 @@ public class AgentNpc : FSM {
 	private int radioVision = 425;
 	private int stopDistance = 50;
 	private int rangeWeapon = 0;
+	private int hpToRun = 30;
 	
 	
 	//Npc propierties
@@ -168,8 +169,8 @@ public class AgentNpc : FSM {
 			nextTarget = closestEnemy.transform.position;
 			nextTarget.z = 0;
 			relPos = nextTarget - getPosition();
-			// Si la vida es inferior a 30. huye!
-			if (getHealth() < 30){
+			// Si la vida es inferior a "hpToRun". huye!
+			if (getHealth() < hpToRun){
 				relPos.x *= -1;
 			}
 			targetEnemy = true;
@@ -282,7 +283,7 @@ public class AgentNpc : FSM {
 				case "NPC":
 				case "Allied":
 					Actor a = detected.GetComponent(typeof(Actor)) as Actor;
-					if(isEnemy(a)){ // Comprobar rivales
+					if(isEnemy(a) && getHealth()>=hpToRun){ // Comprobar rivales
 						curState = FSM.Attack;
 						//animateIfExist("atacarDer","atacarIzq");
 					}
@@ -302,7 +303,8 @@ public class AgentNpc : FSM {
 				case "Allied":
 					Actor a = detected.GetComponent(typeof(Actor)) as Actor;
 					if(isEnemy(a)){ // Comprobar rivales
-						curState = FSM.Attack;
+						if (getHealth()>=hpToRun)
+							curState = FSM.Attack;
 								//animateIfExist("atacarDer","atacarIzq");
 					} else if (derecha){
 						curState = FSM.Jump;
@@ -324,6 +326,10 @@ public class AgentNpc : FSM {
 
 	}
     protected void UpdateAttackState(){
+		if (getHealth()<hpToRun){
+			curState = FSM.Run;
+			return;
+		}
         //Debug.Log("WEAPON: "+getWeapon());
         string anim = (derecha)? "atacarDer":"atacarIzq";
 		if(this.primary.GetType () == typeof(MeleeWeapon)) {
