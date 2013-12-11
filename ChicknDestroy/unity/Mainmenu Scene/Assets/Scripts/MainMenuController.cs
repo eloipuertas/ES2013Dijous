@@ -6,7 +6,7 @@ using System.Collections;
 public class MainMenuController: MonoBehaviour{
 	
 	//Variables
-	public bool isQuit = false, isStart = false, isOptions = false, isLoad = false;			
+	public bool isQuit = false, isStart = false, isOptions = false, isLoad = false, isCredits = false;			
 	public Material[] Materials;
 	public AudioSource audioOpcions;
 	public AudioSource audioAcceptar;
@@ -40,5 +40,7 @@ public class MainMenuController: MonoBehaviour{
 			Application.LoadLevel(2); //referenced to Load Game button, jump to Load game scene
 		else if(isOptions)
 			Application.LoadLevel(3); //referenced to Options button, jump to Options scene
+		else if(isCredits)
+			Application.LoadLevel(5); // Referenced to Credits button, jump to credits scene
 	}
 }
