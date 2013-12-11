@@ -659,6 +659,8 @@ public class AgentNpc : FSM {
 			weapon = false;
 		if(new Regex("shield.").IsMatch(o.name))
 			weapon = false;
+		if(new Regex("Bandera.").IsMatch(o.name))
+			weapon = false;
 		return weapon;
 	}
 	
