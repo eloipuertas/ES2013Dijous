@@ -15,8 +15,39 @@ public class RouteToZone : MonoBehaviour {
 		Zona1[1] = "Zona15";
 		Zona1[2] = "Zona4";
 		
+		Zona8 = new string[1];
+		Zona8[0] = "Zona4";
 		
-	
+		Zona9 = new string[1];
+		Zona9[0] = "Zona10";
+		
+		Zona10 = new string[3];
+		Zona10[0] = "Zona9";
+		Zona10[1] = "Zona11";
+		Zona10[2] = "Zona12";
+		
+		Zona11 = new string[3];
+		Zona11[0] = "Zona4";
+		Zona11[1] = "Zona10";
+		Zona11[2] = "Zona3";
+		
+		Zona12 = new string[1];
+		Zona12[0] = "Zona13";
+		
+		Zona13 = new string[4];
+		Zona13[0] = "Zona9";
+		Zona13[1] = "Zona10";
+		Zona13[2] = "Zona12";
+		Zona13[3] = "Zona11";
+		
+		Zona15 = new string[3];
+		Zona15[0] = "Zona1";
+		Zona15[1] = "Zona17";
+		Zona15[2] = "Zona2";
+		
+		Zona16 = new string[1];
+		Zona16[0] = "Zona2";
+
 	}
 	
 	public string [] thisZoneToThisZones(string zone){
