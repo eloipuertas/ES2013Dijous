@@ -304,6 +304,7 @@ public class AgentNpc : FSM {
                     } else if (!haAtacado && animations[anim].time > (animations[anim].length*2f/3f)){
                         haAtacado = true;
 						if(this.primary.attack ()) {
+							if (actor.GetType () == typeof(PlayerController)) audioKatana.Play();
 	                        actor.dealDamage(this.primary.getDamage());
 	                        p.mostrarDany();
 						}

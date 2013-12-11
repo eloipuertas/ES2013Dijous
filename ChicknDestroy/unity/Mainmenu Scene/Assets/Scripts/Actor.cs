@@ -323,6 +323,7 @@ public class Actor : MonoBehaviour {
 	        transform.parent = null;
 	}
 	
+	
 	public int getShield(){ return shield; }
 	public void addShield(int s){ setShield(Mathf.Min(100,shield+s)); }
 	

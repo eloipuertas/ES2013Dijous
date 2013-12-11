@@ -8,10 +8,10 @@ public class DynamicObjects : MonoBehaviour {
 	private float [] timeShotguns = {0F,0F,0F,0F};//30F
 	private float [] timeKatanas = {0F};//30F
 	private float [] timeFlags = {0F,0F};//10F
-	private float [] timeLife = {0F,0F,0F,0F,0F,0F};//30F
+	private float [] timeLife = {0F,0F,0F,0F,0F,0F,0F,0F,0F,0F};//30F
 	private float [] timeShields = {0F};//60F
-	private float [] timeGranades = {0F,0F,0F,0F};//30F
-	private float [] timeGuns = {0F};//30F
+	private float [] timeGranades = {0F,0F,0F,0F,0F,0F};//30F
+	private float [] timeGuns = {0F,0F,0F,0F};//30F
 	private float [] timeAmmo = {0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F,0F};//20F
 	
 	// Use this for initialization
@@ -40,7 +40,7 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void checkShotguns(){
 		bool respawn = false;
-		for(int i=0;i<2;i++){
+		for(int i=0;i<4;i++){
 			if(GameObject.Find("escopeta"+(i+1)) == null){
 				timeShotguns[i] -= Time.deltaTime;
 				if(timeShotguns[i] <= 0F)
@@ -67,7 +67,7 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void checkLives(){
 		bool respawn = false;
-		for(int i=0;i<6;i++){
+		for(int i=0;i<10;i++){
 			if(GameObject.Find("lifeUp"+(i+1)) == null){
 				timeLife[i] -= Time.deltaTime;
 				if(timeLife[i] <= 0F)
@@ -119,7 +119,7 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void checkGranades(){
 		bool respawn = false;
-		for(int i=0;i<4;i++){
+		for(int i=0;i<6;i++){
 			if(GameObject.Find("granada"+(i+1)) == null){
 				timeGranades[i] -= Time.deltaTime;
 				if(timeGranades[i] <= 0F)
@@ -133,7 +133,7 @@ public class DynamicObjects : MonoBehaviour {
 	
 	void checkGuns(){
 		bool respawn = false;
-		for(int i=0;i<1;i++){
+		for(int i=0;i<4;i++){
 			if(GameObject.Find("gun"+(i+1)) == null){
 				timeGuns[i] -= Time.deltaTime;
 				if(timeGuns[i] <= 0F)
@@ -192,20 +192,21 @@ public class DynamicObjects : MonoBehaviour {
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name= "escopeta3";
 			x.tag = "escopeta";
-			x.transform.position = new Vector3(14981.84F,-81.11998F,-1.002815F);
+			x.transform.position = new Vector3(3505.329F,704.0554F,-20.12647F);
 			x.transform.eulerAngles = new Vector3(0F,180F,0F);
 			x.transform.localScale = new Vector3(1F,1F,1F);
-			timeShotguns[2] = 5F;
+			timeShotguns[2] = 30F;
 		}
-		/*
+		
 		if(GameObject.Find("escopeta4") == null && timeShotguns[3] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name = "escopeta4";
-			x.transform.position = new Vector3(9816.015F,208.1602F,-10.07793F);
-			x.transform.eulerAngles = new Vector3(0F,270F,0F);
-			x.transform.localScale = new Vector3(4437.306F,5000F,5000F);
+			x.tag = "escopeta";
+			x.transform.position = new Vector3(9819.947F,223.5915F,-10.07793F);
+			x.transform.eulerAngles = new Vector3(0F,180F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
 			timeShotguns[3] = 30F;
-		}*/
+		}
 
 	}
 	
@@ -246,7 +247,7 @@ public class DynamicObjects : MonoBehaviour {
 		if(GameObject.Find("lifeUp3") == null && timeLife[2] <= 0){
 			x = Instantiate(Resources.Load("ObjectPrefabs/upVida")) as GameObject;
 			x.name = "lifeUp3";
-			x.transform.position = new Vector3(12598.17F,227.9633F,-17.9776F);
+			x.transform.position = new Vector3(12547.89F,666.6908F,-17.9776F);
 			x.transform.eulerAngles = new Vector3(0F,20.76423F,0F);
 			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
 			x.animation.playAutomatically = true;
@@ -278,6 +279,42 @@ public class DynamicObjects : MonoBehaviour {
 			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
 			x.animation.playAutomatically = true;
 			timeLife[5] = 30F;
+		}
+		if(GameObject.Find("lifeUp7") == null && timeLife[6] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/upVida")) as GameObject;
+			x.name = "lifeUp7";
+			x.transform.position = new Vector3(1083.781F,1059.604F,-3.585088F);
+			x.transform.eulerAngles = new Vector3(0F,20.76423F,0F);
+			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
+			x.animation.playAutomatically = true;
+			timeLife[6] = 30F;
+		}
+		if(GameObject.Find("lifeUp8") == null && timeLife[7] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/upVida")) as GameObject;
+			x.name = "lifeUp8";
+			x.transform.position = new Vector3(2930.491F,661.7186F,-3.585088F);
+			x.transform.eulerAngles = new Vector3(0F,20.76423F,0F);
+			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
+			x.animation.playAutomatically = true;
+			timeLife[7] = 30F;
+		}
+		if(GameObject.Find("lifeUp9") == null && timeLife[8] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/upVida")) as GameObject;
+			x.name = "lifeUp9";
+			x.transform.position = new Vector3(174.4894F,-6.68808F,-3.585088F);
+			x.transform.eulerAngles = new Vector3(0F,20.76423F,0F);
+			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
+			x.animation.playAutomatically = true;
+			timeLife[8] = 30F;
+		}
+		if(GameObject.Find("lifeUp10") == null && timeLife[9] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/upVida")) as GameObject;
+			x.name = "lifeUp10";
+			x.transform.position = new Vector3(14652.32F,-88.96371F,-3.585088F);
+			x.transform.eulerAngles = new Vector3(0F,20.76423F,0F);
+			x.transform.localScale = new Vector3(780.8656F,1032.907F,1261.287F);
+			x.animation.playAutomatically = true;
+			timeLife[9] = 30F;
 		}
 
 	}
@@ -452,6 +489,22 @@ public class DynamicObjects : MonoBehaviour {
 			x.transform.localScale = new Vector3(1F,1F,1F);
 			timeGranades[3] = 30F;
 		}
+		if(GameObject.Find("granada5") == null && timeGranades[4] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/granada")) as GameObject;
+			x.name = "granada5";
+			x.transform.position = new Vector3(7300.961F,228.5064F,-9.998901F);
+			x.transform.eulerAngles = new Vector3(0F,0F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
+			timeGranades[4] = 30F;
+		}
+		if(GameObject.Find("granada6") == null && timeGranades[5] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/granada")) as GameObject;
+			x.name = "granada6";
+			x.transform.position = new Vector3(1909.551F,205.0481F,-9.998901F);
+			x.transform.eulerAngles = new Vector3(0F,0F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
+			timeGranades[5] = 30F;
+		}
 	}
 	
 	void createShields(){
@@ -476,6 +529,33 @@ public class DynamicObjects : MonoBehaviour {
 			x.transform.eulerAngles = new Vector3(0F,0F,0F);
 			x.transform.localScale = new Vector3(1F,1F,1F);
 			timeGuns[0] = 30F;
+		}
+		if(GameObject.Find("gun2") == null && timeGuns[1] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/gun")) as GameObject;
+			x.name = "gun2";
+			x.tag = "pistola";
+			x.transform.position = new Vector3(15587.34F,220.8885F,-8.241943F);
+			x.transform.eulerAngles = new Vector3(0F,0F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
+			timeGuns[1] = 30F;
+		}
+		if(GameObject.Find("gun3") == null && timeGuns[2] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/gun")) as GameObject;
+			x.name = "gun3";
+			x.tag = "pistola";
+			x.transform.position = new Vector3(16131.87F,981.4404F,-8.241943F);
+			x.transform.eulerAngles = new Vector3(0F,0F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
+			timeGuns[2] = 30F;
+		}
+		if(GameObject.Find("gun4") == null && timeGuns[3] <= 0){
+			x = Instantiate(Resources.Load("ObjectPrefabs/gun")) as GameObject;
+			x.name = "gun4";
+			x.tag = "pistola";
+			x.transform.position = new Vector3(-626.856F,981.4404F,-8.241943F);
+			x.transform.eulerAngles = new Vector3(0F,0F,0F);
+			x.transform.localScale = new Vector3(1F,1F,1F);
+			timeGuns[3] = 30F;
 		}
 	}
 	
