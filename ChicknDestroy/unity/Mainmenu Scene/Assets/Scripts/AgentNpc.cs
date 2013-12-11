@@ -61,6 +61,8 @@ public class AgentNpc : FSM {
 	
 	private Vector3[,] grid;
 	private float targetTimer = 5f;
+	private string goingTo;
+	private RouteToZone rtz;
 	
 	
 	/*################################################################
@@ -69,6 +71,7 @@ public class AgentNpc : FSM {
 	protected override void Ini(){
 		grid = ((Grid)GameObject.Find ("GameStartUp").GetComponent("Grid")).getGrid();
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
+		rtz = GameObject.Find ("GameStartUp").GetComponent("RouteToZone") as RouteToZone;
 		loadRoute();
 		setInitialsAttributes();
 		updateModelWeapon();
@@ -103,12 +106,16 @@ public class AgentNpc : FSM {
 		string content = bindata.text;
 		string []lines = content.Split('|');
 		foreach(string s in lines){
-			string []pos = s.Split(',');
-			float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
-			float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
-			float z = float.Parse(pos[2]);
-			rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
-			posindex +=1;
+			if(lines[0] != s){
+				string []pos = s.Split(',');
+				float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
+				float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
+				float z = float.Parse(pos[2]);
+				rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
+				posindex +=1;
+			}else{
+				goingTo = s;
+			}
 		}
 		content ="";
 		posindex = 0;
@@ -651,6 +658,8 @@ public class AgentNpc : FSM {
 		if(new Regex("lifeUp.").IsMatch(o.name))
 			weapon = false;
 		if(new Regex("shield.").IsMatch(o.name))
+			weapon = false;
+		if(new Regex("Bandera.").IsMatch(o.name))
 			weapon = false;
 		return weapon;
 	}
