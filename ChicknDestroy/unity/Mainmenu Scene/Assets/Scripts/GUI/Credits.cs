@@ -13,7 +13,7 @@ public class Credits : MonoBehaviour
 	private Timer timer;
 	private int count;
 	//private int N = (int)((y+Screen.height)/DY);
-	private int N = 270;
+	private int N = 400;
 	private int nrosters = 10;
 	private int change_interval;
 	private bool end = false;
