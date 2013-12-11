@@ -28,6 +28,9 @@ public class Credits : MonoBehaviour
 	private bool change;
 	
 	private const int MULTIPLE = 20;
+	
+	private AudioSource creditsSong;
+		
 	public Credits (){
 	}
 	
@@ -51,6 +54,10 @@ public class Credits : MonoBehaviour
 		this.change = false;
 		
 		Debug.Log (N);
+		
+		creditsSong = gameObject.AddComponent<AudioSource>();
+		creditsSong.clip = Resources.Load("sounds/credits_song") as AudioClip;
+		creditsSong.Play();
 	}
 	
 	private string getNextRoster() {
