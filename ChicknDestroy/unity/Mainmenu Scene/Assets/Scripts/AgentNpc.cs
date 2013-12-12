@@ -40,6 +40,8 @@ public class AgentNpc : FSM {
 	private int radioVision = 425;
 	private int stopDistance = 50;
 	private int rangeWeapon = 0;
+	private int hpToRun = 30;
+	public bool respawn = true;
 	
 	
 	//Npc propierties
@@ -50,7 +52,7 @@ public class AgentNpc : FSM {
 	private FSM curState;
 	private Animation animations;
 	private bool derecha = true;
-	private bool dead = false;
+	private int dead = 0;
 	private float elapsedTime = 0;
 	private bool haAtacado = true;
 	
@@ -61,6 +63,7 @@ public class AgentNpc : FSM {
 	
 	private Vector3[,] grid;
 	private float targetTimer = 10f;
+	private float timerDead = 0f;
 	private string goingTo;
 	private RouteToZone rtz;
 	
@@ -168,8 +171,8 @@ public class AgentNpc : FSM {
 			nextTarget = closestEnemy.transform.position;
 			nextTarget.z = 0;
 			relPos = nextTarget - getPosition();
-			// Si la vida es inferior a 30. huye!
-			if (getHealth() < 30){
+			// Si la vida es inferior a "hpToRun". huye!
+			if (getHealth() < hpToRun){
 				relPos.x *= -1;
 			}
 			targetEnemy = true;
@@ -282,7 +285,7 @@ public class AgentNpc : FSM {
 				case "NPC":
 				case "Allied":
 					Actor a = detected.GetComponent(typeof(Actor)) as Actor;
-					if(isEnemy(a)){ // Comprobar rivales
+					if(isEnemy(a) && getHealth()>=hpToRun){ // Comprobar rivales
 						curState = FSM.Attack;
 						//animateIfExist("atacarDer","atacarIzq");
 					}
@@ -302,7 +305,8 @@ public class AgentNpc : FSM {
 				case "Allied":
 					Actor a = detected.GetComponent(typeof(Actor)) as Actor;
 					if(isEnemy(a)){ // Comprobar rivales
-						curState = FSM.Attack;
+						if (getHealth()>=hpToRun)
+							curState = FSM.Attack;
 								//animateIfExist("atacarDer","atacarIzq");
 					} else if (derecha){
 						curState = FSM.Jump;
@@ -324,6 +328,10 @@ public class AgentNpc : FSM {
 
 	}
     protected void UpdateAttackState(){
+		if (getHealth()<hpToRun){
+			curState = FSM.Run;
+			return;
+		}
         //Debug.Log("WEAPON: "+getWeapon());
         string anim = (derecha)? "atacarDer":"atacarIzq";
 		if(this.primary.GetType () == typeof(MeleeWeapon)) {
@@ -337,7 +345,6 @@ public class AgentNpc : FSM {
                     } else if (!haAtacado && animations[anim].time > (animations[anim].length*2f/3f)){
                         haAtacado = true;
 						if(this.primary.attack ()) {
-							if (actor.GetType () == typeof(PlayerController)) audioKatana.Play();
 	                        actor.dealDamage(this.primary.getDamage());
 	                        p.mostrarDany();
 						}
@@ -399,19 +406,46 @@ public class AgentNpc : FSM {
     }
     protected void UpdateDeadState(){
 		//Animacio morirs
-		if(!animations.IsPlaying((derecha)?"muerteDerecha":"muerteIzquierda")){
-	        if (!dead){
-                animateIfExist("muerteDerecha","muerteIzquierda");
-                dead = true;
-                /*if (playerController.getTeam() != team)
-                        notifyDeadtoPlayer();*/
+		switch (dead){
+			case 0:
+				animateIfExist("muerteDerecha","muerteIzquierda");
+				dead = 1;
 				int t;
 				if (this.team == 1) t = 2;
 				else t = 1;
 				this.hud.notifyPoints (t,100);
-	        }else
-                Destroy(gameObject);
+				break;
+			case 1:
+				if(!animations.IsPlaying((derecha)?"muerteDerecha":"muerteIzquierda")){
+					if (!respawn){
+						Destroy(gameObject);
+						return;
+					}
+					weap_mod[weapon-1].SetActive(false);	// desaparece visualmente
+					rigidbody.isKinematic = true;			// no caigas al infinito... (ya que no tiene collider)
+					collider.enabled = false;				// fuera Collider
+					dead = 2;
+					timerDead = 50f;
+				}
+				break;
+			default: //case 2:
+				Vector3 playerDist = GameObject.FindGameObjectWithTag("Player").transform.position;
+				if (timerDead < 0 && distance3D(playerDist,getPosition()) > 2000){
+				// RESURECCION!
+					heal (100);
+					weap_mod[weapon-1].SetActive(true);
+					collider.enabled = true;
+					rigidbody.isKinematic = false;
+					dead = 0;
+					curState = FSM.Run;
+				} else
+					timerDead -= Time.deltaTime;
+				break;
+			
 		}
+
+		
+
 		
 		
 		// Dar puntos a player
