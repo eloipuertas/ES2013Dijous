@@ -60,7 +60,7 @@ public class AgentNpc : FSM {
 	private bool changeDir = true;
 	
 	private Vector3[,] grid;
-	private float targetTimer = 5f;
+	private float targetTimer = 10f;
 	private string goingTo;
 	private RouteToZone rtz;
 	
