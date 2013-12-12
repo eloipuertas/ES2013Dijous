@@ -365,16 +365,16 @@ public class Actor : MonoBehaviour {
 		if (a == null) return false;
 		return getTeam() != a.getTeam();
 	}
-	public void notifyHudPoints(int team,int p) {
-		this.hud.notifyPoints(team,p);
-		if (team == PlayerPrefs.GetInt ("Team"))notifyScoreChange(this.hud.getPoints());
-		else notifyScoreChange (this.hud.getNPCPoints());
+	public void notifyHudPoints(int t,int p) {
+		this.hud.notifyPoints(t,p);
+		if (t == PlayerPrefs.GetInt ("Team"))notifyScoreChange(t, this.hud.getPoints());
+		else notifyScoreChange (t, this.hud.getNPCPoints());
 	}
 	/*
 	 * Notify the score change. This will view if the actor have won the game.
 	 */ 
-	public void notifyScoreChange(int points) {
-		gameManager.notifyScoreChange(this.team,points);
+	public void notifyScoreChange(int t, int points) {
+		gameManager.notifyScoreChange(t,points);
 	}
 	
 	protected void initFlagManagement() {
