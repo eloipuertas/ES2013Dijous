@@ -3,7 +3,7 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 	
-	private static int SCORE_TO_WIN = 100;
+	private static int SCORE_TO_WIN = 1000;
 	//public GameObject player;
 	private GameCamera cam;
 	//public bool GameSelRobot = true;
