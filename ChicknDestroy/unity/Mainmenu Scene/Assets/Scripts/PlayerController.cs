@@ -382,10 +382,11 @@ public class PlayerController : Actor {
 					this.hud.notifyAmmo (1,((DistanceWeapon)this.primary).getCAmmo());
 			}
 		} else { // Melee weapon.
+			if (!audioKatana.isPlaying) audioKatana.Play();
 			if(detected != null){
 				Actor actor = detected.GetComponent(typeof(Actor)) as Actor;
 				if(isEnemy(actor)) {
-					actor.dealDamage(this.primary.getDamage()); // Katana damage???
+					actor.dealDamage(this.primary.getDamage()); // Katana damage
 					p.mostrarDany();
 				}
 				

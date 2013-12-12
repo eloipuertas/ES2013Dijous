@@ -37,8 +37,7 @@ public class Actor : MonoBehaviour {
 	protected const int DIR_DERECHA = 2;
 	
 	// Sounds
-	protected AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta;
-	protected AudioSource sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioMachineGun;
+	protected AudioSource sonidoDisparoPistola, sonidoDisparoEscopeta, sonidoSalto, sonidoPowerUp, sonidoEscudo, audioKatana, audioMachineGun;
 	
 	protected FlagManagement flagManagement;
 	public Parpadeig p; // Public visibility, in PlayerController was public.
@@ -251,7 +250,7 @@ public class Actor : MonoBehaviour {
 			if (currentTimeDamage > damageDuration) {
 				if(this.GetType () == typeof(PlayerController)) {
 					p.mostrarDany();
-					showBlood(collision);
+					showBlood(collision.contacts[0].point);
 				}					
 				dealDamage(5);
 				damageTime = Time.time;
@@ -312,7 +311,10 @@ public class Actor : MonoBehaviour {
 			|| collision.gameObject.tag == "punxes") {
 			if (currentTimeDamage > damageDuration) {
 				dealDamage(5);
-				if(this.GetType() == typeof(PlayerController))p.mostrarDany();
+				if(this.GetType() == typeof(PlayerController)) {
+					p.mostrarDany();
+					showBlood(collision.contacts[0].point);
+				}
 				damageTime = Time.time;
 			}
 		}
@@ -322,6 +324,7 @@ public class Actor : MonoBehaviour {
 		else
 	        transform.parent = null;
 	}
+	
 	
 	public int getShield(){ return shield; }
 	public void addShield(int s){ setShield(Mathf.Min(100,shield+s)); }
@@ -379,17 +382,8 @@ public class Actor : MonoBehaviour {
 		flagManagement.loadFlag(team);
 	}
 	
-	protected void showBlood(Collision collision) {
-		GameObject bloodExpl = null;
-		
-		switch(collision.gameObject.tag) {
-			case "guillotina": bloodExpl = Instantiate(sang, collision.contacts[0].point, Quaternion.identity) as GameObject;
-							   break;
-			case "punxes": bloodExpl = Instantiate(sang, gameObject.transform.position, Quaternion.identity) as GameObject;
-						   break;
-			default:break;
-		}
-		
+	protected void showBlood(Vector3 punt) {
+		GameObject bloodExpl = Instantiate(sang, punt, Quaternion.identity) as GameObject;
 		Destroy(bloodExpl, (float)0.4);
 	}
 }
