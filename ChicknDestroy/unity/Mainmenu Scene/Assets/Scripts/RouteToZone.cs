@@ -15,11 +15,43 @@ public class RouteToZone : MonoBehaviour {
 		Zona1[1] = "Zona15";
 		Zona1[2] = "Zona4";
 		
-		Zona8 = new string[1];
-		Zona8[0] = "Zona4";
+		Zona2 = new string[2];
+		Zona2[0] = "Zona15";
+		Zona2[1] = "Zona16";
 		
-		Zona9 = new string[1];
+		Zona3 = new string[4];
+		Zona3[0] = "Zona1";
+		Zona3[1] = "Zona11";
+		Zona3[2] = "Zona8";
+		Zona3[3] = "Zona4";
+		
+		Zona4 = new string[7];
+		Zona4[0] = "Zona1";
+		Zona4[1] = "Zona3";
+		Zona4[2] = "Zona17";
+		Zona4[3] = "Zona5";
+		Zona4[4] = "Zona6";
+		Zona4[5] = "Zona7";
+		Zona4[6] = "Zona11";
+		
+		Zona5 = new string[2];
+		Zona5[0] = "Zona17";
+		Zona5[1] = "Zona4";
+		
+		Zona6 = new string[2];
+		Zona6[0] = "Zona4";
+		Zona6[1] = "Zona5";
+		
+		Zona7 = new string[1];
+		Zona7[0] = "Zona4";
+		
+		Zona8 = new string[2];
+		Zona8[0] = "Zona4";
+		Zona8[1] = "Zona9";
+		
+		Zona9 = new string[2];
 		Zona9[0] = "Zona10";
+		Zona9[1] = "Zona8";
 		
 		Zona10 = new string[3];
 		Zona10[0] = "Zona9";
@@ -31,14 +63,15 @@ public class RouteToZone : MonoBehaviour {
 		Zona11[1] = "Zona10";
 		Zona11[2] = "Zona3";
 		
-		Zona12 = new string[1];
+		Zona12 = new string[2];
 		Zona12[0] = "Zona13";
+		Zona12[0] = "Zona10";
 		
-		Zona13 = new string[4];
-		Zona13[0] = "Zona9";
-		Zona13[1] = "Zona10";
-		Zona13[2] = "Zona12";
-		Zona13[3] = "Zona11";
+		Zona13 = new string[1];
+		Zona13[0] = "Zona12";
+		
+		Zona14 = new string[1];
+		Zona14[0] = "Zona8";
 		
 		Zona15 = new string[3];
 		Zona15[0] = "Zona1";
@@ -47,6 +80,11 @@ public class RouteToZone : MonoBehaviour {
 		
 		Zona16 = new string[1];
 		Zona16[0] = "Zona2";
+		
+		Zona15 = new string[3];
+		Zona15[0] = "Zona15";
+		Zona15[1] = "Zona4";
+		Zona15[2] = "Zona5";
 
 	}
 	
