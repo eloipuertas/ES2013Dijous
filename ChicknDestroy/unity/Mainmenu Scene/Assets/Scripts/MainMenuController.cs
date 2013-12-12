@@ -4,9 +4,12 @@ using System.Collections;
 //MainMenuController.cs - This script will take control of the main menu options
 
 public class MainMenuController: MonoBehaviour{
+	//Constants
+	private const int START_GAME = 1, LOAD_GAME = 0, OPTIONS = 0, CREDITS = 3;
 	
 	//Variables
 	public bool isQuit = false, isStart = false, isOptions = false, isLoad = false, isCredits = false;			
+		
 	public Material[] Materials;
 	public AudioSource audioOpcions;
 	public AudioSource audioAcceptar;
@@ -35,12 +38,12 @@ public class MainMenuController: MonoBehaviour{
 		if(isQuit)
 			Application.Quit();//referenced to Quit Game button, quits program
 		else if(isStart)
-			Application.LoadLevel(1); //referenced to Start Game button, jump to start game scene
+			Application.LoadLevel(START_GAME); //referenced to Start Game button, jump to start game scene
 		else if(isLoad)
-			Application.LoadLevel(2); //referenced to Load Game button, jump to Load game scene
+			Application.LoadLevel(LOAD_GAME); //referenced to Load Game button, jump to Load game scene
 		else if(isOptions)
-			Application.LoadLevel(3); //referenced to Options button, jump to Options scene
+			Application.LoadLevel(OPTIONS); //referenced to Options button, jump to Options scene
 		else if(isCredits)
-			Application.LoadLevel(5); // Referenced to Credits button, jump to credits scene
+			Application.LoadLevel(CREDITS); // Referenced to Credits button, jump to credits scene
 	}
 }
