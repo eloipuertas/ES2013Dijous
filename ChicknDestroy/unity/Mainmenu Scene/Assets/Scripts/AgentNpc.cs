@@ -88,6 +88,8 @@ public class AgentNpc : FSM {
 	}
 	
 	void setInitialsAttributes(){
+		this.currentDirection = DIR_DERECHA;
+		
 		this.secondary = (ThrowableWeapon)WeaponFactory.instance ().create (WeaponFactory.WeaponType.GRANADE);
 		nextTarget = rutaActual[keyPosActual];
 		curState = FSM.Run;
