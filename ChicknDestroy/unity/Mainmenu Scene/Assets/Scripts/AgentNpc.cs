@@ -221,11 +221,11 @@ public class AgentNpc : FSM {
 			// Si z=3 espera a que haya algo en (x,y)
 		if (((nextTarget.z == 3) && (anythingOn(nextTarget))) ||                        
 			// Si z=2 debera acercarse al punto (x,y) almenos en 30
-			((nextTarget.z == 2) && (distance3D(nextTarget,getPosition()) <= 30)) ||
+			((nextTarget.z == 2) && (distance3D(nextTarget,getPosition()) <= 60)) ||
 			// Si z=1 debera estar cerca respecto al eje x almenos en 15, y tendra que estar tocando el suelo
-			((nextTarget.z == 1) && (Mathf.Abs(relPos.x) <= 15) && onGround()) ||
+			((nextTarget.z == 1) && (Mathf.Abs(relPos.x) <= 50) && onGround()) ||
 			// Si z=0 debera estar cerca respecto al eje x almenos en 15
-			((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 15))){
+			((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 50))){
 			
 			keyPosActual+=1;
 			targetTimer = 10f;
