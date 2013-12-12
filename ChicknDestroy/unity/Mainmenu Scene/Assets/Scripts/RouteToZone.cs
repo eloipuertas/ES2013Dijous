@@ -81,10 +81,10 @@ public class RouteToZone : MonoBehaviour {
 		Zona16 = new string[1];
 		Zona16[0] = "Zona2";
 		
-		Zona15 = new string[3];
-		Zona15[0] = "Zona15";
-		Zona15[1] = "Zona4";
-		Zona15[2] = "Zona5";
+		Zona17 = new string[3];
+		Zona17[0] = "Zona15";
+		Zona17[1] = "Zona4";
+		Zona17[2] = "Zona5";
 
 	}
 	
