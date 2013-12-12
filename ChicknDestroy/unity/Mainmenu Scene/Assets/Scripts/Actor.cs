@@ -198,7 +198,7 @@ public class Actor : MonoBehaviour {
 	 * ==========================================================================
 	 */
 	protected void specialJump() {
-		rigidbody.velocity = rigidbody.velocity + Vector3.up *750; 
+		rigidbody.velocity = rigidbody.velocity + Vector3.up *200; 
 	}
 	/*
 	 * 
@@ -267,7 +267,6 @@ public class Actor : MonoBehaviour {
 				flag = false;
 				notifyHudPoints(this.team, 300); //team
 				hud.notifyFlag(false, this.team==2);
-		
 			}
 		}
 			

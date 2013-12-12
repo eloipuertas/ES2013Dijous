@@ -73,6 +73,7 @@ public class AgentNpc : FSM {
 	###################### INITIALIZATION OF NPC #####################*/
 	
 	protected override void Ini(){
+		this.gameManager = (GameManager) (GameObject.Find("Main Camera").GetComponent("GameManager"));
 		grid = ((Grid)GameObject.Find ("GameStartUp").GetComponent("Grid")).getGrid();
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		rtz = GameObject.Find ("GameStartUp").GetComponent("RouteToZone") as RouteToZone;
