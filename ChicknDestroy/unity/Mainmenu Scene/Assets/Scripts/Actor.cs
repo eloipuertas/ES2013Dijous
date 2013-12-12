@@ -198,7 +198,7 @@ public class Actor : MonoBehaviour {
 	 * ==========================================================================
 	 */
 	protected void specialJump() {
-		rigidbody.velocity = rigidbody.velocity + Vector3.up *200; 
+		rigidbody.velocity = rigidbody.velocity + Vector3.up *400; 
 	}
 	/*
 	 * 
