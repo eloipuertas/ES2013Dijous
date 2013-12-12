@@ -422,7 +422,7 @@ public class PlayerController : Actor {
 	private bool isGround() {
 		bool ret = false;
 		for (int i = -2; i < 2 && !ret; ++i) {
-			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, team==ROBOT_TEAM? heightHero+ 0.1f:3f);
+			ret = ret || Physics.Raycast((transform.position + new Vector3(i,0,0)), Vector3.down, heightHero+ 0.1f);
 			
 		}
 		return ret;
