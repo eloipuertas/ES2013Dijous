@@ -65,6 +65,7 @@ public class AgentNpc : FSM {
 	private float targetTimer = 10f;
 	private float timerDead = 0f;
 	private string goingTo;
+	private string lastZone = null;
 	private RouteToZone rtz;
 	
 	
@@ -75,7 +76,8 @@ public class AgentNpc : FSM {
 		grid = ((Grid)GameObject.Find ("GameStartUp").GetComponent("Grid")).getGrid();
 		this.hud = (HUD) (GameObject.Find("HUD").GetComponent("HUD"));
 		rtz = GameObject.Find ("GameStartUp").GetComponent("RouteToZone") as RouteToZone;
-		loadRoute();
+		loadRouteParam(getZone(getXGrid(),getYGrid()),Random.Range(1,rtz.thisZoneToThisZones(getZone(getXGrid(),getYGrid())).Length));
+		//loadRoute();
 		setInitialsAttributes();
 		updateModelWeapon();
 		updateNextTarget();
@@ -98,6 +100,35 @@ public class AgentNpc : FSM {
 		//playerController = GameObject.FindGameObjectWithTag("Player").GetComponent("PlayerController") as PlayerController;
 
 	}
+	
+	void loadRouteParam(string zona,int ruta){
+		rutaActual = new List<Vector3>();
+		int fileindex = 0;
+		int posindex = 0;
+		
+		
+		TextAsset bindata= (TextAsset) Resources.Load("routes/"+zona+"Ruta"+ruta, typeof(TextAsset));
+		string content = bindata.text;
+		string []lines = content.Split('|');
+		foreach(string s in lines){
+			if(lines[0] != s){
+				string []pos = s.Split(',');
+				float x = grid[int.Parse(pos[0]),int.Parse(pos[1])].x;
+				float y = grid[int.Parse(pos[0]),int.Parse(pos[1])].y;
+				float z = float.Parse(pos[2]);
+				rutaActual.Insert(posindex,(Vector3)new Vector3(x,y,z));
+				posindex +=1;
+			}else{
+				goingTo = s;
+			}
+		}
+		content ="";
+		posindex = 0;
+		
+		fileindex +=1;
+		lastZone = zona;
+	}
+	
         
 	void loadRoute(){
 		rutaActual = new List<Vector3>();
@@ -196,18 +227,41 @@ public class AgentNpc : FSM {
 			((nextTarget.z == 0) && (Mathf.Abs(relPos.x) <= 15))){
 			
 			keyPosActual+=1;
-			targetTimer = 5f;
+			targetTimer = 10f;
 			if (keyPosActual == rutaActual.Count){
 				keyPosActual = 0;
-				/*loadRoute(getZone())*/
+				goToRandomZone();
+				loadRandomRoute(getZone(getXGrid(),getYGrid()));
 			}
+			
 		}
 		if(targetTimer <= 0){
 			keyPosActual = 0;
-			targetTimer = 5f;
-			/*loadRoute(getZone())*/
+			targetTimer = 10f;
+			goToRandomZone();
+			//loadRandomRoute(getZone(getXGrid(),getYGrid()));
 		}
 		targetTimer-=Time.deltaTime;
+		
+	}
+	
+	
+	void goToRandomZone(){
+		if(lastZone.CompareTo(getZone(getXGrid(),getYGrid())) != 0){
+			string [] Zones = rtz.thisZoneToThisZones(getZone(getXGrid(),getYGrid()));
+			int randRoute = Random.Range(1,Zones.Length);
+			while(Zones[randRoute].CompareTo(lastZone) == 0 && Zones.Length > 1){
+				randRoute = Random.Range(1,Zones.Length);
+			}
+			loadRouteParam(getZone(getXGrid(),getYGrid()),randRoute);
+		}
+		
+	}
+	
+	void loadRandomRoute(string zone){
+		int randRoute = Random.Range(1,rtz.thisZoneToThisZones(zone).Length);
+		loadRouteParam(zone,randRoute);
+		
 	}
         
         /*################################################################
@@ -578,6 +632,10 @@ public class AgentNpc : FSM {
 					//Destroy(weap_mod[i]);                        
 					weap_mod[i].SetActive(false);
 		}
+		for (int i=0;i< weap_mod.Length; i++){
+			weap_mod[weapon-1].animation.cullingType = AnimationCullingType.AlwaysAnimate;
+		}
+		
 			
 		animations = weap_mod[weapon-1].animation;
 		

@@ -199,7 +199,7 @@ public class DynamicChickenCreation : MonoBehaviour {
 										c.AddComponent<FlagManagement>();
                                         break;
                                 case 4:
-                                        c.transform.position = new Vector3(13051.11f,118.5825f,0.8170023f);
+                                        c.transform.position = new Vector3(13051.11f,218.5825f,0.8170023f);
                                         c.AddComponent<AgentNpc>().direrutas = "rutaRival4";
                                         c.GetComponent<AgentNpc>().setWeapon(Actor.WEAPON_KATANA);
 										c.AddComponent<FlagManagement>();
