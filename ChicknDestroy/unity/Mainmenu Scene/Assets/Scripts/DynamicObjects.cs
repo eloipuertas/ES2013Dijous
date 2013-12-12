@@ -183,7 +183,7 @@ public class DynamicObjects : MonoBehaviour {
 			x = Instantiate(Resources.Load("ObjectPrefabs/escopeta")) as GameObject;
 			x.name = "escopeta2";
 			x.tag = "escopeta";
-			x.transform.position = new Vector3(14049.33F,484.6809F,-1.233887F);
+			x.transform.position = new Vector3(14049.33F,484.6809F,-20.6F);
 			x.transform.eulerAngles = new Vector3(0F,360F,0F);
 			x.transform.localScale = new Vector3(1F,1F,1F);
 			timeShotguns[1] = 30F;
