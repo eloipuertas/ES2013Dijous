@@ -403,7 +403,7 @@ public class AgentNpc : FSM {
                         haAtacado = true;
 						if(this.primary.attack ()) {
 	                        actor.dealDamage(this.primary.getDamage());
-	                        p.mostrarDany();
+	                        if(actor.GetType() == typeof(PlayerController)) p.mostrarDany();
 						}
                     }
                 } else {
