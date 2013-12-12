@@ -642,11 +642,14 @@ public class AgentNpc : FSM {
 			
 		animations = weap_mod[weapon-1].animation;
 		
-		if (weapon == WEAPON_ESCOPETA)
+		if (weapon == WEAPON_ESCOPETA){
 			bala = Resources.Load("ChickenPrefabs/weapons/balaEscopeta") as GameObject;
-		
-		else if (weapon == WEAPON_PISTOLA)
+			rangeWeapon = 100;
+		}else if (weapon == WEAPON_PISTOLA){
 			bala = Resources.Load("ChickenPrefabs/weapons/balaPistola") as GameObject;
+			rangeWeapon = 200;
+		}else
+			rangeWeapon = 0;
                 
 	}
         
