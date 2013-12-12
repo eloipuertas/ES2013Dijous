@@ -1,0 +1,9 @@
+Builds en
+https://www.dropbox.com/sh/03mw8km6cm5amy7/2SUWjBlv1c
+
+(Hi han fitxers de més de 100MB, massa grans per github)
+
+remote: error: GH001: Large files detected.
+remote: error: Trace: 87813cf412ef9cb34ccee60a1954bd92
+remote: error: See http://git.io/iEPt8g for more information.
+remote: error: File ChicknDestroy/unity/Builds/0.5/linux_build/linux_build_Data/resources.assets is 102.93 MB; this exceeds GitHub's file size limit of 100 MB

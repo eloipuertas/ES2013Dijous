@@ -3,7 +3,6 @@ var text2:GameObject;
 var foc1:GameObject;
 var boto:GameObject;
 var audioCountdown:AudioSource;
-var obstacle:GameObject;
 
 private var timer:float;
 private var startTimer;
@@ -11,7 +10,6 @@ private var countdown_activada;
 
 
 function Start () {
-	obstacle.active = false;
 	text1.active = false;
 	text2.active = false;
 	countdown_activada = 0;
@@ -19,7 +17,6 @@ function Start () {
 	timer = 15;
 }
 
-/* MILLORAR CODI !! */
 function Update () {
 	if (startTimer == 1) {
 		timer -= Time.deltaTime;
@@ -27,16 +24,15 @@ function Update () {
 			var numero = timer.ToString("F0");
 			switch(numero) {
 			
-				case "0": //afegir so error. potser colocar final fora if timer > 0 ??
+				case "0": 
 						startTimer = 0;
 						countdown_activada = 0;
 						text1.active = false;
 						text2.active = false;
 						foc1.active = true;
-						obstacle.active = false;
 						break;
 						
-				case "9":  //canviar colors per cada numero, funcio o assignant directament el color?
+				case "9":
 				case "8":
 				case "7":
 				case "6":
@@ -58,13 +54,11 @@ function Update () {
 						   text1.GetComponent(TextMesh).text = numero;
 						   text2.GetComponent(TextMesh).text = numero;
 						   break;
-						   
-				case "13": obstacle.active = true;
 				case "15":
+				case "13":
 				case "12":
 				case "11":
 				case "10":
-						
 						text1.GetComponent(TextMesh).text = numero;
 						text2.GetComponent(TextMesh).text = numero;
 						break;
@@ -91,7 +85,6 @@ function OnCollisionEnter(collision:Collision){
 						
 			text1.active = true;
 			text2.active = true;
-			obstacle.active = false;
 			foc1.active = false;
 			
 			text1.renderer.material.color = Color.blue;

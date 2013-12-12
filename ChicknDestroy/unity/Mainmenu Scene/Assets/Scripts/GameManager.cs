@@ -3,37 +3,57 @@ using System.Collections;
 
 public class GameManager : MonoBehaviour {
 	
-	private static int SCORE_TO_WIN = 800;
+	private static int SCORE_TO_WIN = 1000;
 	//public GameObject player;
 	private GameCamera cam;
-	public bool GameSelRobot = true;
-	public int gravity = 800;
+	//public bool GameSelRobot = true;
+	public int gravity = 900;
 	private float loseOrWinTime = 5F;//time later the lose or win of a player (5 seconds Timer)
 	private bool winConditionLastUpdate;
 	private bool looseConditionLastUpdate;
+	private int player_team;
+	
+	public string targetName;
+	private string currentTarget;
 	
 	public AudioSource audioLoose, audioAmbient, audioWin;
 	
 	void Start () {
+		player_team = PlayerPrefs.GetInt ("Team"); // Get the player team.
 		cam = GetComponent<GameCamera>();
 		this.winConditionLastUpdate = false;
 		this.looseConditionLastUpdate = false;
 		Physics.gravity = new Vector3(0, -gravity, 0);
-		if(PlayerPrefs.GetInt("Team") == 1)
-			cam.transform.position = new Vector3(15700F,26.20233F,-643.3362F);
-		/*
-		GameObject go;
+
 		
-		if (GameSelRobot)
-			go = GameObject.FindGameObjectWithTag("Player");
-		else 
-			go = GameObject.FindGameObjectWithTag("NPC");
+		//if(PlayerPrefs.GetInt("Team") == 1)
+		//	cam.transform.position = new Vector3(15700F,26.20233F,-643.3362F);
 		
-		
-		cam.SetTarget(go.transform);*/
+//CAMARA PARA NPCs	
+		if (!targetName.Equals("")) {
+			GameObject go;
+			go = GameObject.Find(targetName);
+			
+			cam.SetTarget(go.transform);
+			cam.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, cam.transform.position.z);
+			
+		}
+		currentTarget = targetName.Clone().ToString();
+//FI CAMARA NPCs
+
 	}
 	// Update is called once per frame
 	void Update () {
+		
+		if (!targetName.Equals("") && !currentTarget.Equals(targetName)) {
+			GameObject go;
+			go = GameObject.Find(targetName);
+			
+			cam.SetTarget(go.transform);
+			cam.transform.position = new Vector3(go.transform.position.x, go.transform.position.y, cam.transform.position.z);
+			currentTarget = targetName.Clone().ToString();
+		}
+		
 		bool endRequested = false;
 		if (winCondition()) {
 			if (!audioWin.isPlaying) {
@@ -85,10 +105,13 @@ public class GameManager : MonoBehaviour {
 		this.looseConditionLastUpdate = true;
 	}
 	
-	public void notifyScoreChange(int score) {
+	/*public void notifyScoreChange(int score) {
 		this.winConditionLastUpdate = score >= SCORE_TO_WIN;			
+	}*/
+	public void notifyScoreChange(int team, int score) {
+		if (team == this.player_team) this.winConditionLastUpdate = score>=SCORE_TO_WIN;
+		else this.looseConditionLastUpdate = score>=SCORE_TO_WIN;
 	}
-	
 	public bool winCondition () {
 		return winConditionLastUpdate;	
 	}
@@ -103,7 +126,9 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public void setTarget(Transform tr){
-		cam.SetTarget(tr.transform);
-		cam.transform.position = new Vector3(tr.transform.position.x, tr.transform.position.y, cam.transform.position.z);
+		if(targetName.Equals("")){
+			cam.SetTarget(tr.transform);
+			cam.transform.position = new Vector3(tr.transform.position.x, tr.transform.position.y, cam.transform.position.z);
+		}
 	}
 }

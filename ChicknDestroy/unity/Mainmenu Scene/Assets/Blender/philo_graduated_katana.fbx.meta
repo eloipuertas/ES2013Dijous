@@ -33,6 +33,7 @@ ModelImporter:
     100054: Cylinder
     100056: //RootNode
     100058: Plane
+    100060: Cube
     400000: Armature
     400002: Bone
     400004: Bone_001
@@ -63,8 +64,10 @@ ModelImporter:
     400054: Cylinder
     400056: //RootNode
     400058: Plane
+    400060: Cube
     4300000: Plane
     4300002: Cylinder
+    4300004: Cube
     7400000: Default Take
     7400002: atacarDer
     7400004: atacarDerCorriendo
@@ -94,6 +97,7 @@ ModelImporter:
     11100000: //RootNode
     13700000: Cylinder
     13700002: Plane
+    13700004: Cube
   materials:
     importMaterials: 1
     materialName: 0
