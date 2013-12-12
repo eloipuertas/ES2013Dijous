@@ -234,7 +234,7 @@ public class AgentNpc : FSM {
 			if (keyPosActual == rutaActual.Count){
 				keyPosActual = 0;
 				goToRandomZone();
-				loadRandomRoute(getZone(getXGrid(),getYGrid()));
+				//loadRandomRoute(getZone(getXGrid(),getYGrid()));
 			}
 			
 		}
@@ -252,9 +252,9 @@ public class AgentNpc : FSM {
 	void goToRandomZone(){
 		if(lastZone.CompareTo(getZone(getXGrid(),getYGrid())) != 0){
 			string [] Zones = rtz.thisZoneToThisZones(getZone(getXGrid(),getYGrid()));
-			int randRoute = Random.Range(1,Zones.Length);
-			while(Zones[randRoute].CompareTo(lastZone) == 0 && Zones.Length > 1){
-				randRoute = Random.Range(1,Zones.Length);
+			int randRoute = Random.Range(1,Zones.Length+1);
+			while(Zones[randRoute-1].CompareTo(lastZone) == 0 && Zones.Length > 1){
+				randRoute = Random.Range(1,Zones.Length+1);
 			}
 			loadRouteParam(getZone(getXGrid(),getYGrid()),randRoute);
 		}
