@@ -467,7 +467,7 @@ public class AgentNpc : FSM {
 				int t;
 				if (this.team == 1) t = 2;
 				else t = 1;
-				this.hud.notifyPoints (t,100);
+				notifyHudPoints(t,100);
 				break;
 			case 1:
 				if(!animations.IsPlaying((derecha)?"muerteDerecha":"muerteIzquierda")){
