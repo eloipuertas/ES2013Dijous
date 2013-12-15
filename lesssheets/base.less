@@ -2,12 +2,41 @@
 
 /* Parameters & defines */
 
+@topBarHeight: 40px;
+@bottomBarHeight: 40px;
+
 /* Styles */
 
-html {
-    body {
-        background : red;
-    }
+
+body {
+    margin: 0px;
 }
+
+#topBar {
+    position: fixed;
+    top: 0px;
+    width: 100%; height: @topBarHeight;
+    z-index:  10;
+    background: white;
+}
+
+#topBarButtons > * {
+    display: inline-block;
+}
+
+#mainContent {
+    margin-top: @topBarHeight;
+    margin-bottom: @bottomBarHeight;
+    background: white;
+}
+
+#bottomBar {
+    position: fixed;
+    bottom: 0px;
+    width: 100%; height: @bottomBarHeight;
+    background: black;
+}
+
+/* dropdown lists style */
 
 /* Animations */

@@ -1,7 +1,31 @@
 /* Base style file */
 /* Parameters & defines */
 /* Styles */
-html body {
-  background: red;
+body {
+  margin: 0px;
 }
+#topBar {
+  position: fixed;
+  top: 0px;
+  width: 100%;
+  height: 40px;
+  z-index: 10;
+  background: white;
+}
+#topBarButtons > * {
+  display: inline-block;
+}
+#mainContent {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  background: white;
+}
+#bottomBar {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 40px;
+  background: black;
+}
+/* dropdown lists style */
 /* Animations */
