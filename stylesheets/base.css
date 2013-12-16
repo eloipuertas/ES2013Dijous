@@ -1,6 +1,10 @@
 /* Base style file */
 /* Parameters & defines */
 /* Styles */
+html > body {
+  /* fonts */
+  font-family: 'Rum Raisin', sans-serif;
+}
 html > body > header {
   position: fixed;
   top: 0px;
