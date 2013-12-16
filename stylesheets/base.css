@@ -1,10 +1,7 @@
 /* Base style file */
 /* Parameters & defines */
 /* Styles */
-body {
-  margin: 0px;
-}
-#topBar {
+html > body > header {
   position: fixed;
   top: 0px;
   width: 100%;
@@ -12,15 +9,13 @@ body {
   z-index: 10;
   background: white;
 }
-#topBarButtons > * {
-  display: inline-block;
-}
-#mainContent {
+html > body > #content {
+  margin: 0px;
   margin-top: 40px;
   margin-bottom: 40px;
   background: white;
 }
-#bottomBar {
+html > body > footer {
   position: fixed;
   bottom: 0px;
   width: 100%;

@@ -7,34 +7,28 @@
 
 /* Styles */
 
+html > body {
+    > header {
+        position: fixed;
+        top: 0px;
+        width: 100%; height: @topBarHeight;
+        z-index:  10;
+        background: white;
+    }
 
-body {
-    margin: 0px;
-}
+    >  #content {
+        margin: 0px;
+        margin-top: @topBarHeight;
+        margin-bottom: @bottomBarHeight;
+        background: white;
+    }
 
-#topBar {
-    position: fixed;
-    top: 0px;
-    width: 100%; height: @topBarHeight;
-    z-index:  10;
-    background: white;
-}
-
-#topBarButtons > * {
-    display: inline-block;
-}
-
-#mainContent {
-    margin-top: @topBarHeight;
-    margin-bottom: @bottomBarHeight;
-    background: white;
-}
-
-#bottomBar {
-    position: fixed;
-    bottom: 0px;
-    width: 100%; height: @bottomBarHeight;
-    background: black;
+    > footer {
+        position: fixed;
+        bottom: 0px;
+        width: 100%; height: @bottomBarHeight;
+        background: black;
+    }
 }
 
 /* dropdown lists style */
