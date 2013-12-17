@@ -22,6 +22,11 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $(".carousel").carousel();
+        });
+    </script>
 </head>
 <body>
 <header>
@@ -64,8 +69,48 @@
         </div><!-- /.navbar-collapse -->
     </nav>
 </header>
-<div id="#content">
+<div id="content">
+    <div id="tutorial-carousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#tutorial-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="1"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="2"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="3"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="4"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="5"></li>
+        </ol>
 
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <img src="../images/tutorial/run.png" alt="Run">
+            </div>
+            <div class="item">
+                <img src="../images/tutorial/jump.png" alt="Jump">
+            </div>
+            <div class="item">
+                <img src="../images/tutorial/shoot.png" alt="Shoot">
+            </div>
+            <div class="item">
+                <img src="../images/tutorial/avoid.png" alt="Hazard objects">
+            </div>
+            <div class="item">
+                <img src="../images/tutorial/mario.png" alt="Jump over">
+            </div>
+            <div class="item">
+                <img src="../images/tutorial/powerups.png" alt="Power-ups">
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#tutorial-carousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#tutorial-carousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
 </div>
 <footer>
     <a href="./developers.html">Developers</a>
