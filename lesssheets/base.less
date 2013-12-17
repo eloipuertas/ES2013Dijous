@@ -3,6 +3,7 @@
 /* Parameters & defines */
 
 @topBarHeight: 50px;
+@softBlue: #6FACFF;
 
 /* Styles */
 
@@ -22,8 +23,7 @@ html > body {
     }
 
     >  #content {
-        margin: 0px;
-        background: white;
+        margin: 10px 25px 25px 10px;
     }
 
 }
@@ -31,6 +31,39 @@ html > body {
 div > img {
     display: block;
     margin: auto;
+}
+
+.button-tower {
+    > * {
+        display: block;
+        margin: auto;
+    }
+}
+
+.big-button {
+
+    margin: 20px auto;
+
+    font-size: 32pt;
+    border: black solid 2px;
+    background: @softBlue;
+    border-radius: 15px;
+    color: black;
+    text-decoration: none;
+    width: 500px;
+
+    padding: 5px;
+
+    &:hover {
+        color: darkgrey;
+    text-decoration: none;
+    }
+
+    > img.icon, .glyphicon {
+    max-height: 32px;
+    max-width: 32px;
+    margin: auto
+    }
 }
 
 /* dropdown lists style */
