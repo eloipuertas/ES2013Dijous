@@ -6,25 +6,16 @@ html > body {
   font-family: 'Rum Raisin', sans-serif;
 }
 html > body > header {
-  position: fixed;
   top: 0px;
   width: 100%;
-  height: 50px;
   z-index: 10;
+}
+html > body > header > #headerImage img {
+  max-width: 100%;
 }
 html > body > #content {
   margin: 0px;
-  margin-top: 50px;
-  margin-bottom: 40px;
   background: white;
-  padding-top: 10;
-}
-html > body > footer {
-  position: fixed;
-  bottom: 0px;
-  width: 100%;
-  height: 40px;
-  background: black;
 }
 div > img {
   display: block;

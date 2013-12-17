@@ -3,7 +3,6 @@
 /* Parameters & defines */
 
 @topBarHeight: 50px;
-@bottomBarHeight: 40px;
 
 /* Styles */
 
@@ -14,26 +13,19 @@ html > body {
     font-family: 'Rum Raisin', sans-serif;
 
     > header {
-        position: fixed;
+        > #headerImage  img {
+            max-width: 100%;
+        }
         top: 0px;
-        width: 100%; height: @topBarHeight;
+        width: 100%;
         z-index:  10;
     }
 
     >  #content {
         margin: 0px;
-        margin-top: @topBarHeight;
-        margin-bottom: @bottomBarHeight;
         background: white;
-        padding-top: 10;
     }
 
-    > footer {
-        position: fixed;
-        bottom: 0px;
-        width: 100%; height: @bottomBarHeight;
-        background: black;
-    }
 }
 
 div > img {
