@@ -20,8 +20,17 @@ div > img {
   display: block;
   margin: auto;
 }
+h1.title {
+  text-align: center;
+  margin: 30px 100px;
+  border-bottom: solid black 2px;
+}
+.centered > * {
+  text-align: center;
+  margin: auto;
+}
 .button-tower > * {
-  display: block;
+  display: table;
   margin: auto;
 }
 .big-button {
@@ -32,7 +41,8 @@ div > img {
   border-radius: 15px;
   color: black;
   text-decoration: none;
-  width: 500px;
+  min-width: 500px;
+  display: inline-block;
   padding: 5px;
 }
 .big-button:hover {
