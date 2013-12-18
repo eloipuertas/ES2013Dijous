@@ -22,6 +22,13 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.carousel').carousel({
+                interval: 5000
+            });
+         });
+    </script>
 </head>
 <body>
 <header>
@@ -123,6 +130,48 @@
     </nav>
 </header>
 <div id="content">
+
+    <div id="tutorial-carousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+            <li data-target="#tutorial-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="1"></li>
+            <li data-target="#tutorial-carousel" data-slide-to="2"></li>
+        </ol>
+
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+            <div class="item active">
+                <embed src="../images/scenario/platforms.mp4"></embed>
+                <div class="carousel-caption">
+                    <h3>Awesome Platforms</h3>
+                    <p>Jump over and over again!</p>
+                </div>
+            </div>
+            <div class="item">
+                <embed src="../images/scenario/traps.mp4"></embed>
+                <div class="carousel-caption">
+                    <h3>Deadly Traps</h3>
+                    <p>You will not survive easily</p>
+                </div>
+            </div>
+            <div class="item">
+                <embed src="../images/scenario/flags.mp4"></embed>
+                <div class="carousel-caption">
+                    <h3>Capture their Flag!</h3>
+                    <p>Earn points capturing enemy flag</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <a class="left carousel-control" href="#tutorial-carousel" data-slide="prev">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#tutorial-carousel" data-slide="next">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </a>
+    </div>
 
 </div>
 </body>

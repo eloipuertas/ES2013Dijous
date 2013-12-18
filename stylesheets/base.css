@@ -5,6 +5,20 @@ html > body {
   /* fonts */
   font-family: 'Rum Raisin', sans-serif;
 }
+html > body h1,
+html > body h2,
+html > body h3,
+html > body h4,
+html > body h5,
+html > body h6,
+html > body .h1,
+html > body .h2,
+html > body .h3,
+html > body .h4,
+html > body .h5,
+html > body .h6 {
+  font-family: 'Rum Raisin', sans-serif;
+}
 html > body > header {
   top: 0px;
   width: 100%;
@@ -16,9 +30,14 @@ html > body > header > #headerImage img {
 html > body > #content {
   margin: 10px 25px 25px 10px;
 }
-div > img {
+div > img,
+div > embed {
   display: block;
   margin: auto;
+  min-height: 200px;
+  min-width: 400px;
+  height: 500px;
+  width: 1000px;
 }
 h2 {
   margin-top: 20px;
@@ -57,5 +76,3 @@ h1.title {
   max-width: 32px;
   margin: 5px 5px;
 }
-/* dropdown lists style */
-/* Animations */

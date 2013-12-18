@@ -4,6 +4,11 @@
 
 @softBlue: #6FACFF;
 @softRed: #FC4848;
+@fontFamily: 'Rum Raisin', sans-serif;
+@mediaMinHeight: 200px;
+@mediaMinWidth: 400px;
+@mediaHeight: 500px;
+@mediaWidth: 1000px;
 
 /* Styles */
 
@@ -11,7 +16,11 @@ html > body {
 
     /* fonts */
 
-    font-family: 'Rum Raisin', sans-serif;
+    font-family: @fontFamily;
+
+    h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+        font-family: @fontFamily;
+    }
 
     > header {
         > #headerImage  img {
@@ -28,9 +37,14 @@ html > body {
 
 }
 
-div > img {
+div > img,
+div > embed {
     display: block;
     margin: auto;
+    min-height: @mediaMinHeight;
+    min-width: @mediaMinWidth;
+    height: @mediaHeight;
+    width: @mediaWidth;
 }
 
 h2 {
@@ -84,6 +98,3 @@ h1.title {
     }
 }
 
-/* dropdown lists style */
-
-/* Animations */
