@@ -20,6 +20,9 @@ div > img {
   display: block;
   margin: auto;
 }
+h2 {
+  margin-top: 20px;
+}
 h1.title {
   text-align: center;
   margin: 30px 100px;
@@ -27,7 +30,6 @@ h1.title {
 }
 .centered > * {
   text-align: center;
-  margin: auto;
 }
 .button-tower > * {
   display: table;
