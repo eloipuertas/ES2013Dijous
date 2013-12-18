@@ -4,6 +4,7 @@
 
 @topBarHeight: 50px;
 @softBlue: #6FACFF;
+@softRed: #FC4848;
 
 /* Styles */
 
@@ -55,14 +56,14 @@ div > img {
     padding: 5px;
 
     &:hover {
-        color: darkgrey;
-    text-decoration: none;
+        background: @softRed;
+        text-decoration: none;
     }
 
     > img.icon, .glyphicon {
     max-height: 32px;
     max-width: 32px;
-    margin: auto
+    margin: 5px 5px;
     }
 }
 

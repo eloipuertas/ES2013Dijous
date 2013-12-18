@@ -36,14 +36,14 @@ div > img {
   padding: 5px;
 }
 .big-button:hover {
-  color: darkgrey;
+  background: #fc4848;
   text-decoration: none;
 }
 .big-button > img.icon,
 .big-button .glyphicon {
   max-height: 32px;
   max-width: 32px;
-  margin: auto;
+  margin: 5px 5px;
 }
 /* dropdown lists style */
 /* Animations */
